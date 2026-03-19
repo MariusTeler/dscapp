@@ -1,0 +1,846 @@
+/* Tabulator Tailwind Theme - Following official Tabulator structure */
+/* Based on https://tabulator.info/docs/6.3/theme#build and CSS class documentation */
+/* Core Tabulator Styles imported in app.css */
+
+/* CSS Custom Properties for Theme Variables - Override Defaults */
+:root {
+  /* General */
+  --tabulator-bg-color: #ffffff;
+  --tabulator-border-color: hsl(var(--border));
+  --tabulator-text-color: hsl(var(--foreground));
+  --tabulator-text-size: 0.700rem;
+
+  /* Header */
+  --tabulator-header-bg-color: #f8f9fa;
+  --tabulator-header-text-color: hsl(var(--foreground));
+  --tabulator-header-border-color: hsl(var(--primary) / 0.2);
+  --tabulator-header-separator-color: hsl(var(--border));
+  --tabulator-sort-arrow-active: hsl(var(--primary));
+  --tabulator-sort-arrow-inactive: hsl(var(--muted-foreground));
+
+  /* Rows */
+  --tabulator-row-bg-color: #ffffff;
+  --tabulator-row-alt-bg-color:#ecedef;
+  --tabulator-row-border-color: darkgray;
+  --tabulator-row-text-color: hsl(var(--foreground));
+  --tabulator-row-hover-bg: hsl(var(--muted) / 0.5);
+  --tabulator-row-selected-bg: hsl(var(--primary) / 0.1);
+  --tabulator-row-selected-hover-bg: hsl(var(--primary) / 0.15);
+  --tabulator-edit-box-color: hsl(var(--primary));
+
+  /* Footer */
+  --tabulator-footer-bg-color: hsl(var(--muted) / 0.5);
+  --tabulator-footer-text-color: hsl(var(--muted-foreground));
+  --tabulator-footer-border-color: hsl(var(--border));
+  --tabulator-footer-separator-color: hsl(var(--border));
+  --tabulator-footer-active-color: hsl(var(--primary));
+}
+
+/* Main Tabulator Container */
+.tabulator {
+  background-color: var(--tabulator-bg-color);
+  border: 1px solid var(--tabulator-border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  overflow: hidden;
+  font-size: var(--tabulator-text-size);
+  color: var(--tabulator-text-color);
+}
+
+/* Table Holder and Table*/
+.tabulator .tabulator-tableholder {
+  background-color: var(--tabulator-bg-color);
+}
+
+.tabulator .tabulator-table {
+  background-color: var(--tabulator-bg-color);
+}
+
+
+/* Header Styles */
+.tabulator .tabulator-header {
+  background-color: var(--tabulator-header-bg-color) !important;
+  border-bottom: 1px solid var(--tabulator-header-separator-color);
+}
+
+.tabulator .tabulator-header .tabulator-headers {
+  border-bottom: none;
+  background-color: var(--tabulator-header-bg-color) !important;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  background-color: var(--tabulator-header-bg-color) !important;
+  border-right: 1px solid var(--tabulator-header-border-color);
+  color: var(--tabulator-header-text-color);
+}
+
+/* Override any default Tabulator header styling */
+.tabulator-header,
+.tabulator .tabulator-header,
+.tabulator .tabulator-header .tabulator-headers,
+.tabulator .tabulator-header .tabulator-col {
+  background: var(--tabulator-header-bg-color) !important;
+}
+
+.tabulator .tabulator-header .tabulator-col:last-child {
+  border-right: none;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+  padding: 0.5rem;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+  font-size: var(--tabulator-text-size);
+  font-weight: 600;
+  color: var(--tabulator-header-text-color);
+}
+
+/* Sortable Headers */
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable .tabulator-col-title {
+  cursor: pointer;
+  transition: color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable:hover .tabulator-col-title {
+  color: var(--tabulator-sort-arrow-active);
+}
+
+/* Sort Arrows */
+.tabulator .tabulator-header .tabulator-col[aria-sort="ascending"] .tabulator-col-title::after {
+  content: '↑';
+  margin-left: 0.25rem;
+  color: var(--tabulator-sort-arrow-active);
+}
+
+.tabulator .tabulator-header .tabulator-col[aria-sort="descending"] .tabulator-col-title::after {
+  content: '↓';
+  margin-left: 0.25rem;
+  color: var(--tabulator-sort-arrow-active);
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-arrow {
+  color: var(--tabulator-sort-arrow-inactive);
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-arrow.asc {
+  color: var(--tabulator-sort-arrow-active);
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-arrow.desc {
+  color: var(--tabulator-sort-arrow-active);
+}
+
+/* Column Resize Handle */
+.tabulator .tabulator-header .tabulator-col .tabulator-handle {
+  background-color: var(--tabulator-header-border-color);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-handle:hover {
+  background-color: var(--tabulator-sort-arrow-active);
+}
+
+/* Row Styles */
+.tabulator .tabulator-row {
+  background-color: var(--tabulator-row-bg-color) !important;
+  border-bottom: 1px solid var(--tabulator-row-border-color);
+  color: var(--tabulator-row-text-color);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-row:last-child {
+  border-bottom: none;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: var(--tabulator-row-hover-bg);
+}
+
+.tabulator .tabulator-row.tabulator-row-even {
+  background-color: var(--tabulator-row-alt-bg-color) !important;
+}
+
+.tabulator .tabulator-row.tabulator-selected {
+  background-color: var(--tabulator-row-selected-bg);
+}
+
+.tabulator .tabulator-row.tabulator-selected:hover {
+  background-color: var(--tabulator-row-selected-hover-bg);
+}
+
+/* Cell Styles */
+.tabulator .tabulator-row .tabulator-cell {
+  border-right: 1px solid var(--tabulator-row-border-color) !important;
+  padding: 0.25rem;
+  color: var(--tabulator-row-text-color);
+}
+
+.tabulator .tabulator-row .tabulator-cell:last-child {
+  border-right: none;
+}
+
+/* Editing Styles */
+.tabulator .tabulator-row.tabulator-editing .tabulator-cell.tabulator-editing {
+  border: 2px solid var(--tabulator-edit-box-color);
+  padding: calc(0.75rem - 1px);
+}
+
+.tabulator .tabulator-edit-box {
+  background-color: var(--tabulator-bg-color);
+  border: 1px solid var(--tabulator-border-color);
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.tabulator .tabulator-edit-box input,
+.tabulator .tabulator-edit-box select,
+.tabulator .tabulator-edit-box textarea {
+  background-color: var(--tabulator-bg-color);
+  border: none;
+  outline: none;
+  padding: 0.25rem;
+  color: var(--tabulator-text-color);
+}
+
+/* Footer Styles */
+.tabulator .tabulator-footer {
+  background-color: var(--tabulator-footer-bg-color);
+  border-top: 1px solid var(--tabulator-footer-separator-color);
+  color: var(--tabulator-footer-text-color);
+  padding: 0.5rem;
+}
+
+.tabulator .tabulator-footer .tabulator-paginator {
+  font-size: var(--tabulator-text-size);
+  color: var(--tabulator-footer-text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tabulator .tabulator-footer .tabulator-page {
+  background-color: var(--tabulator-bg-color);
+  border: 1px solid var(--tabulator-footer-border-color);
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  margin: 0 0.125rem;
+  font-size: var(--tabulator-text-size);
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.tabulator .tabulator-footer .tabulator-page:hover {
+  background-color: var(--tabulator-row-hover-bg);
+}
+
+.tabulator .tabulator-footer .tabulator-page.active {
+  background-color: var(--tabulator-footer-active-color);
+  color: hsl(var(--primary-foreground));
+  border-color: var(--tabulator-footer-active-color);
+}
+
+.tabulator .tabulator-footer .tabulator-page.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Loading Styles */
+.tabulator .tabulator-loader {
+  background-color: hsl(var(--background) / 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.tabulator .tabulator-loader .tabulator-loader-msg {
+  background-color: var(--tabulator-bg-color);
+  border: 1px solid var(--tabulator-border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  color: var(--tabulator-text-color);
+}
+
+.tabulator .tabulator-loader .tabulator-loading {
+  color: var(--tabulator-footer-text-color);
+}
+
+/* Error Styles */
+.tabulator .tabulator-loader .tabulator-error {
+  background-color: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+  border-color: hsl(var(--destructive) / 0.2);
+}
+
+/* Group Styles */
+.tabulator .tabulator-row.tabulator-group {
+  background-color: hsl(var(--muted) / 0.8);
+  border-bottom: 1px solid var(--tabulator-border-color);
+}
+
+.tabulator .tabulator-row.tabulator-group .tabulator-cell {
+  padding: 0.5rem;
+  font-weight: 500;
+  color: var(--tabulator-text-color);
+}
+
+.tabulator .tabulator-row.tabulator-group .tabulator-arrow {
+  border-color: var(--tabulator-text-color);
+}
+
+/* Filter Styles */
+.tabulator .tabulator-header .tabulator-col .tabulator-header-filter {
+  background-color: var(--tabulator-bg-color);
+  border: 1px solid var(--tabulator-border-color);
+  border-radius: 0.25rem;
+  font-size: calc(var(--tabulator-text-size) * 0.9);
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-header-filter input,
+.tabulator .tabulator-header .tabulator-col .tabulator-header-filter select {
+  background-color: var(--tabulator-bg-color);
+  border: none;
+  outline: none;
+  width: 100%;
+  color: var(--tabulator-text-color);
+}
+
+/* Data Tree Styles */
+.tabulator .tabulator-row .tabulator-cell .tabulator-data-tree-branch {
+  border-color: var(--tabulator-border-color);
+}
+
+.tabulator .tabulator-row .tabulator-cell .tabulator-data-tree-control {
+  background-color: hsl(var(--muted));
+  border: 1px solid var(--tabulator-border-color);
+  border-radius: 0.25rem;
+  color: var(--tabulator-text-color);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-row .tabulator-cell .tabulator-data-tree-control:hover {
+  background-color: hsl(var(--muted) / 0.8);
+}
+
+/* Frozen Column Styles */
+.tabulator .tabulator-frozen {
+  border-right: 2px solid hsl(var(--primary) / 0.2);
+}
+
+.tabulator .tabulator-frozen.tabulator-frozen-left {
+  border-right: 2px solid hsl(var(--primary) / 0.2);
+}
+
+.tabulator .tabulator-frozen.tabulator-frozen-right {
+  border-left: 2px solid hsl(var(--primary) / 0.2);
+}
+
+/* Responsive Styles */
+.tabulator .tabulator-row .tabulator-cell .tabulator-responsive-collapse {
+  background-color: hsl(var(--muted) / 0.2);
+  border-top: 1px solid var(--tabulator-border-color);
+  padding: 0.5rem;
+}
+
+.tabulator .tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle {
+  background-color: var(--tabulator-footer-active-color);
+  color: hsl(var(--primary-foreground));
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  transition: background-color 0.15s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+.tabulator .tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+/* Menu Styles */
+.tabulator-menu {
+  background-color: var(--tabulator-bg-color);
+  border: 1px solid var(--tabulator-border-color);
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  padding: 0.25rem 0;
+  color: var(--tabulator-text-color);
+}
+
+.tabulator-menu .tabulator-menu-item {
+  padding: 0.5rem;
+  font-size: var(--tabulator-text-size);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator-menu .tabulator-menu-item:hover {
+  background-color: var(--tabulator-row-hover-bg);
+}
+
+.tabulator-menu .tabulator-menu-separator {
+  border-top: 1px solid var(--tabulator-border-color);
+  margin: 0.25rem 0;
+}
+
+/* Dark Mode Adjustments */
+.dark .tabulator {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Utility Classes for Enhanced Functionality */
+.tabulator-compact .tabulator-row .tabulator-cell {
+  padding: 0.5rem;
+}
+
+.tabulator-compact .tabulator-header .tabulator-col .tabulator-col-content {
+  padding: 0.5rem;
+}
+
+.tabulator-borderless {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.tabulator-borderless .tabulator-row {
+  border-bottom: none;
+}
+
+.tabulator-borderless .tabulator-row .tabulator-cell {
+  border-right: none;
+}
+
+/* Action Button Styles for Cell Content */
+.tabulator-cell-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.tabulator-cell-actions .btn {
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabulator-cell-actions .btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.tabulator-cell-actions .btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.tabulator-cell-actions .btn-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border-color: hsl(var(--secondary));
+}
+
+.tabulator-cell-actions .btn-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+.tabulator-cell-actions .btn-destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+  border-color: hsl(var(--destructive));
+}
+
+.tabulator-cell-actions .btn-destructive:hover {
+  background-color: hsl(var(--destructive) / 0.9);
+}
+
+/* Row styling */
+.tabulator .tabulator-row {
+  border-bottom: 1px solid hsl(var(--border));
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-row:last-child {
+  border-bottom: none;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.tabulator .tabulator-row.tabulator-selected {
+  background-color: hsl(var(--primary) / 0.1);
+}
+
+.tabulator .tabulator-row.tabulator-selected:hover {
+  background-color: hsl(var(--primary) / 0.15);
+}
+
+.tabulator .tabulator-row.tabulator-row-odd {
+  background-color: var(--tabulator-bg-color);
+}
+
+.tabulator .tabulator-row.tabulator-row-even {
+  background-color: hsl(var(--muted) / 0.2);
+}
+
+/* Cell styling */
+.tabulator .tabulator-row .tabulator-cell {
+  border-right: 1px solid hsl(var(--border));
+  padding: 0.25rem;
+}
+
+.tabulator .tabulator-row .tabulator-cell:last-child {
+  border-right: none;
+}
+
+.tabulator .tabulator-row .tabulator-cell .tabulator-data-tree-branch {
+  border-color: hsl(var(--border));
+}
+
+.tabulator .tabulator-row .tabulator-cell .tabulator-data-tree-control {
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  color: hsl(var(--foreground));
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-row .tabulator-cell .tabulator-data-tree-control:hover {
+  background-color: hsl(var(--muted) / 0.8);
+}
+
+/* Footer */
+.tabulator .tabulator-footer {
+  background-color: hsl(var(--muted) / 0.5);
+  border-top: 1px solid hsl(var(--border));
+  padding: 0.5rem;
+}
+
+.tabulator .tabulator-footer .tabulator-page {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  margin: 0 0.25rem;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-footer .tabulator-page:hover {
+  background-color: hsl(var(--muted));
+}
+
+.tabulator .tabulator-footer .tabulator-page.active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.tabulator .tabulator-footer .tabulator-page.active:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.tabulator .tabulator-footer .tabulator-page.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tabulator .tabulator-footer .tabulator-page.disabled:hover {
+  background-color: hsl(var(--background));
+}
+
+/* Pagination */
+.tabulator .tabulator-paginator {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tabulator .tabulator-page-counter {
+  color: hsl(var(--muted-foreground));
+}
+
+.tabulator .tabulator-page-size {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+}
+
+/* Edit cell */
+.tabulator .tabulator-edit-box {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.tabulator .tabulator-edit-box input,
+.tabulator .tabulator-edit-box select,
+.tabulator .tabulator-edit-box textarea {
+  background-color: var(--tabulator-bg-color);
+  border: none;
+  outline: none;
+  padding: 0.25rem;
+  color: hsl(var(--foreground));
+}
+
+/* Loading overlay */
+.tabulator .tabulator-loader {
+  background-color: hsl(var(--background) / 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.tabulator .tabulator-loader .tabulator-loader-msg {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.tabulator .tabulator-loader .tabulator-loading {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Error styling */
+.tabulator .tabulator-error {
+  background-color: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+  border: 1px solid hsl(var(--destructive) / 0.2);
+}
+
+/* Grouping */
+.tabulator .tabulator-group {
+  background-color: hsl(var(--muted) / 0.8);
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.tabulator .tabulator-group .tabulator-group-header {
+  padding: 0.5rem;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+}
+
+.tabulator .tabulator-group .tabulator-group-header .tabulator-arrow {
+  border-color: hsl(var(--foreground));
+}
+
+/* Filters */
+.tabulator .tabulator-header-filter {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.tabulator .tabulator-header-filter input {
+  background-color: var(--tabulator-bg-color);
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+/* Context menu */
+.tabulator-menu {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  padding: 0.25rem 0;
+}
+
+.tabulator-menu .tabulator-menu-item {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator-menu .tabulator-menu-item:hover {
+  background-color: hsl(var(--muted));
+}
+
+.tabulator-menu .tabulator-menu-separator {
+  border-top: 1px solid hsl(var(--border));
+  margin: 0.25rem 0;
+}
+
+/* Responsive columns */
+.tabulator .tabulator-responsive-collapse {
+  background-color: hsl(var(--muted) / 0.2);
+  border-top: 1px solid hsl(var(--border));
+  padding: 0.5rem;
+}
+
+.tabulator .tabulator-responsive-collapse .tabulator-responsive-collapse-toggle {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.tabulator .tabulator-responsive-collapse .tabulator-responsive-collapse-toggle:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+/* Row selection checkbox */
+.tabulator .tabulator-row .tabulator-cell .tabulator-row-select {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  background-color: hsl(var(--background));
+}
+
+.tabulator .tabulator-row.tabulator-selected .tabulator-cell .tabulator-row-select {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+
+/* Frozen columns */
+.tabulator .tabulator-frozen {
+  border-right: 2px solid hsl(var(--primary) / 0.2);
+}
+
+.tabulator .tabulator-frozen.tabulator-frozen-left {
+  border-right: 2px solid hsl(var(--primary) / 0.2);
+}
+
+.tabulator .tabulator-frozen.tabulator-frozen-right {
+  border-left: 2px solid hsl(var(--primary) / 0.2);
+}
+
+/* Dark mode adjustments */
+.dark .tabulator {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.dark .tabulator .tabulator-row:hover {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+.dark .tabulator .tabulator-row.tabulator-row-even {
+  background-color: hsl(var(--muted) / 0.1);
+}
+
+/* Custom utility classes for common Tabulator scenarios */
+.tabulator-compact .tabulator-row .tabulator-cell {
+  padding: 0.125rem;
+}
+
+.tabulator-compact .tabulator-header .tabulator-col .tabulator-col-content {
+  padding: 0.5rem;
+}
+
+.tabulator-borderless {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.tabulator-borderless .tabulator-row {
+  border-bottom: none;
+}
+
+.tabulator-borderless .tabulator-cell {
+  border-right: none;
+}
+
+/* Status indicators */
+.tabulator-status-success {
+  background-color: rgb(240 253 244);
+  color: rgb(21 128 61);
+}
+
+.dark .tabulator-status-success {
+  background-color: rgb(20 83 45);
+  color: rgb(134 239 172);
+}
+
+.tabulator-status-warning {
+  background-color: rgb(254 252 232);
+  color: rgb(161 98 7);
+}
+
+.dark .tabulator-status-warning {
+  background-color: rgb(133 77 14);
+  color: rgb(253 224 71);
+}
+
+.tabulator-status-error {
+  background-color: rgb(254 242 242);
+  color: rgb(185 28 28);
+}
+
+.dark .tabulator-status-error {
+  background-color: rgb(153 27 27);
+  color: rgb(248 113 113);
+}
+
+.tabulator-status-info {
+  background-color: rgb(239 246 255);
+  color: rgb(29 78 216);
+}
+
+.dark .tabulator-status-info {
+  background-color: rgb(30 58 138);
+  color: rgb(147 197 253);
+}
+
+/* Action buttons in cells */
+.tabulator-cell-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tabulator-cell-actions .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  transition: all 0.15s ease-in-out;
+}
+
+.tabulator-cell-actions .btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+.tabulator-cell-actions .btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.tabulator-cell-actions .btn-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border-color: hsl(var(--secondary));
+}
+
+.tabulator-cell-actions .btn-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+.tabulator-cell-actions .btn-destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+  border-color: hsl(var(--destructive));
+}
+
+.tabulator-cell-actions .btn-destructive:hover {
+  background-color: hsl(var(--destructive) / 0.9);
+}

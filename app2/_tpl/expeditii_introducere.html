@@ -1,0 +1,135 @@
+{ERROR} <div class="separator_empty" style="height: 5px;"></div>
+
+<form action="" id="form_expeditie" method="post" name="form" target="_blank">
+	<input type="hidden" name="step" value="2" />
+
+	<div class="separator_empty" style="height: 2px;"></div>
+	<div class="expeditii_listare">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				Introducere_ListareExpeditii();
+				if ($('#data_introducere').length > 0) {
+					jQuery("#data_introducere").datepicker({
+						changeMonth : true,
+						changeYear : true,
+						showOn : "both",
+						buttonImage : HTTP + "assets/images/calendar.gif",
+						buttonImageOnly : true,
+						dateFormat : 'dd/mm/yy',
+						onSelect : function(selectedDate) {
+							jQuery("#expeditii_listare").jqGrid('setGridParam', {
+								url : HTTP + 'expeditii/json/introducere?data=' + selectedDate
+							}).trigger("reloadGrid");
+						}
+					});
+				}
+
+			});
+			
+			$(document).keydown(function(event) {
+		        if (event.ctrlKey==true && (event.which == '80') ) {
+		            event.preventDefault();
+		        }
+		    });
+		</script>
+		
+		
+		 <script type="text/javascript">
+	        $(document).keydown(function(e) {
+	        	var code = (e.keyCode ? e.keyCode : e.which);
+	        	if (e.altKey) {
+		            if(code==65){
+	            		AdaugaExpeditie();	            		
+	            	}	            		
+	                else if(code==77){
+	                	EditareExpeditie();
+	                }
+	                else if(code==83){
+	                	StergereExpeditie($('#NR_EXP').val());
+	                }
+               }else{
+               		if(code==45 || code==107){
+	                	ResetareCampuri();
+	                }
+               }
+               
+	        });
+	    </script>
+
+		<table id="expeditii_listare" class="table_jqgrid"></table>
+		<div id="paginatie" class="pagination_jqgrid"></div>
+	</div>
+	<div class="separator_empty" style="height: 2px;"></div>
+	<div id="expeditii_continut" class="expeditii_content">
+		{FORMULAR_EXPEDITIE}
+	</div>
+</form>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<div id="adauga_client" title="Adaugare Client">
+	<p class="validateTips">
+		Toate campurile sunt obligatorii!
+	</p>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<form>
+		<input type="hidden" name="client_cod_localitate" id="client_cod_localitate" value=""/>
+		<input type="hidden" name="client_tip" id="client_tip" value="0"/>
+		<fieldset id="client_pj_fieldset">
+			<legend class="legend">
+				Persoana juridica ?
+			</legend>
+			<input type="checkbox" name="client_pj" id="client_pj" class="field_checkbox" checked/>
+		</fieldset>
+		<fieldset id="client_cui_fieldset">
+			<legend class="legend">
+				CUI/CIF
+			</legend>
+			<input type="text" name="client_cui" id="client_cui" class="field_input w280" value="" placeholder="CUI/CIF"/>
+		</fieldset>
+		<fieldset>
+			<legend class="legend">
+				Nume
+			</legend>
+			<input type="text" name="client_nume" id="client_nume" class="field_input w280" value="" placeholder="Nume" disabled="disabled"/>
+		</fieldset>
+		<fieldset>
+			<legend class="legend">
+				Localitate
+			</legend>
+			<input type="text" name="client_localitate" id="client_localitate" class="field_input w280" value="" placeholder="Localitate" disabled="disabled"/>
+		</fieldset>
+		<fieldset>
+			<legend class="legend">
+				Adresa
+			</legend>
+			<textarea name="client_adresa" id="client_adresa" class="text_area w280" placeholder = "Adresa"></textarea>
+		</fieldset>
+		<fieldset>
+			<legend class="legend">
+				Persoana
+			</legend>
+			<input type="text" name="client_contact" id="client_contact" class="field_input w280" value="" placeholder="Persoana"/>
+		</fieldset>
+		<fieldset>
+			<legend class="legend">
+				Telefon
+			</legend>
+			<input type="text" name="client_telefon" id="client_telefon" class="field_input w280" value="" placeholder="Telefon: 07XXXXXXXX"/>
+		</fieldset>
+	</form>
+</div>
+
+<div id="adauga_puisori" title="Coduri de Bare" class="ascuns">
+	<div class="separator_empty" style="height: 10px;"></div>
+	<span id="error_coduri_puisori" style="color:red"><br/><br/></span>
+	<textarea name="coduri_puisori" id="coduri_puisori" class="text_area w260" style="resize: none; height: 100px;" ></textarea>
+	<input type="checkbox" value="1" name="consecutive" id="consecutive" checked="checked" /><label for="consecutive">Coduri Consecutive</label>
+	<span><br/>(Trebuie introdus doar primul cod)</span>
+</div>
+
+<div id="confirmare_expeditie" title="Confirmare"></div>
+
+<div id="detalii_expeditie"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+

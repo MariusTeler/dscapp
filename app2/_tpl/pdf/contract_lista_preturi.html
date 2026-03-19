@@ -1,0 +1,30 @@
+<div style="text-align:justify;">
+	<h2 style="color:#365F91">ANEXA 1 la contract Nr. {nr} din {data}</h2>
+    <h3>Art1.	LISTA PRETURI</h3>
+    <table  cellspacing="0" cellpadding="1" border="1" style="text-align: center">
+        <tr>
+            <th rowspan="2">&nbsp;<br>SERVICII</th>
+            <th colspan="2">LOCO<br></th>
+            <th colspan="2">ALTE LOCALITATI<br></th>
+        </tr>
+        <tr>
+            <td>Standard</td>
+            <td>Propus</td>
+            <td>Standard</td>
+            <td>Propus</td>
+        </tr>
+        {lista_preturi}
+    </table>
+    <span style="font-style:italic">Tarifele sunt exprimate in lei si nu contin tva.</span>
+    <h3>Art2.	MODALITATI PLATA, EMITERE FACTURA</h3>
+    <div>Factura se va emite {tip_facturare} {zi_facturare}</div>
+    <div>Termen de plata factura: {termen_plata} zile.</div>
+    <h5>&nbsp;</h5>
+    <table>
+        <tr><td><h4>FURNIZOR:</h4></td><td><h4>BENEFICIAR:</h4></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td>{gestionar_nume_societate}</td><td>{nume_societate}</td></tr>
+        <tr><td>prin {gestionar_reprezentant_calitate}</td><td>prin {reprezentant_calitate}</td></tr>
+        <tr><td>{gestionar_reprezentant}</td><td>{reprezentant}</td></tr>
+    </table>
+</div>

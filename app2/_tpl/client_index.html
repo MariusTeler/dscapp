@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <meta name="title" content="{TITLE}"/>
+        <meta name="description" content="{DESCRIPTION}"/>
+        <meta name="keywords" content="{KEYWORDS}"/>
+        <meta name="author" content="{AUTHOR}"/>
+        <meta name="owner" content="{OWNER}"/>
+        <meta name="copyright" content="{COPYRIGHT}"/>
+        <meta name="Robots" content="{ROBOTS}"/>
+        <meta name="Revisit-after" content="1 day"/>
+
+        <title>{TITLE}</title>
+
+        <base href="{HTTP}" />
+
+        <script type="text/javascript">
+            var HTTP = "{HTTP}";
+            var PHP_SELF = "{PHP_SELF}";
+            var PROCENT_TVA = "{PROCENT_TVA}";
+            var ALERTA_NR_ZILE = "{ALERTA_NR_ZILE}";
+        </script>
+
+        <!--stiluri css-->
+        <link type="text/css" rel="stylesheet" href="/assets/css/style_form.css?v={CLIENT_JS_VERSION}" />
+        <link type="text/css" rel="stylesheet" href="/assets/css/style.css?v={CLIENT_JS_VERSION}" />
+
+        <script type="text/javascript" src="/assets/js/jquery-1.7.2.min.js"></script>
+
+        <!--jquery modal-->
+        <script type="text/javascript" src="/assets/js/jquery.modal.min.js"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery.modal.min.css" />
+
+        <!--jquery validator-->
+        <script type="text/javascript" src="/assets/js/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="/assets/js/jquery.validate.messages_ro.min.js"></script>
+
+        <!--jquery ui-->
+        <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery-ui/jquery-ui-1.8.22.custom.css" />
+        <script type="text/javascript" src="/assets/js/jquery-ui/jquery-ui-1.8.22.custom.min.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery-ui/i18n/jquery.ui.datepicker-ro.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery-ui/jquery-ui-timepicker-addon.js"></script>
+
+		<!--jqgrid-->
+        <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery-jqgrid/ui.jqgrid.css" />
+		<script type="text/javascript" src="/assets/js/jquery-jqgrid/jquery.jqGrid.min.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery-jqgrid/i18n/grid.locale-ro.js"></script>
+
+		<script type="text/javascript" src="/assets/js/jquery.hint.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery.print.js"></script>
+
+		<script type="text/javascript" src="/assets/js/EventSource.js"></script>
+
+		<script type="text/javascript" src="/assets/js/common1.js?v={CLIENT_JS_VERSION}"></script>
+        <script type="text/javascript" src="/assets/js/global.js?v={ONLOAD_JS_VERSION}"></script>
+		<script type="text/javascript" src="/assets/js/client.js?v={CLIENT_JS_VERSION}"></script>
+
+        <script type="text/javascript">
+            $.ajaxSetup({
+                statusCode: {
+                    401: function() {
+                        if(!($.modal === undefined) && !$.modal.isActive()) {
+                            $('#parola_expirata_popup').hide();
+                            $('#LoginModal').modal();
+                        }
+                    }
+                }
+            })
+        </script>
+
+        <style>
+            .tooltip {
+                position: absolute;
+                background: #FFF;
+                color: #000;
+                padding: 5px 10px;
+                border-radius: 5px;
+                font-size: 12px;
+                white-space: nowrap;
+                visibility: hidden;
+                opacity: 0;
+                transition: opacity 0.2s;
+                pointer-events: none;
+                z-index: 9999999;
+            }
+        </style>
+
+    </head>
+    
+    <body>
+        <div class='tooltip' id='tooltip'></div>
+        <div class="main">
+            <!--meniu-->
+            <ul id="nav" style="padding-left: 10px; min-width:970px;">
+                <li class="current"><a href="{HTTP}">Home</a></li>
+                <li><a href="javascript:;">Expeditii</a>
+                    <ul>
+                    	<li><a href="{HTTP}client/expeditie_noua">Expeditie Noua</a></li>
+                        <li><a href="{HTTP}client/liste_expeditii">Lista expeditii</a></li>
+                        <li><a href="{HTTP}client/liste_retururi">Lista Retururi</a></li>
+                        <li {MENIU_RECANTARITE}><a href="{HTTP}client/recantarite">Expeditii recantarite</a></li>
+						<li {MENIU_IMPORT}><a href="{HTTP}client/importuri/expeditii">Import .csv</a></li>
+						<li {MENIU_IMPORT_XLS}><a href="{HTTP}client/import/expeditii">Import</a></li>
+                    </ul>
+                </li>
+                <li><a href="javascript:;">Borderouri</a>
+                    <ul>
+                        <li><a href="{HTTP}client/borderou_nou">Borderou Nou</a></li>
+                        <li><a href="{HTTP}client/liste_borderouri">Lista Borderouri</a></li>
+                    </ul>
+                </li>
+                <li><a href="javascript:;">Comenzi</a>
+                    <ul>
+                        <li><a href="{HTTP}client/comanda_noua">Comanda Noua</a></li>
+                        <li><a href="{HTTP}client/liste_comenzi">Lista Comenzi</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="javascript:;">Clienti</a>
+                	<ul>
+                		  <li><a href="{HTTP}client/listare_clienti">Listare</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="{HTTP}client/date_personale">Date Personale</a></li>
+                <li><a href="{HTTP}delogare">Delogare</a></li>
+                <li id="switcher" style="margin-top: 5px; float: right;"></li>
+            </ul>
+            <!--meniu-->
+            <!--continut-->
+            <div class="content ui-widget-content">
+                <div class="title_page">{TITLE_PAGE}</div>
+                <div class="title_info mesaj_confirmare">{TITLE_INFO}</div>
+                <div class="separator_empty title_border"></div>
+                {ERROR}
+                {CONTENT}
+            </div>
+            <div class="separator_empty"></div>
+            <div id="footer" style="text-align:right; padding-top: 10px;">
+                {FOOTER_TEXT}
+	        </div>
+        </div>
+        <div id="LoginModal" style="display:none; width: 320px;">
+            <form id="formular" name="formular" action="" method="post" onsubmit="javascript:ajaxLogin();return false;">
+                <input type="hidden" name="step" value="2" />
+                <div class="field_row" style="text-align:center;">
+                    <a href="{HTTP}"><img src="/assets/images/logo.png"></a>
+                </div>
+                <div class="separator_empty h10"></div>
+                <div class="field_row">
+                    <input type="text" class="text_field" name="login_user" id="login_user" placeholder="Username"/>
+                    <div class="separator_empty"></div>
+                </div>
+                <div class="field_row">
+                    <input type="password" class="text_field" id="login_pass" name="login_pass" placeholder="Password"/>
+                    <div class="separator_empty"></div>
+                </div>
+                <div class="separator_empty"></div>
+                <div class="field_row">
+                </div>
+                <div class="separator_empty"></div>
+                <div class="field_row" style="margin-left: 0px">
+                    <input id="buton_logare_popup" type="submit" class="button" value="Intra in Cont"/>
+                </div>
+                <div class="separator_empty h5"></div>
+            </form>
+        </div>
+        <div id="MesajUtilizatorModal" style="display:none;" data-keyboard="false">
+            <div class="modal-body"></div>
+        </div>
+    </body>
+</html>

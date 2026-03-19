@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <meta name="title" content="{TITLE}"/>
+        <meta name="description" content="{DESCRIPTION}"/>
+        <meta name="keywords" content="{KEYWORDS}"/>
+        <meta name="author" content="{AUTHOR}"/>
+        <meta name="owner" content="{OWNER}"/>
+        <meta name="copyright" content="{COPYRIGHT}"/>
+        <meta name="Robots" content="{ROBOTS}"/>
+        <meta name="Revisit-after" content="1 day"/>
+
+        <title>{TITLE}</title>
+
+        <base href="{HTTP}" />
+
+        <script type="text/javascript">
+            var HTTP = "{HTTP}";
+            var PHP_SELF = "{PHP_SELF}";
+            var PROCENT_TVA = "{PROCENT_TVA}";
+            var ALERTA_NR_ZILE = "{ALERTA_NR_ZILE}";
+            var APP_VERSION = "{APP_VERSION}";
+            var APP_MESSAGE = "{APP_MESSAGE}";
+            var CHECK_SESSION_EXPIRED = '{CHECK_SESSION_EXPIRED}';
+        </script>
+
+        <!--stiluri css-->
+        <link type="text/css" rel="stylesheet" href="/assets/css/style_form.css?v={ONLOAD_JS_VERSION}" />
+        <link type="text/css" rel="stylesheet" href="/assets/css/style2.css?v={ONLOAD_JS_VERSION}" />
+
+        <script type="text/javascript" src="/assets/js/jquery-1.7.2.min.js"></script>
+
+        <!--jquery modal-->
+        <script type="text/javascript" src="/assets/js/jquery.modal.min.js"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery.modal.min.css" />
+
+
+        <!--jquery validator-->
+        <script type="text/javascript" src="/assets/js/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="/assets/js/jquery.validate.messages_ro.min.js"></script>
+
+        <!--jquery ui-->
+        <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery-ui/jquery-ui-1.8.22.custom.css" />
+        <script type="text/javascript" src="/assets/js/jquery-ui/jquery-ui-1.8.22.custom.min.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery-ui/i18n/jquery.ui.datepicker-ro.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery-ui/jquery-ui-timepicker-addon.css"></script>
+		<script type="text/javascript" src="/assets/js/jquery-ui/jquery-ui-timepicker-addon.js"></script>
+
+		<!--jqgrid-->
+        <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery-jqgrid/ui.jqgrid.css" />
+		<script type="text/javascript" src="/assets/js/jquery-jqgrid/jquery.jqGrid.min.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery-jqgrid/i18n/grid.locale-ro.js"></script>
+
+		<script type="text/javascript" src="/assets/js/jquery.hint.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery.print.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery.blockUI.js"></script>
+
+		<script type="text/javascript" src="/assets/js/common1.js?v={ONLOAD_JS_VERSION}"></script>
+		<script type="text/javascript" src="/assets/js/onload.js?v={ONLOAD_JS_VERSION}"></script>
+        <script type="text/javascript" src="/assets/js/global.js?v={ONLOAD_JS_VERSION}"></script>
+        <script type="text/javascript" src="/assets/js/expeditii.js?v={ONLOAD_JS_VERSION}"></script>
+		<script type="text/javascript" src="/assets/js/retururi.js?v={RETURURI_JS_VERSION}"></script>
+        <script type="text/javascript" src="/assets/js/facturare.js?v={FACTURARE_JS_VERSION}"></script>
+
+        <script type="text/javascript">
+            $.ajaxSetup({
+                statusCode: {
+                    401: function() {
+                        if(!($.modal === undefined) && !$.modal.isActive()) {
+                            $('#parola_expirata_popup').hide();
+                            $('#LoginModal').modal();
+                        }
+                    }
+                }
+            })
+        </script>
+
+    </head>
+    <body>
+        <div class="main">
+            <!--meniu-->
+            <ul id="nav" style="padding-left: 10px; min-width:970px;">
+                <li class="current"><a href="{HTTP}">Home/Setari</a>
+                    <ul>
+                        <li {MENIU_12}><a href="{HTTP}/dashboard/urmarire">Dashboard</a></li>
+                        <li {MENIU_14}><a href="{HTTP}contracte/nou">Contract nou</a></li>
+                        <li {MENIU_11}><a href="{HTTP}loguri/raport">Loguri</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_1}><a href="{HTTP}expeditii/introducere#expeditii_continut">Expeditii</a>
+                    <ul>
+                        <li {MENIU_1_1}><a href="{HTTP}expeditii/cautare">Cautare</a></li>
+                        <li {MENIU_1_17}><a href="{HTTP}expeditiiclienti">Expeditii clienti</a></li>
+                        <li {MENIU_1_2}><a href="{HTTP}localitati/show">Localitati</a></li>
+                        <li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_1_2}><a href="{HTTP}expeditii/introducere#expeditii_continut">Introducere date</a></li>
+                        <li {MENIU_1_9}><a href="{HTTP}confirmari/confirmare">Confirmare</a></li>
+                        <li {MENIU_1_3}><a href="{HTTP}expeditii/urmarire">Urmarire</a></li>
+                        <li {MENIU_1_3}><a href="{HTTP}verificari/expeditie">Istoric Expeditie</a></li>
+                        <li {MENIU_1_18}><a href="{HTTP}expeditii/istoric_scanari">Istoric Livrari</a></li>
+						<li class="nav_sep">&nbsp;</li>
+						<li {MENIU_1_4}><a href="{HTTP}expeditii/liste_expeditii">Liste expeditii</a></li>
+                        <li {MENIU_1_5}><a href="{HTTP}expeditii/rapoarte_traseu">Rapoarte traseu</a></li>
+
+                        <li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_1_11}><a href="{HTTP}retururi/vizualizare">Vizualizare retururi</a></li>
+                        <li {MENIU_1_8}><a href="{HTTP}retururi/urmarire">Urmarire retururi</a></li>
+                        <li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_1_13}><a href="{HTTP}importuri-xls/expeditii">Import Cli NT XLS</a></li>
+                        <li {MENIU_1_13}><a href="{HTTP}importuri-csv/expeditii">Import Cli NT CSV</a></li>
+                        <li {MENIU_1_13}><a href="{HTTP}importuri-op-xls/expeditii">Import Op NT XLS</a></li>
+                        <li {MENIU_1_14}><a href="{HTTP}importuri-xls/destinatari">Import Destinatari XLS</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_15}><a href="{HTTP}recantariri/expeditii/cautare">Recantariri</a>
+                    <ul>
+                        <li {MENIU_15_1}><a href="{HTTP}recantariri/expeditii/cautare">Cautare</a></li>
+                        <li {MENIU_15_2}><a href="{HTTP}recantariri/xls">Import</a></li>
+                        <li {MENIU_15_3}><a href="{HTTP}recantariri/validare/cautare">Validare</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_7}><a href="{HTTP}rambursuri/vizualizare">Rambursuri</a>
+                    <ul>
+                        <li {MENIU_7_1}><a href="{HTTP}rambursuri/vizualizare">Vizualizare rambursuri</a></li>
+                        <li {MENIU_7_2}><a href="{HTTP}rambursuri/urmarire">Urmarire rambursuri</a></li>
+                        <li {MENIU_7_7}><a href="{HTTP}rambursuri/creare_tiparire">Creare/Tiparire note RBS</a></li>
+                        <li {MENIU_7_1}><a href="{HTTP}rambursuri/lista">Lista RBS</a></li>
+                        <li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_7_5}><a href="{HTTP}rambursuri/validate">RBS validate</a></li>
+                        <li {MENIU_7_4}><a href="{HTTP}rambursuri/decont/cautare">Chitante RBS</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_2}><a href="{HTTP}comenzi/preluare">Comenzi</a>
+                    <ul>
+                        <li {MENIU_2_1}><a href="{HTTP}comenzi/preluare">Preluare</a></li>
+                        <li {MENIU_2_2}><a href="{HTTP}comenzi/distribuire">Distribuire</a></li>
+                        <li {MENIU_2_1}><a href="{HTTP}comenzi/istoric">Istoric</a></li>
+                        <li {MENIU_2_3}><a href="{HTTP}expeditii/borderouri_clienti">Borderouri</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_3}><a href="#">Editare</a>
+                    <ul>
+                        <li {MENIU_18_1}><a href="{HTTP}apiusers/listare">Utilizatori API</a></li>
+                        <li {MENIU_18_1} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_3_1}><a href="{HTTP}clienti/listare">Clienti</a></li>
+                        <li {MENIU_3_13}><a href="{HTTP}clienti/alocare">Alocare Clienti</a></li>
+                        <li {MENIU_3_2} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_3_2}><a href="{HTTP}localitati/listare">Localitati</a></li>
+                        <li {MENIU_3_3}><a href="{HTTP}centre/listare">Centre</a></li>
+                        <li {MENIU_3_3}><a href="{HTTP}centre/dispecerate_listare">Dispecerate</a></li>
+                        <li {MENIU_3_12}><a href="{HTTP}checkpoints/listare">Checkpoints</a></li>
+                        <li {MENIU_3_11}><a href="{HTTP}geocoder_address/listare">Adrese geocoder</a></li>
+                        <li {MENIU_3_14} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_3_14}><a href="{HTTP}rute/ruta_noua">Ruta Noua</a></li>
+                        <li {MENIU_3_14}><a href="{HTTP}rute/lista_rute">Lista Rute</a></li>
+                        <li {MENIU_3_4} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_3_4}><a href="{HTTP}agenti/listare">Agenti</a></li>
+                        <li {MENIU_3_9}><a href="{HTTP}ag_vanzari/listare">Agenti vanzari</a></li>
+                        <li {MENIU_3_5} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_3_10}><a href="{HTTP}banci/listare">Banci</a></li>
+                        <li {MENIU_3_5}><a href="{HTTP}clienti/tarif_lista">Tarif de lista</a></li>
+                        <li {MENIU_3_6} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_3_6}><a href="{HTTP}operatori/listare">Operatori</a></li>
+                        <li {MENIU_3_7}><a href="{HTTP}operatori/drepturi_acces">Drepturi acces</a></li>
+                        <li {MENIU_3_7} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_3_8}><a href="{HTTP}operatori/date_personale">Date personale</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_4}><a href="{HTTP}expeditii/activitate_centre">Centralizari</a>
+                	<ul>
+                        <li {MENIU_4_1}><a href="{HTTP}expeditii/activitate_centre">Activitate centre</a></li>
+                        <li {MENIU_4_2}><a href="{HTTP}expeditii/colectari">Colectari</a></li>
+                        <li {MENIU_4_3}><a href="{HTTP}expeditii/livrari">Livrari</a></li>
+                        <li {MENIU_4_6}><a href="{HTTP}expeditii/rapoarte_centre">Rapoarte centre</a></li>
+                        <li {MENIU_4_8}><a href="{HTTP}reports/view">Rapoarte export</a></li>
+                        <li {MENIU_4_7}><a href="{HTTP}expeditii/cautare/alex">Rapoarte Alex</a></li>
+                        <li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_4_4}><a href="{HTTP}expeditii/v_istoric_scanari">Istoric Scanari</a></li>
+                        <li {MENIU_4_4}><a href="{HTTP}expeditii/rulaj_expeditii_clienti">Rulaj expeditii clienti</a></li>
+	                    <li {MENIU_4_5}><a href="{HTTP}expeditii/dif_exp_scan">Diferente awb scanare</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_5}><a href="{HTTP}facturi/restante">Facturi</a>
+                    <ul>
+                        <!-- <li {MENIU_5_1}><a href="{HTTP}facturi/incasari">Incasari</a></li> -->
+                        <li {MENIU_5_1}><a href="{HTTP}facturi/incasari_cf">Incasari clienti CTR</a></li>
+                        <li {MENIU_5_1}><a href="{HTTP}facturi/liste">Lista facturi</a></li>
+                        <li {MENIU_5_2}><a href="{HTTP}facturi/restante">Restante</a></li>
+                        <li {MENIU_5_3}><a href="{HTTP}facturi/diferente">Diferente</a></li>
+                        <li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_5_3}><a href="{HTTP}facturi/facturare/">Facturare</a></li>
+                        <li {MENIU_5_5}><a href="{HTTP}facturare/">Facturare periodica</a></li>
+                        <li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_5_1}><a href="{HTTP}facturi/v_incasari">Validare incasari android</a></li>
+                        <li {MENIU_5_6}><a href="{HTTP}facturi/decont/cautare">Facturi android</a></li>
+                        <li {MENIU_5_6}><a href="{HTTP}facturi/decont/cautare_cf">Chitante client CTR</a></li>
+                        <li {MENIU_5_7}><a href="{HTTP}cheltuieli/decont/cautare">Cheltuieli</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_6}><a href="javascript:;">Scanare</a>
+                    <ul>
+                        <li><a href="{HTTP}scanare/istoric-codbare">Istoric CodBare</a></li>
+                        <li class="nav_sep">&nbsp;</li>
+                        <li><a href="{HTTP}scanare/istoric_scanari">Istoric Scanari</a></li>
+                        <li><a href="{HTTP}scanare/bo_livrare_curieri">Borderou livrare curieri</a></li>
+						<li class="nav_sep">&nbsp;</li>
+						<li><a href="{HTTP}scanare/fara_key">Fara key entry</a></li>
+						<li><a href="{HTTP}scanare/diferente_agent">Diferente Agent</a></li>
+						<li><a href="{HTTP}scanare/diferente_centru">Diferente Centru</a></li>
+						<li><a href="{HTTP}scanare/diferente_rute">Diferente Rute</a></li>
+						<li class="nav_sep">&nbsp;</li>
+                        <li {MENIU_20}><a href="{HTTP}scanport">Statie Scanare</a></li>
+                    </ul>
+                </li>
+                <li {MENIU_8}><a href="javascript:;">Decont</a>
+                    <ul>
+                        <li {MENIU_8_1}><a href="{HTTP}decont_card/afisare">Decont CARD</a></li>
+                        <li {MENIU_8_1}><a href="/financiar/centru">Financiar centru</a></li>
+                        <li {MENIU_8_3}><a href="/financiar/centre">Financiar centre</a></li>
+                        <li {MENIU_8_4}><a href="/financiar/salarii">Financiar salarii</a></li>
+                        <!-- <li {MENIU_8_5}><a href="/financiar/aprobare_rbs_cash">Aprobare RBS cash</a></li> -->
+                        <li {MENIU_8_6} class="nav_sep">&nbsp;</li>
+                        <li {MENIU_8_6}><a href="{HTTP}agenti/pontaj">Pontaj curieri</a></li>
+                    </ul>
+                </li>
+
+                <li {MENIU_19}><a href="javascript:;">Statie Scanare</a>
+                    <ul>
+                        <li><a href="{HTTP}scanport">Scanare</a></li>
+                    </ul>
+                </li>
+
+                <li><a class="delogare_link" href="{HTTP}delogare">Delogare</a></li>
+                <li id="switcher" style="margin-top: 5px; float: right;"></li>
+
+            </ul>
+            <!--meniu-->
+            <!--continut-->
+            <div class="content ui-widget-content">
+                <div class="title_page">{TITLE_PAGE}</div>
+                <div class="title_info mesaj_confirmare">{TITLE_INFO}</div>
+                <div class="separator_empty title_border"></div>
+                {ERROR}
+                {CONTENT}
+            </div>
+            <div class="separator_empty"></div>
+            <div id="footer" style="text-align:right; padding-top: 10px;">
+		    	{FOOTER_TEXT}
+	        </div>
+        </div>
+        <div id="LoginModal" style="display:none; width: 320px;">
+            <form id="formular" name="formular" action="" method="post" onsubmit="javascript:ajaxLogin();return false;">
+                <input type="hidden" name="step" value="2" />
+                <div class="field_row" style="text-align:center;">
+                    <a href="{HTTP}"><img src="/assets/images/logo.png"></a>
+                </div>
+                <div class="separator_empty h10"></div>
+                <div class="field_row">
+                    <input type="text" class="text_field" name="login_user" id="login_user" value="" placeholder="Username"/>
+                    <div class="separator_empty"></div>
+                </div>
+                <div class="field_row">
+                    <input type="password" class="text_field" id="login_pass" name="login_pass" value="" placeholder="Password"/>
+                    <div class="separator_empty"></div>
+                </div>
+                <div class="separator_empty"></div>
+                <div class="field_row">
+                </div>
+                <div class="separator_empty"></div>
+                <div class="field_row" style="margin-left: 0px">
+                    <input id="buton_logare_popup" type="submit" class="button" value="Intra in Cont"/>
+                    <p id="parola_expirata_popup">Parola expirata, apasa<a href="{HTTP}">aici</a> pentru modificare</p>
+                </div>
+                <div class="separator_empty h5"></div>
+            </form>
+        </div>
+        <div id="MesajUtilizatorModal" style="display:none;" data-keyboard="false">
+            <div class="modal-body"></div>
+        </div>
+    </body>
+</html>

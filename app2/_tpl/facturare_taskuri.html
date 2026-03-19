@@ -1,0 +1,1968 @@
+<script type="application/javascript">
+
+    var ajax_progress = false;
+    var facturare_task_menu = 1;
+    var proforma_activa = 0;
+    var detalii_client_id = 0;
+    var val_totala_exp = 0;
+    var val_totala_tva = 0;
+    var val_totala_exp_sel = 0;
+    var val_totala_tva_sel = 0;
+    var files;
+    var status_factura = {STATUS_FACTURA_JS_ARRAY};
+    var proforma_activa_detalii_tip = '';
+
+
+    function redirectPost(url, data) {
+
+        $('#export_redirect_value').val(data);
+        $('#export_redirect').submit();
+    }
+
+    function ComboClientiFacturareNoua(field) {
+        $("#" + field + "_nume").autocomplete({
+            source : function(request, response) {
+                $.ajax({
+                    url : HTTP + "facturare/json/platitori",
+                    dataType : "json",
+                    data : { name_startsWith : request.term , puncte_de_lucru: $('#puncte_de_lucru').is(':checked'), clienti_activi: $('#clienti_activi').is(':checked'), clienti_cash: $('#clienti_cash').is(':checked') },
+                    success : function(data) {
+                        response($.map(data.rezultat, function(item) {
+                            return {
+                                cod_cl : item.cod_cl,
+                                master : item.master,
+                                localitate_id : item.localitate_id,
+                                cod_fiscal : item.cod_fiscal,
+                                NUME_SOCIETATE : item.NUME_SOCIETATE,
+                                REG_COM : item.REG_COM,
+                                LOCALITATE_SEDIU_SOCIAL : item.LOCALITATE_SEDIU_SOCIAL,
+                                ADRESA_SEDIU_SOCIAL : item.ADRESA_SEDIU_SOCIAL,
+                                EMAIL_FACTURA : item.EMAIL_FACTURA,
+                                value : item.value,
+                                label : item.label,
+                            }
+                        }));
+                    }
+
+                });
+            },
+            minLength : 2,
+            select: function(event,ui){
+                $('#'+field).val(ui.item.cod_cl);
+                $('#'+field+"_master").val(ui.item.master);
+                var dethtml = '';
+                dethtml += '<span>COD CL:</span>' + ui.item.cod_cl + '<br>';
+                dethtml += '<span>Cod fiscal:</span>' + ui.item.cod_fiscal + '<br>';
+                dethtml += '<span>Reg. Com.:</span>' + ui.item.REG_COM + '<br>';
+                dethtml += '<span>Nume Societate:</span>' + ui.item.NUME_SOCIETATE + '<br>';
+                dethtml += '<span>Localitate sediu:</span>' + ui.item.LOCALITATE_SEDIU_SOCIAL + '<br>';
+                dethtml += '<span>Adresa sediu:</span>' + ui.item.ADRESA_SEDIU_SOCIAL + '<br>';
+                dethtml += '<span>Email factura:</span>' + ui.item.EMAIL_FACTURA + '<br>';
+
+
+                $('#detalii_client_selectat').html(dethtml);
+
+                //  $('#localitate_id').val(ui.item.localitate_id);
+                //  $('#'+field+"_nume").val(ui.item.value);
+                //  $('#'+field+"_afm").val(ui.item.cod_fiscal);
+            },
+            open: function() {
+                $('#'+field).val("");
+                $('#'+field+"_master").val("");
+                //  $('#'+field+"_afm").val("");
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function() {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            }
+        });
+    }
+
+
+    // Grab the files and set them to our variable
+    function prepareUpload(event)
+    {
+        files = event.target.files;
+    }
+
+
+    // Catch the form submit and upload the files
+    function updateBorderouXls(event)
+    {
+        // START A LOADING SPINNER HERE
+
+        // Create a formdata object and add the files
+        var data = new FormData();
+
+        /*if (typeof files !== 'undefined') {
+         return ;
+         }*/
+
+        $.each(files, function(key, value)
+        {
+            data.append(key, value);
+        });
+        data.append("recalculare_idfact", $('#recalculare_idfact').val());
+        $.ajax({
+            url: '{HTTP}facturare/acc',
+            type: 'POST',
+            data: data,
+            cache: false,
+            dataType: 'json',
+            processData: false, // Don't process the files
+            contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+            success: function(data, textStatus, jqXHR)
+            {
+                if(data.mesaj){
+                    AfiseazaEroare(data.mesaj);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown)
+            {
+                // Handle errors here
+                console.log('ERRORS: ' + textStatus);
+                // STOP LOADING SPINNER
+            }
+        });
+
+        return false;
+    }
+
+
+    function prepareUpload(event)
+    {
+        files = event.target.files;
+    }
+
+    $(document).ready(function()
+    {
+
+
+        $( "body" ).click(function() {
+            $('.progress_area_mess').slideUp();
+        });
+
+        $('input[type=file]').on('change', prepareUpload);
+
+        //  $('#recalculare_borderou_form').on('submit', updateBorderouXls);
+
+        $('#data_facturi_val').datepicker({ dateFormat:"dd.mm.yy" });
+
+        $('#data_start').datepicker({ dateFormat:"dd.mm.yy" });
+        $('#data_final').datepicker({ dateFormat:"dd.mm.yy" });
+        $('#data_start_cautare').datepicker({ dateFormat:"dd.mm.yy" });
+        $('#data_final_cautare').datepicker({ dateFormat:"dd.mm.yy" });
+        sortTabs('#facturare-tabs');
+        $('#facturare-tabs').tabs();
+
+        FacturiGrid('cautare_facturi_tabel', 'facturare/json/facturi_cautare/cautare', 'Cautare Facturi');
+        FacturiGrid('lista_taskuri', 'facturare/json/taskuri/1', 'Lista taskuri');
+        FacturiGrid('stornari_facturi_tabel', 'facturare/json/facturi_cautare/storno', 'Lista facturi');
+
+        Grid_DetaliiTask(0);
+        GridPozitiiFactura();
+        ComboClientiFacturareNoua('clienti_combo');
+        ComboClientiFacturareNoua('clienti_stornare_combo');
+        ComboClientiFacturareNoua('clienti_search_combo');
+        AfisarePerioada();
+
+
+        $('#tab_1 a').on( "click", function(event) {
+            $('#tarif_negociat_a').click();
+        });
+
+        $('#tab_2 a').on( "click", function(event) {
+            $('#expeditii_spre_facturare').click();
+        });
+
+
+
+        getProgress();
+
+        /*$('#tab_3 a').on( "click", function(event) {
+         $('#expeditii_spre_facturare').click();
+         })*/;
+
+        $('.ui-datepicker-trigger').hide();
+        $('.tab-sub-menu a').on( "click", function(event) {
+            event.preventDefault();
+            $('#expeditii_noi').hide();
+            $("#pozitii_factura").hide();
+            $("#detalii_task").setGridParam({postData: null});
+
+            disableAcctions();
+
+            facturare_task_menu = parseInt($( this ).attr('rel'));
+            $('.tab-sub-menu a').removeClass('active');
+            $( this ).addClass('active');
+
+            if(facturare_task_menu == 3 ){
+                $('#gridWrapperDetalii').show();
+                $("#pozitii_factura").hide();
+                $('#adauga_in_facturare').attr('disabled','disabled');
+                $('#scoate_din_facturare').removeAttr('disabled');
+                jQuery("#detalii_task").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/detalii_task/'+proforma_activa,
+                    postData : {
+                        filters:'{"groupOp":"AND","rules":[{"field":"ep.data_expeditie","op":"gt","data":""},{"field":"ep.data_expeditie","op":"lt","data":""}]}'
+                    },
+                    search : false
+                }).trigger("reloadGrid");
+                jQuery("#detalii_task").jqGrid('setCaption', 'Lista expeditii');
+            } else if(facturare_task_menu == 4 ){
+                $("#pozitii_factura").hide();
+                $('#gridWrapperDetalii').show();
+                $('#adauga_in_facturare').removeAttr('disabled');
+                $('#scoate_din_facturare').attr('disabled','disabled');
+                jQuery("#detalii_task").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/detalii_task_exp_nefacturate/'+ proforma_activa,
+                    postData : {
+                        filters:'{"groupOp":"AND","rules":[{"field":"ep.data_expeditie","op":"gt","data":""},{"field":"ep.data_expeditie","op":"lt","data":""}]}'
+                    },
+                    search : false
+                }).trigger("reloadGrid");
+
+                jQuery("#detalii_task").jqGrid('setCaption', 'Lista expeditii nefacturate');
+
+            } else if(facturare_task_menu == 7 ){
+                $("#pozitii_factura").hide();
+                $('#gridWrapperDetalii').show();
+                $('#adauga_in_facturare').removeAttr('disabled');
+                $('#scoate_din_facturare').attr('disabled','disabled');
+                jQuery("#detalii_task").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/detalii_task_exp_neasociate/'+ proforma_activa,
+                    postData : {
+                        filters:'{"groupOp":"AND","rules":[{"field":"ep.data_expeditie","op":"gt","data":""},{"field":"ep.data_expeditie","op":"lt","data":""}]}'
+                    },
+                    search : false
+                }).trigger("reloadGrid");
+
+                jQuery("#detalii_task").jqGrid('setCaption', 'Lista expeditii neasociate');
+
+            } else if(facturare_task_menu == 5 ) {
+                $("#pozitii_factura").hide();
+                // $('#gridWrapperDetalii').hide();
+                $("#detalii_task").jqGrid('setCaption', 'Cautare expeditii');
+                $('#adauga_in_facturare').removeAttr('disabled');
+                $('#expeditii_noi').show();
+                $('#gridWrapperDetalii').show();
+                $("#detalii_task").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/cautare_expeditii/'+ proforma_activa,
+                    postData : {
+                        filters:'{"groupOp":"AND","rules":[{"field":"ep.data_expeditie","op":"gt","data":""},{"field":"ep.data_expeditie","op":"lt","data":""}]}'
+                    },
+                    search : false
+                }).trigger("reloadGrid");
+
+            }  else if(facturare_task_menu == 6 ) {
+                $("#pozitii_factura").show();
+                $('#expeditii_noi').hide();
+                $('#gridWrapperDetalii').hide();
+                $("#pozitii_factura_table").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/pozitii_factura/'+ proforma_activa
+                }).trigger("reloadGrid");
+            } else {
+                jQuery("#detalii_task").jqGrid('setCaption', 'Lista expeditii');
+                jQuery("#lista_taskuri").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/taskuri/'+facturare_task_menu
+                }).trigger("reloadGrid");
+            }
+
+            // console.log("facturare_task_menu:"+facturare_task_menu);
+
+        });
+
+
+
+    });
+
+    function sortTabs(target) {
+        var sortedTabs = $(target).find("li").sort(function (a, b) {
+            if (a.id < b.id) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+        //update the sorted DOM
+        $(target).find('ul').html(sortedTabs);
+    }
+
+    function disableAcctions() {
+        $('#adauga_in_facturare').attr('disabled','disabled');
+        $('#scoate_din_facturare').attr('disabled','disabled');
+    }
+
+    function UpdateFacturareTaskuri() {
+
+    }
+
+    function inchideDetaliiFactura() {
+        // $('#facturare-tabs').tabs();
+        // $('#facturare-tabs').tabs('select', 2);
+
+        //   $('#tab_detalii a').html('Datalii');
+        // $('#tab_detalii').hide();
+
+        // $('#facturare-tabs ul').tabs('select', 1);
+        //$('#tabs-detalii').addClass('ui-tabs-hide');
+        //$('#lista_taskuri_but').addClass('ui-tabs-selected ui-state-active');
+
+        //$('#tabs-1').removeClass('ui-tabs-hide');
+
+        //  $( "#facturare-tabs" ).tabs({ active: 2 });
+        //console.log("inchid");
+        location.reload();
+        //  return false;
+    }
+
+
+    function GridPozitiiFactura() {
+        var gridimgpath = 'css/smoothness/images';
+        var grid = jQuery('#pozitii_factura_table');
+        var gridData;
+        var gridData_expeditor;
+
+        grid.jqGrid(
+                {
+                    url : HTTP + 'facturare/json/pozitii_factura/',
+                    datatype: 'json',
+                    mtype: 'POST',
+                    colNames : [ 'Nume', 'Cantitate', 'Val. fara T.V.A.', 'Val. T.V.A.', 'Id Fact.'],
+                    colModel : [ {
+                        name : 'nume',
+                        index : 'nume',
+                        editable:true,
+                        width: 716,
+                        editrules:{custom:true,
+                            custom_func: function mypricecheck(value, colname) {
+
+                                if(value.length > 0){
+                                    return [true,""];
+                                } else {
+                                    return [false,"Completeaza " + colname];
+                                }
+                            }
+                        }
+                    }, {
+                        name : 'cantitate',
+                        index : 'cantitate',
+                        width: 50,
+                        editable:true,
+                        align: 'center',
+                        editrules:{custom:true,
+                            custom_func: function mypricecheck(value, colname) {
+                                if(value.length > 0){
+                                    return [true,""];
+                                } else {
+                                    return [false,"Completeaza " + colname];
+                                }
+                            }
+                        }
+                    },{
+                        name : 'valoare_fara_tva',
+                        index : 'valoare_fara_tva',
+                        width: 60,
+                        editable:true,
+                        align: 'right'
+                    },{
+                        name : 'valoare_tva',
+                        index : 'valoare_tva',
+                        width: 60,
+                        editable:false,
+                        align: 'right'
+                    },{
+                        name : 'idfact',
+                        index : 'idfact',
+                        hidden: true,
+                        width: 60,
+                        editable: true,
+                        editoptions: {
+                            defaultValue: function () {
+                                return proforma_activa;
+                            }
+                        },
+                        align: 'right'
+                    }],
+                    rowNum : 10000,
+                    rownumbers : true,
+                    width : 960,
+                    height : 350,
+                    viewrecords : true,
+                    pager : '#pozitii_factura_table_pag',
+                    shrinkToFit: false,
+                    caption:'Corectii factura',
+                    forceFit: true,
+                    multiselect: true,
+                    editurl: HTTP + 'facturare/json/pozitii_factura/',
+
+                    beforeSelectRow: function (rowid, e) {
+                        var $myGrid = $(this),
+                                i = $.jgrid.getCellIndex($(e.target).closest('td')[0]),
+                                cm = $myGrid.jqGrid('getGridParam', 'colModel');
+                        return (cm[i].name === 'cb');
+                    },
+                    ondblClickRow : function(rowid, nr, col,  row) {
+                        jQuery(this).jqGrid("editRow", rowid, true, '', '', '', '', reload_pozitii_factura_table);
+                    },
+                    gridComplete: function()
+                    {
+
+                    }
+                });
+        grid.jqGrid('bindKeys');
+        grid.jqGrid('filterToolbar',{
+            stringResult : true,
+            searchOnEnter : false
+        });
+
+        grid.jqGrid('navGrid', '#pozitii_factura_table_pag', {
+            del : true,
+            add : true,
+            edit : false,
+            search : false
+        });
+    }
+
+
+    function reload_pozitii_factura_table(rowid, result) {
+        $("#pozitii_factura_table").trigger("reloadGrid");
+        return [];
+    }
+
+    datePick = function(elem)
+    {
+        jQuery(elem).datepicker({ dateFormat:"yy-mm-dd" });
+    }
+
+
+
+    function FacturiGrid(elem, url, label) {
+        var gridimgpath = 'css/smoothness/images';
+        var grid = jQuery('#'+elem);
+        var gridData;
+        var gridData_expeditor;
+
+        grid.jqGrid(
+                {
+                    url : HTTP + url,
+                    datatype: 'json',
+                    mtype: 'POST',
+                    colNames : [ 'Societate', 'Data', 'Nr. Factura','Nr. Storno', 'Tip fact.', 'Plata', 'Tip factura', 'Mod gen.', 'Suma', 'T.V.A.', 'Corectii', 'Nr.Exp.', 'Nefact.', 'Status', 'Trimisa', 'Cod fiscal', 'Client','Cod client' ,'Email factura','Mod plata', 'Tip TVA', 'TrimisaWME', 'MessWME' ],
+                    colModel : [ {
+                        name : 'client',
+                        index : 'c.NUME_SOCIETATE',
+                        width: 150
+                    }, {
+                        name : 'trndate',
+                        index : 'f.trndate',
+                        sorttype : 'date',
+                        formatter : 'date',
+                        formatoptions : {
+                            srcformat : 'Y-m-d',
+                            newformat : 'd.m.Y'
+                        },
+                        width: 60,
+                        align: 'center',
+                        searchoptions:{dataInit:datePick, attr:{title:'Select Date'}}
+                    }, {
+                        name : 'factura',
+                        index : 'f.invoice',
+                        width: 80,
+                        align: 'left'
+                    },
+                    {
+                        name : 'stornare',
+                        index : 's.stornari',
+                        width: 160,
+                        align: 'left'
+                    },{
+                        name : 'tip_facturare',
+                        index : 'c.TIP_FACTURARE',
+                        edittype : 'select',
+                        align: 'center',
+                        width: 50,
+                        editoptions : {
+                            value : "1:Lunar;2:Bilunar;3:Saptamanal;4:Manual"
+                        },
+                        stype : 'select',
+                        formatter: 'select',
+                        searchoptions : {
+                            value : ":Toate;1:Lunar;2:Bilunar;3:Saptamanal;4:Manual",
+                            sopt : [ 'eq' ]
+                        }
+                    },{
+                        name : 'tip_plata',
+                        index : 'c.tip_plata',
+                        stype : 'select',
+                        edittype : 'select',
+                        formatter: 'select',
+                        searchoptions : {
+                            value : ":Toate;0:Cash;1:Virament",
+                            sopt : [ 'eq' ]
+                        },
+                        editoptions : {
+                            value : "0:Cash;1:Virament"
+                        },
+                        width: 50,
+                        align: 'left'
+                    },{
+                        name : 'tip_factura',
+                        index : 'f.tip_factura',
+                        stype : 'select',
+                        edittype : 'select',
+                        formatter: 'select',
+                        searchoptions : {
+                            value : ":Toate;1:Normala;2:Storno",
+                            sopt : [ 'eq' ]
+                        },
+                        editoptions : {
+                            value : "1:Normala;2:Storno"
+                        },
+                        width: 50,
+                        align: 'left'
+                    },{
+                        name : 'mod_generare',
+                        index : 'f.mod_generare',
+                        stype : 'select',
+                        formatter: 'select',
+                        searchoptions : {
+                            value : ":Toate;1:Automat;2:Manual",
+                            sopt : [ 'eq' ]
+                        },
+                        editoptions : {
+                            value : "1:Automat;2:Manual"
+                        },
+                        width: 50,
+                        align: 'left'
+                    },{
+                        name : 'sumamnt',
+                        formatter: 'integer',
+                        sortable:false,
+			            search:false,
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'procTva',
+                        width: 40,
+                        sortable:false,
+			            search:false,
+                        align: 'right'
+                    }, {
+                        name : 'corectii',
+                        index : 'corectii',
+                        formatter: 'integer',
+                        sortable:false,
+                        width: 40,
+                        align: 'center',
+                        searchoptions : {
+                            sopt : [ 'eq' ]
+                        }
+                    }, {
+                        name : 'nr_exp',
+                        index : 'f.nr_exp',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 50,
+                        align: 'right'
+                    }, {
+                        name : 'nr_exp_cu_referire',
+                        index : 'nr_exp_cu_referire',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 50,
+                        align: 'right',
+                        searchoptions : {
+                            sopt : [ 'eq' ]
+                        }
+                    }, {
+                        name : 'status',
+                        index : 'f.status',
+                        edittype : 'select',
+                        align: 'center',
+                        width: 70,
+                        editoptions : {
+                            value : "{STATUS_FACTURA_JQGRID}"
+                        },
+                        stype : 'select',
+                        formatter: 'select',
+                        searchoptions : {
+                            value : ":Toate{STATUS_FACTURA_JQGRID}",
+                            sopt : [ 'eq' ]
+                        }
+                    }, {
+                        name : 'trimisa',
+                        index : 'f.trimisa',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 42,
+                        align: 'center'
+                    }, {
+                        name : 'COD_FISCAL',
+                        index : 'c.COD_FISCAL',
+                        width: 80,
+                        align: 'left'
+                    }, {
+                        name : 'NUME_SOCIETATE',
+                        index : 'c.NUME',
+                        width: 260,
+                        align: 'left'
+                    }, {
+                        name : 'client_id',
+                        index : 'f.client_id',
+                        hidden:false,
+                        width: 100
+                    }, {
+                        name : 'EMAIL_FACTURA',
+                        index : 'c.EMAIL_FACTURA',
+                        width: 260,
+                        align: 'left'
+                    }, {
+                        name : 'MOD_PLATA',
+                        index : 'c.MOD_PLATA',
+                        width: 60,
+                        align: 'left'
+                    }, {
+                        name : 'TIP_TVA',
+                        index : 'f.TIP_TVA',
+                        stype : 'select',
+                        formatter: 'select',
+                        searchoptions : {
+                            value : ":Toate;0:Taxare normala;2:Taxare inversa;3:Taxare triunghiulara;4:Locul livrarii / prestarii in afara Romaniei;5:Intracom, scutit, cu drept de ded (lit a/d)",
+                            sopt : [ 'eq' ]
+                        },
+                        editoptions : {
+                            value : "0:Taxare normala;2:Taxare inversa;3:Taxare triunghiulara;4:Locul livrarii / prestarii in afara Romaniei;5:Intracom, scutit, cu drept de ded (lit a/d)"
+                        },
+                        width: 120,
+                        align: 'left'
+
+                    }, {
+                        name : 'f.wme',
+                        index : 'f.wme',
+                        width: 80,
+                        align: 'left',
+                        stype : 'select',
+                        formatter: 'select',
+                        searchoptions : {
+                            value : ":Toate;0:Factura netrimise;1:Factura trimisa;2:Factura si chitanta trimisa;3:Eroare",
+                            sopt : [ 'eq' ]
+                        },
+                        editoptions : {
+                            value : "0:Factura netrimisa;1:Factura trimisa;2:Factura si chitanta trimisa;3:Eroare"
+                        }
+                    }, {
+                        name : 'f.wme_message',
+                        index : 'f.wme_message',
+                        width: 300,
+                        align: 'left'
+                    }],
+                    rowNum : 250,
+                    rowList : [ 250,500,1000,2500,5000,10000 ],
+                    rownumbers : true,
+                    width : 960,
+                    height : 350,
+                    viewrecords : true,
+                    pager : '#'+elem+'_pag',
+                    shrinkToFit: false,
+                    caption:label,
+                    forceFit: true,
+                    multiselect: true,
+                    
+                    beforeSelectRow: function (rowid, e) {
+                        var $myGrid = $(this),
+                                i = $.jgrid.getCellIndex($(e.target).closest('td')[0]),
+                                cm = $myGrid.jqGrid('getGridParam', 'colModel');
+                        return (cm[i].name === 'cb');
+                    },
+                    ondblClickRow : function(id, nr, col,  row) {
+                        proforma_activa = id;
+                        $('#recalculare_idfact').val(id);
+                        $('#proforma_activa').val(id);
+                        $("#pozitii_factura").hide();
+
+                        jQuery("#detalii_task").jqGrid("clearGridData");
+                        var client = jQuery("#"+elem).jqGrid('getCell', id, 'client');
+                        var client_id = jQuery("#"+elem).jqGrid('getCell', id, 'client_id');
+                        var factura_status = jQuery("#"+elem).jqGrid('getCell', id, 'status');
+
+                        if(factura_status > 1){
+                            $('#expeditii_spre_facturare').text('Expeditii facturate')
+                        } else {
+                            $('#expeditii_spre_facturare').text('Expeditii spre facturare')
+                        }
+
+                        $('#factura_sub_title').html(status_factura[factura_status]);
+
+                        detalii_client_id = client_id;
+                        var data = jQuery("#"+elem).jqGrid('getCell', id, 'data_expeditie');
+                        $('.tab_detalii a').html( client + '&nbsp;&nbsp;&nbsp;&nbsp;<span id="close_tab_but" onclick="inchideDetaliiFactura()">x</span>');
+                        $('.tab_detalii').show();
+                        disableAcctions();
+                        $('#scoate_din_facturare').removeAttr('disabled');
+
+                        var index = $('#facturare-tabs a[href="#tabs-detalii"]').parent().index();
+                        $('#facturare-tabs').tabs('select', index);
+                        var detalii_tip = '';
+                        if(elem == 'stornari_facturi_tabel'){
+                            detalii_tip = '/storno';
+                        }
+                        proforma_activa_detalii_tip = detalii_tip;
+                        jQuery("#detalii_task").jqGrid('setGridParam', {
+                            url : HTTP + 'facturare/json/detalii_task/'+id + detalii_tip
+                        }).trigger("reloadGrid");
+                        if(elem == 'stornari_facturi_tabel'){
+                            setDetaliiTabHeader('storno');
+                        } else {
+                            setDetaliiTabHeader('normala');
+                        }
+                        $('#expeditii_spre_facturare').click();
+
+                    },
+                    gridComplete: function()
+                    {
+
+                        if(elem == 'lista_taskuri'){
+                            var userData = $("#lista_taskuri").getGridParam("userData");
+                            $('#nr_taskuri').show().text(userData.tarif_negociat + userData.tarif_manual);
+                            $('#negociat_count').text(userData.tarif_negociat);
+                            $('#manual_count').text(userData.tarif_manual);
+                        }
+
+                        var rows = $(this).getDataIDs();
+
+                        for (var i = 0; i < rows.length; i++)
+                        {
+                            if($(this).getCell(rows[i],"nr_exp_cu_referire") > 0)
+                            {
+                                $(this).jqGrid('setRowData',rows[i],false, {  color:'red'} );
+                              //  $(this).jqGrid('setRowData',rows[i],false, {  background:'darkorange'} );
+                            }
+                        }
+
+                    }
+
+                });
+        grid.jqGrid('bindKeys');
+
+
+        grid.jqGrid('navGrid', '#'+elem+'_pag', {
+            del : false,
+            add : false,
+            edit : false,
+            search : false
+        },{},{},{},{multipleSearch:true});
+
+        grid.jqGrid('navButtonAdd','#'+elem+'_pag',{
+            caption:"Export facturi",
+            onClickButton : function () {
+                var allRowsOnCurrentPage = $('#'+elem).jqGrid('getDataIDs');
+                // console.log(allRowsOnCurrentPage);
+                redirectPost(HTTP + "facturare/xls/facturi",allRowsOnCurrentPage);
+                // window.open(HTTP + 'facturare/xls/facturi/' + $('#proforma_activa').val(),'_blank');
+            }
+        });
+
+        grid.jqGrid('filterToolbar',{
+            stringResult : true,
+            searchOnEnter : false
+        });
+    }
+
+
+    function setDetaliiTabHeader(tip) {
+        if(proforma_activa_detalii_tip == '/storno' || tip == 'storno' ){
+            $('.tab-sub-menu').hide();
+            $('#adauga_in_facturare').hide();
+            $('#scoate_din_facturare').hide();
+            $('#stornare_acctions').show();
+        } else if(tip == 'storno-lock'){
+            /* $('.tab-sub-menu').hide();
+             $('#adauga_in_facturare').hide();
+             $('#scoate_din_facturare').hide();
+             $('#stornare_acctions').hide();*/
+        } else {
+            $('.tab-sub-menu').show();
+            $('#adauga_in_facturare').show();
+            $('#scoate_din_facturare').show();
+            $('#stornare_acctions').hide();
+        }
+    }
+
+    function Grid_DetaliiTask(id)
+    {
+        var gridimgpath = 'css/smoothness/images';
+        var grid = jQuery('#detalii_task');
+        var gridData;
+        var gridData_expeditor;
+
+        grid.jqGrid(
+                {
+                    url : HTTP + 'facturare/json/detalii_task/'+id,
+                    datatype: 'json',
+                    mtype: 'POST',
+                    colNames : [ 'Nr. Exp', 'Data', 'Platitor', 'Expeditor' , 'Exp. loc.', 'Destinatar', 'Dest. loc.', 'Dest. centru', 'Plicuri', 'Colete', 'Paleti', 'Tip exp.', 'Greutate', 'Km prel', 'Km livr.', 'Val. gr.', 'Val. km', 'Val. asig.', 'Val. Exp.', 'Val. totala', 'T.V.A.', 'Obs.', 'Status', 'Platitor'],
+                    colModel : [ {
+                        name : 'expeditie',
+                        index : 'ep.expeditie',
+                        width: 50
+                    }, {
+                        name : 'data_expeditie',
+                        index : 'ep.data_expeditie',
+                        sorttype : 'date',
+                        formatter : 'date',
+                        formatoptions : {
+                            srcformat : 'Y-m-d',
+                            newformat : 'd.m.Y'
+                        },
+                        width: 60,
+                        align: 'center',
+                        searchoptions:{dataInit:datePick, attr:{title:'Select Date'}}
+                    }, {
+                        name : 'platitor',
+                        index : 'fe.platitor',
+                        width: 160,
+                        align: 'left'
+                    }, {
+                        name : 'expeditor',
+                        index : 'fe.expeditor',
+                        width: 160,
+                        align: 'left'
+                    }, {
+                        name : 'expeditor_localitate',
+                        index : 'fe.expeditor_localitate',
+                        width: 100,
+                        align: 'left'
+                    }, {
+                        name : 'destinatar',
+                        index : 'fe.destinatar',
+                        width: 160,
+                        align: 'left'
+                    }, {
+                        name : 'destinatar_localitate',
+                        index : 'fe.destinatar_localitate',
+                        width: 100,
+                        align: 'left'
+                    }, {
+                        name : 'destinatar_centru',
+                        index : 'fe.destinatar_centru',
+                        width: 100,
+                        align: 'left'
+                    }, {
+                        name : 'plicuri',
+                        index : 'fe.plicuri',
+                        width: 40,
+                        align: 'center'
+                    }, {
+                        name : 'colete',
+                        index : 'fe.colete',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 40,
+                        align: 'center'
+                    }, {
+                        name : 'paleti',
+                        index : 'fe.paleti',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 40,
+                        align: 'center'
+                    }, {
+                        name : 'tip_expeditie',
+                        index : 'fe.tip_expeditie',
+                        width: 60,
+                        align: 'left'
+                    }, {
+                        name : 'greutate',
+                        index : 'fe.greutate',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'km_preluare',
+                        index : 'fe.km_preluare',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'km_livrare',
+                        index : 'fe.km_livrare',
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'val_greutate',
+                        index : 'fe.val_greutate',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'val_km',
+                        index : 'fe.val_km',
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'val_asig',
+                        index : 'fe.val_asig',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'valoare_expeditie',
+                        index : 'fe.valoare_expeditie',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                        width: 60,
+                        align: 'right'
+                    }, {
+                        name : 'valoare_totala_expeditie',
+                        index : 'fe.valoare_totala_expeditie',
+                        width: 60,
+                        align: 'right',
+                        formatter: 'integer',
+                        sorttype: 'integer',
+                    }, {
+                        name : 'tva',
+                        index : 'ep.TVA',
+                        width: 60,
+                        align: 'left'
+                    }, {
+                        name : 'observatii',
+                        index : 'observatii',
+                        width: 60,
+                        align: 'left'
+                    }, {
+                        name : 'operatiune',
+                        index : 'operatiune',
+                        width: 60,
+                        align: 'left'
+                    }, {
+                        name : 'platitor_id',
+                        index : 'platitor_id',
+                        hidden:true
+                    } ],
+                    rowNum : 250,
+                    rowList: [250, 500, 1000],
+                    rownumbers : true,
+                    width : 960,
+                    height : 350,
+                    viewrecords : true,
+                    shrinkToFit: false,
+                    caption:'Lista expeditii',
+                    pager : '#detalii_task_pag',
+                    forceFit: true,
+                    multiselect: true,
+                    beforeSelectRow: function (rowid, e) {
+                        var $myGrid = $(this),
+                                i = $.jgrid.getCellIndex($(e.target).closest('td')[0]),
+                                cm = $myGrid.jqGrid('getGridParam', 'colModel');
+                        return (cm[i].name === 'cb');
+                    },
+                    afterSelectRow: function (rowid, e) {
+                        var grid = jQuery('#'+id);
+                        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+                        //    console.log(sel_ids);
+                    },
+                    ondblClickRow : function(id) {
+                        AfisareDetaliiExpeditieCuID(id)
+                    },
+                    onSelectAll: function(aRowids,status) {
+                        if(status){
+                            val_totala_exp_sel = val_totala_exp;
+                            val_totala_tva_sel = val_totala_tva;
+                            $('#expeditii_selectate_det span').html($('#expeditii_total_det span').html());
+                        } else {
+                            val_totala_exp_sel = val_totala_tva_sel = 0;
+                            $('#expeditii_selectate_det span').html('Total:<strong>'+val_totala_exp_sel.toFixed(2) + '</strong>&nbsp;&nbsp;&nbsp;&nbsp;T.V.A.: <strong>' + val_totala_tva_sel.toFixed(2) + '</strong>' );
+                        }
+                        //    console.log('val_totala_exp_sel:'+val_totala_exp_sel);
+                    },
+                    onSelectRow: function(aRowid,status) {
+
+                        rowData=$(this).getRowData(aRowid);
+                        if(status) {
+                            val_totala_exp_sel += parseFloat(rowData.valoare_totala_expeditie);
+                            val_totala_tva_sel += parseFloat(rowData.valoare_totala_expeditie)*parseFloat(rowData.tva)/100;
+                        } else {
+                            val_totala_exp_sel -= parseFloat(rowData.valoare_totala_expeditie);
+                            val_totala_tva_sel -= parseFloat(rowData.valoare_totala_expeditie)*parseFloat(rowData.tva)/100;
+                        }
+
+                        $('#expeditii_selectate_det span').html('Total:<strong>'+val_totala_exp_sel.toFixed(2) + '</strong>&nbsp;&nbsp;&nbsp;&nbsp;T.V.A.: <strong>' + val_totala_tva_sel.toFixed(2) + '</strong>' );
+
+                    },
+                    loadComplete: function(rezult)
+                    {
+                        val_totala_exp = val_totala_tva = 0;
+                        val_totala_exp_sel = val_totala_tva_sel = 0;
+                        $('#expeditii_selectate_det span').html('Total:<strong>'+val_totala_exp_sel.toFixed(2) + '</strong>&nbsp;&nbsp;&nbsp;&nbsp;T.V.A.: <strong>' + val_totala_tva_sel.toFixed(2) + '</strong>' );
+                        if(rezult.userdata){
+                            if(rezult.userdata.request_type == 'storno'){
+                                setDetaliiTabHeader('storno');
+                            } else if(rezult.userdata.factura.tip_factura == "2"){
+                                setDetaliiTabHeader('storno-lock');
+                            } else {
+                                setDetaliiTabHeader('normala');
+                            }
+                            $sign = rezult.userdata.factura.tip_factura == 2 ? '-' : '';
+                            $('#factura_det span').html('Total:<strong>'+$sign+rezult.userdata.factura.sumamnt_exp + '</strong>&nbsp;&nbsp;&nbsp;&nbsp;T.V.A.: <strong>' + rezult.userdata.factura.tva + '</strong>' );
+                            $('#factura_title').html('<strong style="font-size: 1.2em;">'+rezult.userdata.factura.invoice+' / '+rezult.userdata.factura.trndate+'</strong>');
+                        } else {
+                            setDetaliiTabHeader('normala');
+                        }
+
+                        var lista = $(this).getDataIDs();
+                        var total = 0;
+                        var tva = 0;
+
+                        for(i=0;i<lista.length;i++){
+                            rowData=$(this).getRowData(lista[i]);
+                            total += parseFloat(rowData.valoare_totala_expeditie);
+                            tva += parseFloat(rowData.valoare_totala_expeditie)*parseFloat(rowData.tva)/100;
+                            if(detalii_client_id  != parseInt(rowData.platitor_id)){
+                                $('#' + $.jgrid.jqID(rowData.expeditie)).addClass('myAltRowClass');
+                            }
+                        }
+                        val_totala_exp = total;
+                        val_totala_tva = tva;
+
+                        $('#expeditii_total_det span').html('Total:<strong>'+val_totala_exp.toFixed(2) + '</strong>&nbsp;&nbsp;&nbsp;&nbsp;T.V.A.: <strong>' +val_totala_tva.toFixed(2) + '</strong>');
+                        // resetPostData(id);
+                    },
+                    footerrow: true,
+                    gridComplete: function() {
+                        /* var $grid = $('#detalii_task');
+                         colSum = $grid.jqGrid('getCol', 'valoare_totala_expeditie', false, 'sum');
+                         $grid.jqGrid('footerData', 'set', { 'valoare_totala_expeditie': colSum.toFixed(2) });*/
+                    },
+                    postData : {
+                        filters:'{"groupOp":"AND","rules":[{"field":"data_expeditie","op":"gt","data":""},{"field":"data_expeditie","op":"lt","data":""}]}'
+                    }
+                });
+
+
+
+        grid.jqGrid('navGrid', '#detalii_task_pag', {
+            del : false,
+            add : false,
+            edit : false,
+            search : true
+        },{},{},{},{multipleSearch:true});
+
+        grid.jqGrid('navButtonAdd','#detalii_task_pag',{
+            caption:"Export borderou",
+            onClickButton : function () {
+                window.open(HTTP + 'facturare/xls/borderou_expeditii/' + $('#proforma_activa').val(),'_blank');
+            }
+        });
+
+        grid.jqGrid('bindKeys');
+        grid.jqGrid('filterToolbar',{
+            stringResult : true,
+            searchOnEnter : false
+        });
+    }
+
+    function resetPostData(id) {
+
+        if(id != 'detalii_task'){
+            jQuery('#'+id).jqGrid('setGridParam', {postData : {
+                storneaza: {},
+                storno_task_nou: '',
+                regenerare:{},
+                factureaza:{},
+                trimite_catre_client:{},
+                sterge:{},
+                filters:{},
+                storno_total:'',
+                scoate:{},
+                proforma_activa:0,
+                generare:0,
+                data_start:'',
+                data_final:''
+            }});
+        } else {
+            jQuery('#'+id).jqGrid('setGridParam', {postData : {
+                storneaza: {},
+                storno_task_nou: '',
+                regenerare:{},
+                factureaza:{},
+                trimite_catre_client:{},
+                sterge:{},
+                filters:{},
+                generare:0,
+                storno_total:'',
+                scoate:{},
+                proforma_activa:0,
+                data_start:'',
+                data_final:''
+            }});
+        }
+    }
+
+    function adaugaInFacturare() {
+        var grid = jQuery('#detalii_task');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o expeditie!"); return false; }
+        $('#adauga_in_facturare').attr('disabled','disabled');
+        $("#detalii_task").closest(".ui-jqgrid").find('.loading').show();
+        var ajaxPost = $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : { adauga : sel_ids ,proforma_activa :proforma_activa },
+            cache: false,
+            success : function(data) {
+                jQuery("#detalii_task").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/detalii_task/'+ proforma_activa,
+                }).trigger("reloadGrid");
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+                // console.log(data);
+            }
+        });
+
+        ajaxPost.always(function() {
+            $('#adauga_in_facturare').removeAttr('disabled');
+            $('#expeditii_spre_facturare').click();
+            $("#detalii_task").closest(".ui-jqgrid").find('.loading').hide();
+        });
+    }
+
+    function factureaza() {
+        var grid = jQuery('#lista_taskuri');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum un client, pentru facturare!"); return false; }
+        $('#factureaza_but').attr('disabled','disabled');
+        $("#lista_taskuri").closest(".ui-jqgrid").find('.loading').show();
+        var ajaxPost = $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : { factureaza : sel_ids },
+            cache: false,
+            success : function(data) {
+                jQuery("#lista_taskuri").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/taskuri/'+facturare_task_menu,
+                }).trigger("reloadGrid");
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+            }
+        });
+        ajaxPost.always(function() {
+            $('#factureaza_but').removeAttr('disabled');
+            $("#lista_taskuri").closest(".ui-jqgrid").find('.loading').hide();
+        });
+
+    }
+
+
+
+    function trimiteCatreClient(idTabel) {
+        // console.log(idTabel);
+        var grid = jQuery('#'+idTabel);
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum un client cu factura, pentru a trimite catre client!"); return false; }
+
+        var url = '';
+        if(idTabel == 'cautare_facturi_tabel'){
+            var data_start_cautare = '';
+            var data_final_cautare = '';
+
+            if ($('#perioada_cautare').is(':checked')) {
+                data_start_cautare = $('#data_start_cautare').val();
+                data_final_cautare = $('#data_final_cautare').val();
+            }
+            var facturi = $('#lista_facturi_cautare').val().replace(/[\r\n\s\t\v\u0085\u2028\u2029]+/g, ',');
+
+
+            $.ajax({
+                type: "POST",
+                url : HTTP + 'facturare/acc',
+                dataType : "json",
+                data : { trimite_catre_client: sel_ids },
+                cache: false,
+                success : function(data) {
+                    jQuery("#" +idTabel).jqGrid('setGridParam', {
+                        url : HTTP + 'facturare/json/facturi_cautare/cautare',
+                        postData:{facturi_expeditii: facturi, client: $('#clienti_search_combo').val(),data_start:data_start_cautare, data_final: data_final_cautare}
+                    }).trigger("reloadGrid");
+                    if(data.eroare == 1){
+                        AfiseazaEroare(data.mesaj);
+                    }
+                }
+            });
+
+        } else {
+
+            $.ajax({
+                type: "POST",
+                url : HTTP + 'facturare/acc',
+                dataType : "json",
+                data : { trimite_catre_client: sel_ids },
+                cache: false,
+                success : function(data) {
+                    jQuery("#"+idTabel).jqGrid('setGridParam', {
+                        url : HTTP + 'facturare/json/taskuri/' +facturare_task_menu,
+                    }).trigger("reloadGrid");
+                    if(data.eroare == 1){
+                        AfiseazaEroare(data.mesaj);
+                    }
+                }
+            });
+
+
+        }
+
+        //resetPostData(idTabel);
+    }
+
+
+    function RegenerareSpecificatii() {
+        var grid = jQuery('#lista_taskuri');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum un client pentru regenerare!"); return false; }
+        $('#regenereaza_but').attr('disabled','disabled');
+        $("#lista_taskuri").closest(".ui-jqgrid").find('.loading').show();
+        var ajaxPost = $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : { regenerare: sel_ids },
+            cache: false,
+            success : function(data) {
+                jQuery("#lista_taskuri").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/taskuri/'+facturare_task_menu,
+                }).trigger("reloadGrid");
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+            }
+        });
+        ajaxPost.always(function() {
+            $('#regenereaza_but').removeAttr('disabled');
+            $("#lista_taskuri").closest(".ui-jqgrid").find('.loading').hide();
+        });
+        // resetPostData('lista_taskuri');
+    }
+
+    function StergeSpecificatii() {
+        var grid = jQuery('#lista_taskuri');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum un client pentru a sterge!"); return false; }
+
+        $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : { sterge: sel_ids },
+            cache: false,
+            success : function(data) {
+                jQuery("#lista_taskuri").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/taskuri/'+facturare_task_menu,
+                }).trigger("reloadGrid");
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+            }
+        });
+
+        // resetPostData('lista_taskuri');
+    }
+
+
+
+    function PrintareFacturi(gridID, cu_borderou) {
+        var grid = jQuery('#' + gridID);
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum un client pentru printare!"); return false; }
+        else if(sel_ids.length>100) { AfiseazaEroare("Nu se pot selectiona mai mult de 100 awb-uri pentru printare !"); return false; }
+        var postDataX = {};
+        for(var $i=0, $l=sel_ids.length; $i<$l; $i++) postDataX[$i] = sel_ids[$i];
+        postDataX = JSON.stringify(postDataX);
+        //alert("JSON serialized jqGrid data:\n" + postData);
+        $("#detalii_expeditie").dialog("destroy");
+        var borderou = '';
+        if(cu_borderou){
+            borderou = '/borderou_pdf';
+        }
+
+        var url = HTTP + 'facturare/printare_multipla/'+postDataX + borderou ;
+        window.open(url,'_blank');
+        return true;
+    }
+
+
+    function StorneazaExpeditii() {
+        var grid = jQuery('#detalii_task');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        var s_total = $('#storno_total').is(':checked');
+        if(sel_ids.length==0 && !s_total) { AfiseazaEroare("Selectioneaza minimum o expeditie pentro stornare!"); return false; }
+        if(sel_ids.length==0) sel_ids = 0;
+
+        $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : {storneaza: sel_ids, storno_task_nou: $('#storno_task_nou').is(':checked'), storno_total: s_total, proforma_activa:proforma_activa},
+            cache: false,
+            success : function(data) {
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj, 'Informatie');
+                } else {
+                    location.reload();
+                }
+            }
+        });
+    }
+
+    function scoateDinFacturare() {
+        var grid = jQuery('#detalii_task');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o expeditie!"); return false; }
+        $('#scoate_din_facturare').attr('disabled','disabled');
+        $("#detalii_task").closest(".ui-jqgrid").find('.loading').show();
+        var ajaxPost = $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : {scoate: sel_ids,proforma_activa:proforma_activa},
+            cache: false,
+            success : function(data) {
+                jQuery("#detalii_task").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/detalii_task/'+ proforma_activa,
+                }).trigger("reloadGrid");
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+            }
+        });
+        ajaxPost.always(function() {
+            $('#scoate_din_facturare').removeAttr('disabled');
+            $("#detalii_task").closest(".ui-jqgrid").find('.loading').hide();
+        });
+    }
+
+    function cautareExpeditii() {
+        var expeditii = $('#lista_expeditii_noi').val().replace(/[\r\n\s\t\v\u0085\u2028\u2029]+/g, ',');
+        $("#detalii_task").jqGrid('setGridParam', {
+            url : HTTP + 'facturare/json/cautare_expeditii/'+ proforma_activa,
+            postData:{expeditii: expeditii}
+        }).trigger("reloadGrid");
+    }
+
+    function cautareFacturi() {
+        var data_start_cautare = '';
+        var data_final_cautare = '';
+
+        if ($('#perioada_cautare').is(':checked')) {
+            data_start_cautare = $('#data_start_cautare').val();
+            data_final_cautare = $('#data_final_cautare').val();
+        }
+        var facturi = $('#lista_facturi_cautare').val().replace(/[\r\n\s\t\v\u0085\u2028\u2029]+/g, ',');
+        $("#cautare_facturi_tabel").jqGrid('setGridParam', {
+            url : HTTP + 'facturare/json/facturi_cautare/cautare',
+            postData:{facturi_expeditii: facturi, client: $('#clienti_search_combo').val(), master: $('#clienti_search_combo_master').val(), data_start:data_start_cautare, data_final: data_final_cautare}
+        }).trigger("reloadGrid");
+        //resetPostData('cautare_facturi_tabel');
+    }
+
+
+    function cautareFacturiStorno() {
+        $("#stornari_facturi_tabel").jqGrid('setGridParam', {
+            url : HTTP + 'facturare/json/facturi_cautare/storno',
+            postData:{client: $('#clienti_stornare_combo').val(), master: $('#clienti_stornare_combo_master').val(), expeditie_stornare:$('#expeditie_stornare').val()}
+        }).trigger("reloadGrid");
+        //resetPostData('stornari_facturi_tabel');
+    }
+
+
+    function filtreazaExpeditiiStorno() {
+        // console.log($('#lista_storno_cautare').val());
+
+        var expeditii = $('#lista_storno_cautare').val().replace(/[\r\n\s\t\v\u0085\u2028\u2029]+/g, ',');
+
+        // console.log(expeditii);
+        jQuery("#detalii_task").jqGrid('setGridParam', {
+            url : HTTP + 'facturare/json/detalii_task/'+proforma_activa + proforma_activa_detalii_tip,
+            postData : {
+                expeditii_stornare:expeditii,
+                filters:'{"groupOp":"AND","rules":[{"field":"ep.data_expeditie","op":"gt","data":""},{"field":"ep.data_expeditie","op":"lt","data":""}]}'
+            },
+            search : false
+        }).trigger("reloadGrid");
+    }
+
+    function generareSpecificatieNoua() {
+
+        if(parseInt($('#clienti_combo').val()) > 0){
+            var data_start = '';
+            var data_final = '';
+            var master = $('#clienti_combo_master').val();
+            var task_nou_tip = parseInt($('#task_nou_tip').val());
+            var expeditii = $('#expeditii_task_nou').val().replace(/[\r\n\s\t\v\u0085\u2028\u2029]+/g, ',');
+
+            if ($('#perioada').is(':checked')) {
+                data_start = $('#data_start').val();
+                data_final = $('#data_final').val();
+            }
+            
+            if(task_nou_tip == 2 && expeditii.length==0){
+            	AfiseazaEroare("Introduceti minimum o expeditie pentru Storno !");
+            	return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url : HTTP + 'facturare/acc',
+                dataType : "json",
+                data : {generare: $('#clienti_combo').val() , data_start:data_start, data_final:data_final, sterge:0, expeditii_task_nou:expeditii, task_nou_tip: 1, master: master },
+                cache: false,
+                success : function(data) {
+                    jQuery("#lista_taskuri").jqGrid('setGridParam', {
+                        url : HTTP + 'facturare/json/taskuri/'+facturare_task_menu,
+                    }).trigger("reloadGrid");
+                    if(data.eroare == 1){
+                        AfiseazaEroare(data.mesaj);
+                    } else {
+                        // $('#clienti_combo').val(0);
+                        // $('#clienti_combo_nume').val("");
+                        $('#facturare-tabs').tabs('select', 0);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    AfiseazaEroare('<strong>'+status+'</strong><br>'+xhr.responseText);
+                }
+            });
+
+            /*jQuery("#lista_taskuri").jqGrid('setGridParam', {
+             url : HTTP + 'facturare/json/taskuri/'+facturare_task_menu,
+             postData:{generare: $('#clienti_combo').val() , data_start:data_start, data_final:data_final, sterge:0}
+             }).trigger("reloadGrid");*/
+            // resetPostData('lista_taskuri');
+
+        } else {
+            AfiseazaEroare("Selectioneaza minimum un client pentru generare!");
+        }
+
+    }
+
+    function modificare_data_facturi() {
+        var grid = jQuery('#lista_taskuri');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o preforma pentru a modifica!"); return false; }
+
+        $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : { modificare_data: sel_ids, data_noua: $('#data_facturi_val').val()},
+            cache: false,
+            success : function(data) {
+                jQuery("#lista_taskuri").jqGrid('setGridParam', {
+                    url : HTTP + 'facturare/json/taskuri/'+facturare_task_menu,
+                }).trigger("reloadGrid");
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+            }
+        });
+
+    }
+
+    function CautarePerioadaFacturaExpeditii() {
+        if ($('#perioada_cautare').is(':checked')) {
+            $('#data_start_cautare').removeAttr('disabled');
+            $('#data_final_cautare').removeAttr('disabled');
+            $('.ui-datepicker-trigger').show();
+        } else if ($('#perioada').is(':checked')) {
+            $('#data_start').removeAttr('disabled');
+            $('#data_final').removeAttr('disabled');
+            $('.ui-datepicker-trigger').show();
+        }
+        else {
+            $('#data_start_cautare').attr('disabled', true);
+            $('#data_final_cautare').attr('disabled', true);
+            $('#data_start').attr('disabled', true);
+            $('#data_final').attr('disabled', true);
+            $('.ui-datepicker-trigger').hide();
+        }
+    }
+
+
+    function generareSpecificatii() {
+
+        var lunare      = $("#lunare ").is(':checked');
+        var bilunare    = $("#bilunare ").is(':checked');
+        var saptamanale = $("#saptamanale ").is(':checked');
+
+        $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : {genereazaSpecificatii: 1, lunare:lunare, bilunare:bilunare, saptamanale:saptamanale },
+            cache: false,
+            success : function(data) {
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                } else {
+                    $('#lunare').attr('checked', false);
+                    $('#bilunare').attr('checked', false);
+                    $('#saptamanale').attr('checked', false);
+                    AfiseazaEroare("Success !");
+                }
+            }
+        });
+    }
+
+
+    function resetareWmeCom(idTabel) {
+        var grid = jQuery('#'+idTabel);
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o factura, pentru a trimite catre wme!"); return false; }
+        $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : { resetare_wme_com: sel_ids },
+            cache: false,
+            success : function(data) {
+                $('#cautare_acc').click();
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+            }
+        });
+    }
+
+</script>
+<style type="text/css">
+    .cont_span {
+        background: #c61200 none repeat scroll 0 0;
+        border-radius: 10px;
+        color: #ffffff;
+        height: 10px;
+        padding: 3px 8px;
+        text-align: center;
+    }
+    .facturare-area .ui-widget-header {
+        background: none;
+        border: 0px solid #e78f08;
+        color: #000;
+        font-weight: bold;
+    }
+    .facturare-area .tab{
+        height: 500px;
+    }
+    #nr_taskuri {
+        display: none;
+    }
+    .tab_detalii {
+        display: none;
+    }
+    #close_tab_but{
+        color: red;
+        cursor: pointer;
+        cursor: hand;
+        z-index: 9999;
+    }
+    .facturare-area .ui-tabs .ui-tabs-panel{
+        padding: 1em 0;
+    }
+    .tab-sub-menu a {
+        padding: 10px;
+        text-decoration: none;
+    }
+    .tab-sub-menu a.active{
+        color: #eb8f00;
+        text-decoration: underline;
+    }
+    .tab-sub-menu a:hover{
+        color: #eb8f00;
+        text-decoration: underline;
+    }
+    .tab-sub-menu span{
+        background: #eb8f00;
+        padding: 3px 7px;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    .tab-sub-menu{
+        display: inline-block;
+    }
+
+    .tab-acctions{
+        float: right;
+    }
+    .tab-acctions a{
+        padding: 10px;
+        text-decoration: none;
+    }
+
+    .ascunde{
+        display:none !important;
+    }
+
+    .tab-acctions input:disabled {
+        background: transparent;
+        color: #ccc;
+        border: 1px solid #cccccc;
+    }
+
+
+
+    #facturare-tabs .ui-state-active{
+        background: #fdf5ce ;
+        border: 1px solid #fbcb09;
+        color: #c77405;
+        font-weight: bold;
+    }
+
+    #facturare-tabs > .ui-widget-content{
+        background: #fdf5ce ;
+    }
+    #expeditii_noi{
+        display: none;
+    }
+
+    .valign-but{
+        margin: 12px 0;
+    }
+    #stornare_acctions{
+        display: none;
+        float: right;
+    }
+    .header-tab-totals{
+        padding: 10px;
+    }
+    .header-tab-totals label{
+        display: inline-block;
+        width: 135px;
+    }
+
+
+    #factura_info{
+        float: right;
+    }
+
+    #detalii_client_selectat span{
+        display: inline-block;
+        width: 120px;
+    }
+
+
+</style>
+<div id="progress_area">
+    <a id="progress_area_buton" href="#check" onclick="getProgress(); return false;"><strong id="job_uri_in_asteptare">0</strong> job-uri in asteptare</a>
+    <div class="progress_area_mess"></div>
+</div>
+<div class="facturare-area">
+    <input type="hidden" id="proforma_activa" value="0">
+    <div id="facturare-tabs">
+        <ul>
+            <li id="tab_1">
+                <a href="#tabs-1" onclick="UpdateFacturareTaskuri()">Taskuri <span id="nr_taskuri" class="cont_span">0</span></a>
+            </li>
+            <li id="tab_2" class="tab_detalii">
+                <a href="#tabs-detalii">Detalii</a>
+            </li>
+            <li id="tab_3" >
+                <a href="#tabs-2">Stornari</a>
+            </li>
+            <li id="tab_4" >
+                <a href="#tabs-3">Task nou</a>
+            </li>
+            <li id="tab_5" >
+                <a href="#tabs-4">Cautare</a>
+            </li>
+            <!--<li>
+                <a href="#tabs-errors">Erori</a>
+            </li>-->
+        </ul>
+        <div id="tabs-1">
+            <div class="tab-sub-menu">
+                <a href="#" rel="1" id="tarif_negociat_a" class="active">Tarif negociat</a><span id="negociat_count">0</span>
+                <a href="#" rel="2" >Tarif manual</a><span id="manual_count">0</span>
+            </div>
+            <div class="tab-acctions">
+                <input class="button ui-button ui-widget ui-state-default ui-corner-all" id="factureaza_but" value="Factureaza" onclick="factureaza();" role="button" aria-disabled="false" type="button">
+                <input class="button ui-button ui-widget ui-state-default ui-corner-all" id="trimite_catre_client_but" value="Trimite catre client" onclick="trimiteCatreClient('lista_taskuri');" role="button" aria-disabled="false" type="button">
+                <input class="button ui-button ui-widget ui-state-default ui-corner-all" id="printare_facturi_but" value="Printare facturi" onclick="PrintareFacturi('lista_taskuri');" role="button" aria-disabled="false" type="button">
+                <input class="button ui-button ui-widget ui-state-default ui-corner-all" id="sterge_but" value="Sterge" onclick="StergeSpecificatii();" role="button" aria-disabled="false" type="button">
+                <input class="button ui-button ui-widget ui-state-default ui-corner-all" id="regenereaza_but" value="Regenereaza" onclick="RegenerareSpecificatii();" role="button" aria-disabled="false" type="button">
+            </div>
+            <div class="separator_empty h10"></div>
+
+
+            <fieldset>
+                <legend>
+                    <label class="field_label">Modificare data factura</label>
+                </legend>
+                <div class="field_name w200">
+                    <input id="data_facturi_val">
+                </div>
+                <div class="field_name w70">
+                    <input class="button ui-button ui-widget ui-state-default ui-corner-all" value="Aplica" onclick="modificare_data_facturi();" role="button" aria-disabled="false" type="button">
+                </div>
+            </fieldset>
+            <div class="separator_empty h10"></div>
+
+            <table id="lista_taskuri"></table>
+            <div id="lista_taskuri_pag"></div>
+        </div>
+        <div id="tabs-detalii">
+            <div class="header-tab-totals">
+                <div id="factura_info">
+                    <div id="factura_title"></div>
+                    <div id="factura_sub_title"></div>
+                </div>
+                <div id="factura_det"><label>Factura:</label><span></span></div>
+                <div id="expeditii_total_det" style="display: none"><label>Total Expeditii:</label><span></span></div>
+                <div id="expeditii_selectate_det"><label>Expeditii selectate:</label><span></span></div>
+            </div>
+            <div class="tab-sub-menu">
+                <a id="expeditii_spre_facturare" href="#" rel="3"  class="active">Expeditii spre facturare</a>
+                <a href="#" rel="4">Expeditii nefacturate</a>
+                <a href="#" rel="7">Expeditii neasociate</a>
+                <a href="#" rel="5">Adauga expeditii</a>
+                <a href="#" rel="6">Corectii</a>
+            </div>
+            <div class="tab-acctions">
+                <input id="scoate_din_facturare" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Scoate din facturare" onclick="scoateDinFacturare();" role="button" aria-disabled="false" type="button">
+                <input id="adauga_in_facturare" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Adauga in facturare" onclick="adaugaInFacturare();" role="button" aria-disabled="false" type="button">
+                <label for="upload-xls" style="cursor: pointer;" class="button ui-button ui-widget ui-state-default ui-corner-all">Recalculare dupa borderou</label>
+                <form id="recalculare_borderou_form" method="post" action="{HTTP}facturare/acc" enctype="multipart/form-data" onsubmit="updateBorderouXls(this); return false;">
+                    <input type="hidden" id="recalculare_idfact" name="recalculare_idfact" value="0">
+                    <input type="file" name="recalculare_borderou_xls" id="upload-xls" style="opacity: 0; position: absolute;z-index: -1;" onchange="this.form.submit()"/>
+                </form>
+            </div>
+            <div id="stornare_acctions">
+                <div class="field_name w100">
+                    <label for="storno_task_nou">Task nou</label>
+                    <input id="storno_task_nou" type="checkbox" value="1"/>
+                </div>
+                <div class="field_name w120">
+                    <label for="storno_total">Stornare totala</label>
+                    <input id="storno_total" type="checkbox" value="1"/>
+                </div>
+                <input id="storneaza_expeditii" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Storneaza" onclick="StorneazaExpeditii();" role="button" aria-disabled="false" type="button">
+            </div>
+            <div class="separator_empty h10"></div>
+            <textarea id="lista_storno_cautare" style="width: 99.9%; margin: 0 auto"></textarea>
+            <input id="cauta_expeditii" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Cautare" onclick="filtreazaExpeditiiStorno();" role="button" aria-disabled="false" type="button">
+
+            <div id="expeditii_noi">
+                <div class="field_name w300">
+                    <textarea id="lista_expeditii_noi" style="margin: 0 10px;  width :93%;"></textarea>
+                </div>
+                <div class="field_name w130">
+                    <input id="cauta_expeditie" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Cautare" onclick="cautareExpeditii();" role="button" aria-disabled="false" type="button">
+                </div>
+            </div>
+            <div class="separator_empty h10"></div>
+            <div id="gridWrapperDetalii">
+                <table id="detalii_task"></table>
+                <div id="detalii_task_pag"></div>
+            </div>
+            <div id="pozitii_factura">
+                <table id="pozitii_factura_table"></table>
+                <div id="pozitii_factura_table_pag"></div>
+            </div>
+        </div>
+        <div id="tabs-2">
+            <div class="field_row" style="margin-top:5px">
+                <div class="field_name w100">
+                    Client
+                </div>
+                <input id="clienti_stornare_combo_nume" class="field_input w190">
+                <input id="expeditie_stornare" class="field_input w150" placeholder="Expeditie">
+                <input id="clienti_stornare_combo" type="hidden">
+                <input id="clienti_stornare_combo_master" type="hidden">
+            </div>
+            <div class="field_name w130">
+                <input class="button ui-button ui-widget ui-state-default ui-corner-all" value="Cautare" onclick="cautareFacturiStorno();" role="button" aria-disabled="false" type="button">
+            </div>
+            <div class="separator_empty h10"></div>
+            <table id="stornari_facturi_tabel"></table>
+            <div id="stornari_facturi_tabel_pag"></div>
+        </div>
+        <div id="tabs-3" style="padding: 10px">
+            <div class="field_name w500">
+            	<fieldset class="field_name w400">
+                    <legend>
+                        <label class="field_label">Factura normala</label>
+                    </legend>
+            		<div class="field_row" style="margin-top:5px">
+                    	<div class="field_name w100">
+                        	Client
+                    	</div>
+                    	<input id="clienti_combo_nume" class="field_input w190">
+                        <input id="clienti_combo" type="hidden">
+                        <input id="clienti_combo_master" type="hidden">
+                	</div>
+                	<fieldset>
+                    	<legend>
+                        	<label class="field_label" for="perioada">Perioada</label>
+                            <input type="checkbox" name="perioada" id="perioada" value="1" class="field_checkbox" onclick="CautarePerioadaFacturaExpeditii();" />
+                    	</legend>
+                    	<div class="field_name w50" style="line-height: 20px;">
+                        	De la:
+                    	</div>
+                    	<div class="field_name" style="width: 101px;">
+                        	<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="" title="De la" disabled="true" />
+                    	</div>
+                    	<div class="field_name w60" style="line-height: 20px;">
+                        	Pana la:
+                    	</div>
+                    	<div class="field_name" style="width: 101px;">
+                        	<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="" title="Pana la" disabled="true" />
+                    	</div>
+                	</fieldset>
+                	<div class="separator_empty h10"></div>
+                	<input id="generare_noua" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Generare" onclick="generareSpecificatieNoua();" role="button" aria-disabled="false" type="button" style="margin-left:340px">
+                </fieldset>
+                <div class="separator_empty h10"></div>
+                <fieldset class="field_name w400">
+                    <legend>
+                        <label class="field_label">Expeditii / Tip factura</label>
+                    </legend>
+                    <div class="field_row" style="margin-top:5px">
+                        <label for="task_nou_tip">Tip factura</label>
+                        <select id="task_nou_tip" name="task_nou_tip">
+                            <option value="1">Normal</option>
+                            <!-- <option value="2">Storno</option> -->
+                        </select>
+                    </div>
+                    <div class="separator_empty h10"></div>
+                    <div class="field_row" style="margin-top:5px">
+                        <label for="expeditii_task_nou">Expeditii:</label>
+                        <div class="separator_empty h10"></div>
+                        <textarea id="expeditii_task_nou" name="expeditii_task_nou" style="width: 100%"></textarea>
+                    </div>
+                    <div class="separator_empty h10"></div>
+                	<input id="generare_noua" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Generare" onclick="generareSpecificatieNoua();" role="button" aria-disabled="false" type="button" style="margin-left:340px">
+                </fieldset>
+            </div>
+            <div class="field_name w400">
+                <fieldset class="field_name w400">
+                    <legend>
+                        <label class="field_label">Taskuri multiple</label>
+                    </legend>
+                    <div class="field_name w80">
+                        <label class="field_label" for="lunare">Lunare</label>
+                        <input type="checkbox" name="lunare" id="lunare" value="1" class="field_checkbox"  />
+                    </div>
+                    <div class="field_name w90">
+                        <label class="field_label" for="bilunare">Bilunare</label>
+                        <input type="checkbox" name="bilunare" id="bilunare" value="1" class="field_checkbox" />
+                    </div>
+                    <div class="field_name w120">
+                        <label class="field_label" for="saptamanale">Saptamanale</label>
+                        <input type="checkbox" name="saptamanale" id="saptamanale" value="1" class="field_checkbox"  />
+                    </div>
+                    <input id="generare_multipla" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Generare " onclick="generareSpecificatii();" role="button" aria-disabled="false" type="button">
+                </fieldset>
+                <div id="detalii_client_selectat"></div>
+                <div class="separator_empty h10"></div>
+            </div>
+            <div class="separator_empty h10"></div>
+
+
+            <div class="separator_empty h10"></div>
+
+
+        </div>
+        <div id="tabs-4">
+            <fieldset>
+                <legend>
+                    <label class="field_label" for="perioada_cautare">Perioada</label>
+                    <input type="checkbox" name="perioada" id="perioada_cautare" value="1" class="field_checkbox" onclick="CautarePerioadaFacturaExpeditii();" />
+                </legend>
+                <div class="field_name w50" style="line-height: 20px;">
+                    De la:
+                </div>
+                <div class="field_name" style="width: 101px;">
+                    <input type="text" name="data_start" id="data_start_cautare" class="field_input auto-hint w70" value="" title="De la" disabled="true" />
+                </div>
+                <div class="field_name w60" style="line-height: 20px;">
+                    Pana la:
+                </div>
+                <div class="field_name" style="width: 101px;">
+                    <input type="text" name="data_final" id="data_final_cautare" class="field_input auto-hint  w70" value="" title="Pana la" disabled="true" />
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    <label class="field_label">Filtre</label>
+                    <label for="puncte_de_lucru">puncte de lucru</label>
+                    <input type="checkbox" value="1" id="puncte_de_lucru" name="puncte_de_lucru">
+                    <label for="clienti_activi">activi</label>
+                    <input type="checkbox" value="1" id="clienti_activi" name="clienti_activi">
+                    <label for="clienti_cash">cash</label>
+                    <input type="checkbox" value="1" id="clienti_cash" name="clienti_cash">
+                </legend>
+                <div class="field_name w270">
+                    <div class="field_name w60">
+                        Client
+                    </div>
+                    <input id="clienti_search_combo_nume" class="field_input w190">
+                    <input id="clienti_search_combo" type="hidden">
+                    <input id="clienti_search_combo_master" type="hidden">
+                </div>
+            </fieldset>
+            <div class="field_name w340">
+                <fieldset>
+                    <legend>
+                        <label class="field_label" for="cautare_acc">Cautare</label>
+                    </legend>
+                    <div class="field_name" style="width: 101px;">
+                        <input class="button ui-button ui-widget ui-state-default ui-corner-all" id="cautare_acc" value="Cautare" onclick="cautareFacturi();" role="button" aria-disabled="false" type="button">
+                    </div>
+                </fieldset>
+            </div>
+            <fieldset style="display: inline-flex">
+                <legend>
+                    <label class="field_label" >Printare</label>
+                </legend>
+                <div class="field_name" style="width: 295px;">
+                    <input class="button ui-button ui-widget ui-state-default ui-corner-all" value="Printare facturi" onclick="PrintareFacturi('cautare_facturi_tabel');" role="button" aria-disabled="false" type="button">
+                    <input class="button ui-button ui-widget ui-state-default ui-corner-all" value="Printare facturi cu borderou" onclick="PrintareFacturi('cautare_facturi_tabel', true);" role="button" aria-disabled="false" type="button">
+                </div>
+            </fieldset>
+            <fieldset style="display: inline-flex">
+                <legend>
+                    <label class="field_label">Client / WME</label>
+                </legend>
+                <div class="field_name" style="width: 295px;">
+                    <input class="button ui-button ui-widget ui-state-default ui-corner-all" value="Trimite catre client" onclick="trimiteCatreClient('cautare_facturi_tabel');" role="button" aria-disabled="false" type="button">
+                    <input class="button ui-button ui-widget ui-state-default ui-corner-all" id="resetare_wme_com" value="Resetare WME com" onclick="resetareWmeCom('cautare_facturi_tabel');" role="button" aria-disabled="false" type="button">
+                </div>
+            </fieldset>
+            <fieldset style="width: 98.5%">
+                <legend>
+                    <label class="field_label">Expeditie / factura</label>
+                </legend>
+                <textarea id="lista_facturi_cautare" style="width: 99.9%; margin: 0 auto"></textarea>
+            </fieldset>
+            <div class="separator_empty h10"></div>
+            <table id="cautare_facturi_tabel"></table>
+            <div id="cautare_facturi_tabel_pag"></div>
+        </div>
+        <!--<div id="tabs-errors">
+            erori
+        </div>-->
+    </div>
+    <div class="separator_empty h10"></div>
+
+</div>
+<div id="detalii_expeditie"></div>
+<div id="eroare"></div>
+<form method="POST" action="{URL}facturare/xls/facturi" id="export_redirect">
+    <input id="export_redirect_value" name="data" value="" type="hidden">
+</form>

@@ -1,0 +1,55 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioada();
+		Grid_ActivitateColectari();
+		Grid_ActivitateLivrari();
+		ComboCentre('centru');
+	});
+
+</script>
+<form action="{HTTP}expeditii/export_activitate_centru/" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="restante_expeditii" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Selectie</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w70" value="{DATA_START}" title="Pana la" />
+			</div>
+			<div class="field_name w120" style="line-height: 20px;">
+				Centru Colectare:
+			</div>
+			<div class="field_name w150">
+				<input type="hidden" name="centru" id="centru" class="field_input  w120" value="0" />
+				<input type="text" name="centru_NUME" id="centru_NUME" class="field_input  w120" value="{CENTRU_NUME}" title="Centru" />
+			</div>
+		</fieldset>
+		<div class="field_name w300 class_btn" style="margin-top: 25px; margin-left: 40px;">
+        	<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareActivitate();" />
+	        <input type="submit" name="view" class="button" value="Export" />
+	    </div>
+	</div>
+</form>
+<div class="separator_empty" style="height: 5px;"></div>
+<h3>Colectari: <span class="rosu" id="valoare_colectari"></span></h3>
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="activitate_colectari"></table>
+<div id="paginatie_colectari" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3>Livrari: <span class="rosu" id="valoare_livrari"></span></h3>
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="activitate_livrari"></table>
+<div id="paginatie_livrari" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+
+<div id="detalii_expeditie" style="display: none;"></div> 

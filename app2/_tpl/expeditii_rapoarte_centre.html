@@ -1,0 +1,129 @@
+<script>
+$(document).ready(function() 
+{
+	Grid_RapoarteCentreExpeditii();
+	
+	ComboCentre1('expeditor_centru');
+	ComboCentre1('destinatar_centru');
+	ComboCentre1('platitor_centru');
+	
+	ComboClienti('expeditor_nume','centru','expeditor_centru_nume');
+	ComboClienti('destinatar_nume','centru','destinatar_centru_nume');
+	ComboClienti('platitor_nume','centru','platitor_centru_nume');
+
+	ComboAgenti('curier_preluare');
+	ComboAgenti('curier_livrare');
+// 
+	ComboOperatori('operator');
+	
+});
+</script>
+<form action="{HTTP}expeditii/rapoarte_centre_export/" id="export_lista" method="post" name="export_lista">
+	<div class="cautare_expeditii" >
+		<fieldset>
+			<legend>
+				<label class="field_label" for="perioada" onclick="CautareExpeditii(1);">Perioada</label>
+				<input type="checkbox" name="perioada" id="perioada" value="1" class="field_checkbox" onclick="CautareExpeditii(1);" {PERIOADA} />
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="" title="De la" disabled="true" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="" title="Pana la" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 330px;">
+			<legend>
+				<label class="field_label" for="user" onclick="CautareExpeditii(10);">Operator</label>
+				<input type="checkbox" name="user" id="user" value="1" class="field_checkbox" onclick="CautareExpeditii(10);" {PERIOADA} />
+			</legend>
+			<div class="field_name w170">
+				<input type="text" name="operator_nume" id="operator_nume" class="field_input auto-hint w160" value="" title="Operator" disabled="true" />
+				<input type="hidden" name="operator" id="operator" value=""/>
+			</div>
+			<div class="field_name w160">
+				{OPERATIUNE}
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="curier" onclick="CautareExpeditii(6);">Curier</label>
+				<input type="checkbox" name="curier" id="curier" value="1" class="field_checkbox" onclick="CautareExpeditii(6);" {CURIER} />
+			</legend>
+			<div class="field_name w130">
+				<input type="hidden" name="curier_preluare" id="curier_preluare"/>
+				<input type="text" name="curier_preluare_nume" id="curier_preluare_nume" class="field_input auto-hint w120" value="" title="Preluare" disabled="true" />
+			</div>
+			<div class="field_name w130">
+				<input type="hidden" name="curier_livrare" id="curier_livrare"/>
+				<input type="text" name="curier_livrare_nume" id="curier_livrare_nume" class="field_input auto-hint w120" value="" title="Livrare" disabled="true" />
+			</div>
+		</fieldset>
+		<!-- <div class="field_name w130 class_btn" style="margin-top: 20px; margin-left: 10px;">
+			<input type="button" name="search" class="button" value="Cauta"  onclick="AfisareRapoarrteCentre();" />
+			<input type="button" name="exporta" class="button" value="Exporta" onclick="ExportRapoarteCentre();" />
+		</div> -->
+		<div class="separator_empty h5">&nbsp;</div>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="expeditor" onclick="CautareExpeditii(7);">Expeditor</label>
+				<input type="checkbox" name="expeditor" id="expeditor" value="1" class="field_checkbox" onclick="CautareExpeditii(7);" {EXPEDITOR} />
+			</legend>
+			<div class="field_name w130">
+				<input type="text" name="expeditor_centru_nume" id="expeditor_centru_nume" class="field_input auto-hint w120" value="" placeholder="Centru"  disabled="true"/>
+				<input type="hidden" name="expeditor_centru" id="expeditor_centru" value=""/>
+			</div>
+			<div class="field_name w130">
+				<input type="text" name="expeditor_nume" id="expeditor_nume" class="field_input auto-hint w120" value="" placeholder="Expeditor" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="destinatar" onclick="CautareExpeditii(8);">Destinatar</label>
+				<input type="checkbox" name="destinatar" id="destinatar" value="1" class="field_checkbox" onclick="CautareExpeditii(8);" {DESTINATAR} />
+			</legend>
+			<div class="field_name w130">
+				<input type="text" name="destinatar_centru_nume" id="destinatar_centru_nume" class="field_input auto-hint w120" value="" placeholder="Centru" disabled="true" />
+				<input type="hidden" name="destinatar_centru" id="destinatar_centru" value=""/>
+			</div>
+			<div class="field_name w130">
+				<input type="text" name="destinatar_nume" id="destinatar_nume" class="field_input auto-hint w120" value="" placeholder="Destinatar" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="platitor" onclick="CautareExpeditii(9);">Platitor</label>
+				<input type="checkbox" name="platitor" id="platitor" value="1" class="field_checkbox" onclick="CautareExpeditii(9);" {PLATITOR} />
+			</legend>
+			<div class="field_name w130">
+				<input type="text" name="platitor_centru_nume" id="platitor_centru_nume" class="field_input auto-hint w120" value="" placeholder="Centru" disabled="true" />
+				<input type="hidden" name="platitor_centru" id="platitor_centru" value=""/>
+			</div>
+			<div class="field_name w130">
+				<input type="text" name="platitor_nume" id="platitor_nume" class="field_input auto-hint w120" value="" placeholder="Platitor" disabled="true" />
+			</div>
+		</fieldset>
+		<div class="field_name w130 class_btn" style="margin-top: 15px; margin-left: 10px;" >
+			<input type="button" name="search" class="button" value="Cauta"  onclick="AfisareRapoarrteCentre();" />
+			<input type="button" name="exporta" class="button" value="Exporta" onclick="ExportRapoarteCentre();" />
+			<!-- <input type="button" name="detalii" class="button" value="Detalii Expeditie" onclick="AfisareDetaliiExpeditie('cautare_expeditii');"/> -->
+		</div>
+	</div>
+</form>
+
+<div class="separator_empty h10">&nbsp;</div>
+<table id="cautare_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div id="detalii_expeditie" style="display: none;">&nbsp;</div>

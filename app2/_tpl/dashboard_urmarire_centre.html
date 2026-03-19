@@ -1,0 +1,235 @@
+<script type="application/javascript">
+
+    $( document ).ready(function() {
+        SetareDate();
+        dashboardGrid();
+    });
+
+    function SetDashboardCentreData() {
+        var id = 'restante_si_rbs';
+        $("#"+id).jqGrid('setGridParam', {
+            url :HTTP + 'dashboard/json/'+id,
+            postData : {
+                data_start: $('#data_start').val(),
+                data_final: $('#data_final').val()
+            },
+        }).trigger("reloadGrid");
+    }
+    function dashboardGrid() {
+
+        var id = 'restante_si_rbs';
+
+        jQuery("#"+id).jqGrid(
+            {
+                mtype: 'POST',
+                datatype : "json",
+                colNames : ['COD','Centru','Res. col/liv','Res. col/liv total','RBS netrimise','RBS netrimise val','RBS nelivrate','RBS nelivrate val'],
+                colModel : [ {
+                    name : 'cod',
+                    index : 't.label',
+                    align: 'left',
+                    width: 50
+                },{
+                    name : 'lebel',
+                    index : 't.nume',
+                    align: 'left',
+                    width: 200
+                }, {
+                    name : 'restante_nr',
+                    align: 'right',
+                    width: 200
+                }, {
+                    name : 'restante_val',
+                    align: 'right',
+                    width: 200
+                }, {
+                    name : 'rbs_netrimise_nr',
+                    align: 'right',
+                    width: 200
+                }, {
+                    name : 'rbs_netrimise_val',
+                    align: 'right',
+                    width: 200
+                }, {
+                    name : 'rbs_nelivrate_nr',
+                    align: 'right',
+                    width: 200
+                }, {
+                    name : 'rbs_nelivrate_val',
+                    align: 'right',
+                    width: 200
+                } ],
+                rowNum : 250,
+                rowList : [ 250,500],
+                width : 970,
+                height : 'auto',
+                rownumbers : true,
+                gridview : true,
+                viewrecords : true,
+                caption : false, //  caption:label,
+                multiselect : false,
+                subGrid : false,
+                pager : '#paginatie_'+id,
+                ondblClickRow : function(id) {
+                    window.open(HTTP + 'dashboard/urmarire?centru=' + id + '&data_start=' + $('#data_start').val() + '&data_stop=' + $('#data_final').val(), '_blank');
+                },
+                footerrow: true,
+                userDataOnFooter: true,
+                gridComplete: function()
+                {
+                    $('#box_restante_colectari_livrari').removeClass('disabled-values');
+                    var records = $("#"+id).getGridParam("records");
+                    $('#'+id+'_count').text(records);
+                    $('#restante_total_exp').text(records);
+
+                    var user_data = $("#"+id).getGridParam("userData");
+                    $('#restante_total_in_valoare').text(user_data.valoare_totala_expeditie);
+                    $('#restante_colectari_exp').text(user_data.count_colectare);
+                    $('#restante_colectari_in_valoare').text(user_data.total_colectare_val_exp);
+
+                    $('#restante_livrari_exp').text(user_data.count_livrare);
+                    $('#restante_livrari_in_valoare').text(user_data.total_livrare_val_exp);
+
+                    $('#li_restante_colectari_livrari').show();
+                    $('#box_restante_colectari_livrari').removeClass('loading_box');
+
+                    $('#restante_colectari_livrari_date_range').text(user_data.restante_colectari_livrari_date_range);
+
+                }
+
+            });
+
+        jQuery("#"+id).jqGrid('navGrid','#paginatie_'+id, {
+            del : false,
+            add : false,
+            edit : false,
+            search : true
+        },{},{},{},{multipleSearch:true});
+
+        jQuery("#"+id).jqGrid('navButtonAdd','#paginatie_'+id,{
+            caption:"Export to CSV",
+            onClickButton : function () {
+                window.location.href = HTTP + 'dashboard/export_csv/'+id+'?data_start='+$('#data_start').val()+ '&data_final=' +$('#data_final').val();
+            }
+        });
+
+        jQuery("#"+id).jqGrid('bindKeys');
+        jQuery("#"+id).jqGrid('filterToolbar',{
+            stringResult : true,
+            searchOnEnter : false
+        });
+
+    }
+</script>
+<style>
+    #taburi_wme_com ul li a span {
+        background: #eb8f00;
+        padding: 3px 7px;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    #taburi_wme_com .ui-tabs-panel{
+        padding: 0;
+    }
+    #selectie_centru{
+        display: none;
+    }
+    .title_page{
+        width: 100%;
+    }
+    #date_range_select{
+        float: right;
+        margin-right: 20px;
+    }
+    .mesaj_confirmare{
+        display: none;
+    }
+    #dashboard_index{
+        list-style: none;
+    }
+    #dashboard_index li{
+        width: 31%;
+        float: left;
+        box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.75);
+
+        min-height: 200px;
+        margin: 0 20px 0 0;
+        border: solid 1px #8c8c8c;
+
+    }
+    #dashboard_index li h4{
+        text-align: center;
+        margin: 15px auto;
+        padding: 0 0 5px 0;
+        border-bottom: 3px solid #e78f08;
+        width: 90%;
+    }
+
+    #dashboard_index li p{
+        margin: 0px;
+        padding: 0 15px;
+    }
+
+    #dashboard_index li span{
+        font-weight: bold;
+    }
+
+
+    #li_restante_colectari_livrari, #li_rambursuri_netrimise, #li_rambursuri_nelivrate, #li_dashboard_index{
+        display: none;
+    }
+
+    #dashboard_index li span{
+        display: inline-flex;
+    }
+
+
+    .btn_afisare_dash {
+        background: #e78f08;
+        background-image: linear-gradient(to bottom, #e78f08, #db8408);
+        border-radius: 8px;
+        text-shadow: 1px 1px 3px #666666;
+        font-family: Arial;
+        color: #ffffff !important;
+        font-size: 20px;
+        padding: 10px 20px 10px 20px;
+        text-decoration: none;
+        box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.75);
+
+    }
+
+    .btn_afisare_dash:hover {
+        background: #3cb0fd;
+        background-image: linear-gradient(to bottom, #db8408, #e78f08);
+        text-decoration: none;
+    }
+
+    .disabled-values p {
+        color: lightgray;
+    }
+
+    .loading_box{
+        background: url('images/indicator.gif') no-repeat center 70%;
+    }
+    #data_range_text, #data_range_text_1{
+        display: none;
+    }
+
+</style>
+<input type="hidden" id="table_filters" name="table_filters" value="{TABLE_FILTERS}" />
+<input type="hidden" id="rbs_centru_id" value="{RBS_CENTRU_ID}">
+<input type="hidden" id="date_range_for" value="1">
+<input type="hidden" id="status_rmb" value="2">
+
+
+<!--
+<div class="separator_empty h40"></div>
+<div style="text-align: center"><a class="btn_afisare_dash" href="#" onclick="loadGrigRestanteSiRbs();return false;">Afiseaza</a></div>
+<div class="separator_empty h40"></div>
+-->
+
+<div id="message"></div>
+<table id="restante_si_rbs"></table>
+<div id="paginatie_restante_si_rbs" class="pagination_jqgrid"></div>
+<div id="eroare"></div>

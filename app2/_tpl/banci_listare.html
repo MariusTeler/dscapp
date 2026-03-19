@@ -1,0 +1,72 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#banci_listare").jqGrid({
+            url : '/banci/listare_json',
+            datatype : "json",
+            colNames : [ 'Nume', 'BIC', 'Label'],
+            colModel : [ {
+                name : 'nume',
+                index : 'nume',
+                editable : true,
+                editrules : {
+				    custom : true,
+				    custom_func : checkNotEmpty
+			    }
+            },{
+                name : 'bic',
+                index : 'bic',
+                editable : true,
+                editrules : {
+				    custom : true,
+				    custom_func : checkNotEmpty
+			    }
+            },{
+			name : 'label',
+			index : 'label',
+			editable : true
+            }],
+            height : 400,
+            width : 970,
+            scroll : 1,
+            rowNum : 50,
+            mtype : "GET",
+            rownumbers : true,
+            rownumWidth : 40,
+            gridview : true,
+            pager : '#banci_listare_pag',
+            sortname : 'nume',
+            viewrecords : true,
+            sortorder : "asc",
+            caption : 'Lista banci',
+            editurl : '/banci/editare?q=dummy'
+        });
+
+        $("#banci_listare").jqGrid('bindKeys');
+        $("#banci_listare").jqGrid('filterToolbar', {
+            stringResult : true,
+            searchOnEnter : false
+        });
+        $("#banci_listare").jqGrid('navGrid', '#banci_listare_pag', {
+            del : true,
+            add : true,
+            edit : true,
+            search : false
+        });
+        $("#banci_listare").jqGrid('navButtonAdd','#banci_listare_pag',{
+            caption:"Export to CSV",
+            onClickButton : function () {
+                window.location.href = '/banci/export_csv';
+            }
+        });
+    });
+    function checkNotEmpty(str) {
+        if (!str.trim().length) {
+            return [ false, "Nume banca, BIC sunt obligatorii!", "" ];
+        } else {
+            return [ true, "", "" ];
+        }
+    }
+</script>
+<table id="banci_listare" class="table_jqgrid"></table>
+<div id="banci_listare_pag"></div>
+<div class="separator_empty h10"></div>

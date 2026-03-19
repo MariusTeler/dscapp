@@ -1,0 +1,417 @@
+<script type="application/javascript">
+
+    var add_rbs_export = true;
+
+    $( document ).ready(function() {
+        $('.tab').tabs();
+        SetareDate();
+        $( "#centru_selectat" ).dblclick(function() {
+            $(this).hide();
+            $('#selectie_centru').show();
+        });
+        ComboCentre1('centru');
+
+        $('#data_range_text, .date_range_box_text').dblclick(function(e) {
+            if(e.ctrlKey || e.altKey) {
+                $('#data_range_text').hide();
+                $('#date_range_select').show();
+            }
+        });
+
+
+    });
+    var tabs_loaded = 0;
+    function reloadGrid(id) {
+
+        if ($("#"+id)[0].grid) {
+            $("#"+id).jqGrid('setGridParam', {
+                url :HTTP + 'dashboard/json/'+id+'/' + $('#centru').val() ,
+                postData : {
+                    data_start: $('#data_start').val(),
+                    data_final: $('#data_final').val()
+                },
+            }).trigger("reloadGrid");
+        } else {
+            if(id == 'rambursuri_netrimise' || id == 'rambursuri_nelivrate'){
+                Rambursuri_Grid_Urmarire(id);
+            } else {
+                dashboardGrid(id);
+            }
+        }
+    }
+
+    function UpdateDashboard() {
+        $.ajax(HTTP + 'loguri/ajax', {
+            type: "POST",
+            data: {method:'getLog'},
+            dataType: "json",
+            statusCode: {
+                200: function (response) {
+                    $('#rambursuri_count').html(response.rambursuri_count);
+                    $('#extrase_count').html(response.extrase_count);
+                    $('#facturi_count').html(response.facturi_count);
+                    $('#clienti_count').html(response.clienti_count);
+                    $('#message').html(response.message);
+                }
+            }
+        });
+    }
+
+
+    function dashboardGrid(id) {
+
+        $('#box_restante_colectari_livrari').addClass('loading_box');
+
+        jQuery("#"+id).jqGrid(
+            {
+                url : HTTP + 'dashboard/json/'+id+'/' + $('#centru').val(),
+                mtype: 'POST',
+                postData : {
+                    data_start: $('#data_start').val(),
+                    data_final: $('#data_final').val()
+                },
+                datatype : "json",
+                colNames : ['Operatiune','Colectat','Expeditie','Curier','Destinatar','CD','Expeditor','CE','Valoare','Tip Exp','Nr Scanari'],
+                colModel : [ {
+                    name : 'operatiune',
+                    index : 'ep.operatiune',
+                    align: 'center',
+                    stype : 'select',
+                    formatter: 'select',
+                    editoptions : {
+                        value : ":Toate;1:Colectare;2:Livrare"
+                    },
+                    searchoptions : {
+                        value : ":Toate;1:Colectare;2:Livrare",
+                        sopt : [ 'eq' ]
+                    },
+                    align: 'center',
+                    width: 60,
+
+                },{
+                    name : 'data_expeditie',
+                    index : 'ep.data_expeditie',
+                    width: 60,
+                    sorttype:'date',
+                    formatter:'date',
+                    datefmt:'d/m/Y',
+                    align: 'center'
+                }, {
+                    name : 'expeditie',
+                    index : 'ep.expeditie',
+                    align: 'center',
+                    width: 60
+                }, {
+                    name : 'curier_livrare',
+                    index : 'agl.nume_ag',
+                    align: 'left',
+                    width: 200
+                }, {
+                    name : 'destinatar',
+                    index : 'cld.nume',
+                    width: 210
+                }, {
+                    name : 'destinatar_centru',
+                    index : 'ced.label',
+                    align: 'center',
+                    width: 30
+                }, {
+                    name : 'expeditor',
+                    index : 'cle.nume',
+                    width: 210
+                }, {
+                    name : 'expeditor_centru',
+                    index : 'cee.label',
+                    align: 'center',
+                    width: 30
+                }, {
+                    name : 'valoare_totala_expeditie',
+                    index : 'ep.valoare_totala_expeditie',
+                    align : 'right',
+                    width : 70
+                }, {
+                    name : 'tip_exp',
+                    index : 'ep.tip_exp',
+                    stype : 'select',
+                    formatter: 'select',
+                    editoptions : {
+                        value : ":;0:Initiala;5:Returnare"
+                    },
+                    searchoptions : {
+                        value : ":Toate;0:Initiala;5:Returnare",
+                        sopt : [ 'eq' ]
+                    },
+                    align: 'center',
+                    edittype : "select",
+                    width: 65
+                }, {
+                    name : 'nr_scanari',
+                    index : 'nr_scanari',
+                    align : 'right',
+                    search : false,
+                    sortable : false,
+                    width : 70
+                } ],
+                rowNum : 100,
+                rowList : [ 100,250,500,1000,2500,5000,10000 ],
+                width : 970,
+                height : 'auto',
+                rownumbers : true,
+                gridview : true,
+                sortname : 'ep.data_expeditie',
+                viewrecords : true,
+                sortorder : "ASC",
+                caption : false, //  caption:label,
+                multiselect : false,
+                subGrid : false,
+                pager : '#paginatie_'+id,
+                ondblClickRow : function(id) {
+                    AfisareDetaliiExpeditieCuID(id);
+                },
+                footerrow: true,
+                userDataOnFooter: true,
+                gridComplete: function()
+                {
+                    $('#box_restante_colectari_livrari').removeClass('disabled-values');
+                    var records = $("#"+id).getGridParam("records");
+                    $('#'+id+'_count').text(records);
+                    $('#restante_total_exp').text(records);
+
+                    var user_data = $("#"+id).getGridParam("userData");
+                    $('#restante_total_in_valoare').text(user_data.valoare_totala_expeditie);
+                    $('#restante_colectari_exp').text(user_data.count_colectare);
+                    $('#restante_colectari_in_valoare').text(user_data.total_colectare_val_exp);
+
+                    $('#restante_livrari_exp').text(user_data.count_livrare);
+                    $('#restante_livrari_in_valoare').text(user_data.total_livrare_val_exp);
+
+                    $('#li_restante_colectari_livrari').show();
+                    $('#box_restante_colectari_livrari').removeClass('loading_box');
+
+                    $('#restante_colectari_livrari_date_range').text(user_data.restante_colectari_livrari_date_range);
+
+                }
+
+            });
+
+        jQuery("#"+id).jqGrid('navGrid','#paginatie_'+id, {
+            del : false,
+            add : false,
+            edit : false,
+            search : true
+        },{},{},{},{multipleSearch:true});
+
+        jQuery("#"+id).jqGrid('navButtonAdd','#paginatie_'+id,{
+            caption:"Export to XLS",
+            onClickButton : function () {
+                window.location.href = HTTP + 'dashboard/export_xls/'+id+'/' + $('#centru').val() + '?data_start='+$('#data_start').val()+ '&data_final=' +$('#data_final').val();
+            }
+        });
+
+        jQuery("#"+id).jqGrid('bindKeys');
+        jQuery("#"+id).jqGrid('filterToolbar',{
+            stringResult : true,
+            searchOnEnter : false
+        });
+
+    }
+
+    function resetDashboardValues() {
+        $('#dashboard_index li').addClass('disabled-values');
+        $('.val-res').text('0');
+    }
+    
+    function SetCentruDashboard() {
+        $('#li_dashboard_index').show();
+        $('#li_restante_colectari_livrari').hide();
+        $('#li_rambursuri_netrimise').hide();
+        $('#li_rambursuri_nelivrate').hide();
+
+        $('#box_restante_colectari_livrari').addClass('loading_box');
+        $('#box_rambursuri_netrimise').addClass('loading_box');
+        $('#box_rambursuri_nelivrate').addClass('loading_box');
+
+
+        resetDashboardValues();
+
+        reloadGrid('restante_colectari_livrari');
+        reloadGrid('rambursuri_netrimise');
+        reloadGrid('rambursuri_nelivrate');
+
+        if(add_rbs_export){
+            adaugaButonExport('rambursuri_nelivrate');
+            adaugaButonExport('rambursuri_netrimise');
+            add_rbs_export = false;
+        }
+    }
+
+    function adaugaButonExport(id) {
+        jQuery("#"+id).jqGrid('navButtonAdd','#paginatie_'+id,{
+            caption:"Export to XLS",
+            onClickButton : function () {
+                window.location.href = HTTP + 'dashboard/export_xls/'+id+'/' + $('#centru').val() + '?data_start='+$('#data_start').val()+ '&data_final=' +$('#data_final').val();
+            }
+        });
+    }
+</script>
+<style>
+    #taburi_wme_com ul li a span {
+        background: #eb8f00;
+        padding: 3px 7px;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    #taburi_wme_com .ui-tabs-panel{
+        padding: 0;
+    }
+    #selectie_centru{
+        display: none;
+    }
+    .title_page{
+        width: 100%;
+    }
+    #date_range_select{
+        float: right;
+        margin-right: 20px;
+        display: none;
+    }
+    .mesaj_confirmare{
+        display: none;
+    }
+    #dashboard_index{
+        list-style: none;
+    }
+    #dashboard_index li{
+        width: 31%;
+        float: left;
+        box-shadow: 4px 4px 5px 0px rgba(0,0,0,0.75);
+
+        min-height: 200px;
+        margin: 0 20px 0 0;
+        border: solid 1px #8c8c8c;
+
+    }
+    #dashboard_index li h4{
+        text-align: center;
+        margin: 15px auto;
+        padding: 0 0 5px 0;
+        border-bottom: 3px solid #e78f08;
+        width: 90%;
+    }
+
+    #dashboard_index li p{
+        margin: 0px;
+        padding: 0 15px;
+    }
+
+    #dashboard_index li span{
+        font-weight: bold;
+    }
+
+
+    #li_restante_colectari_livrari, #li_rambursuri_netrimise, #li_rambursuri_nelivrate, #li_dashboard_index{
+        display: none;
+    }
+
+    #dashboard_index li span{
+        display: inline-flex;
+    }
+
+
+    .btn_afisare_dash {
+        background: #e78f08;
+        background-image: linear-gradient(to bottom, #e78f08, #db8408);
+        border-radius: 8px;
+        text-shadow: 1px 1px 3px #666666;
+        font-family: Arial;
+        color: #ffffff !important;
+        font-size: 20px;
+        padding: 10px 20px 10px 20px;
+        text-decoration: none;
+        box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.75);
+
+    }
+
+    .btn_afisare_dash:hover {
+        background: #3cb0fd;
+        background-image: linear-gradient(to bottom, #db8408, #e78f08);
+        text-decoration: none;
+    }
+
+    .disabled-values p {
+        color: lightgray;
+    }
+
+    .loading_box{
+        background: url('images/indicator.gif') no-repeat center 70%;
+    }
+    #data_range_text, #data_range_text_1{
+        display: none;
+    }
+
+</style>
+<input type="hidden" id="table_filters" name="table_filters" value="{TABLE_FILTERS}" />
+<input type="hidden" id="rbs_centru_id" value="{RBS_CENTRU_ID}">
+<input type="hidden" id="date_range_for" value="1">
+<input type="hidden" id="status_rmb" value="2">
+
+<div id="message"></div>
+
+<div class="tab taburi_wme_com" id="taburi_wme_com">
+    <ul>
+        <li id="li_dashboard_index">
+            <a data-id="10" href="#tabs-10" onclick="">Index</a>
+        </li>
+        <li id="li_restante_colectari_livrari">
+            <a data-id="20" href="#tabs-20">Restante colectari / livrari <span id="restante_colectari_livrari_count">0</span></a>
+        </li>
+        <li id="li_rambursuri_netrimise">
+            <a data-id="30" href="#tabs-30">Rambursuri netrimise <span id="rambursuri_netrimise_count">0</span></a>
+        </li>
+        <li id="li_rambursuri_nelivrate">
+            <a data-id="40" href="#tabs-40">Rambursuri nelivrate <span id="rambursuri_nelivrate_count">0</span></a>
+        </li>
+    </ul>
+    <div id="tabs-10">
+        <div class="separator_empty h10"></div>
+        <ul id="dashboard_index">
+            <li id="box_restante_colectari_livrari" class="disabled-values">
+                <h4>Restante colectari / livrari<span id="restante_colectari_livrari_date_range" class="date_range_box_text"></span></h4>
+                <p><span id="restante_colectari_exp" class="val-res">0</span> Colectari in valoare de <span id="restante_colectari_in_valoare" class="val-res">0</span></p>
+                <p><span id="restante_livrari_exp" class="val-res">0</span> Livrari in valoare de <span id="restante_livrari_in_valoare" class="val-res">0</span></p>
+                <div class="separator_empty h10"></div>
+                <p><span id="restante_total_exp" class="val-res">0</span> exp. in valoare de <span id="restante_total_in_valoare" class="val-res">0</span></p>
+            </li>
+            <li id="box_rambursuri_netrimise" class="disabled-values">
+                <h4>Rambursuri netrimise<span id="rambursuri_netrimise_date_range" class="date_range_box_text"></span></h4>
+                <p><span id="rambursuri_netrimise_exp" class="val-res">0</span> Expeditii in valoare de <span id="rambursuri_netrimise_val" class="val-res">0</span></p>
+            </li>
+            <li id="box_rambursuri_nelivrate" class="disabled-values">
+                <h4>Rambursuri nelivrate<span id="rambursuri_nelivrate_date_range" class="date_range_box_text"></span></h4>
+                <p><span id="rambursuri_nelivrate_exp" class="val-res">0</span> Expeditii in valoare de <span id="rambursuri_nelivrate_val" class="val-res">0</span></p>
+            </li>
+        </ul>
+        <div class="separator_empty h40"></div>
+        <div style="text-align: center"><a class="btn_afisare_dash" href="#" onclick="SetCentruDashboard();return false;">Afiseaza</a></div>
+        <div class="separator_empty h40"></div>
+    </div>
+    <div id="tabs-20">
+        <div class="separator_empty h10"></div>
+        <table id="restante_colectari_livrari"></table>
+        <div id="paginatie_restante_colectari_livrari" class="pagination_jqgrid"></div>
+    </div>
+    <div id="tabs-30">
+        <div class="separator_empty h10"></div>
+        <table id="rambursuri_netrimise"></table>
+        <div id="paginatie_rambursuri_netrimise" class="pagination_jqgrid"></div>
+    </div>
+    <div id="tabs-40">
+        <div class="separator_empty h10"></div>
+        <table id="rambursuri_nelivrate"></table>
+        <div id="paginatie_rambursuri_nelivrate" class="pagination_jqgrid"></div>
+    </div>
+
+</div>
+<div id="eroare"></div>
+<div id="detalii_expeditie"></div>

@@ -1,0 +1,58 @@
+<script>
+	$(document).ready(function() {
+		$(".button").button();
+	});
+</script>
+<form id="form" action="" method="post" autocomplete="off">
+	<input type="hidden" name="step" value="2" />
+	<input type="hidden" name="cod" value="{COD}" />
+	<h3>Informatii Client</h3>
+		
+	<div class="field_row">
+		<div class="field_name">Nume</div>
+		<input type="text" id="nume" name="nume" value="{NUME}" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Email Contact</div>
+		<input type="text" id="mail" name="mail" value="{MAIL}" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Telefon Contact</div>
+		<input type="text" id="telefon" name="telefon" value="{TELEFON}" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Print Awb</div>
+		<div class="field_name w50">
+			<input type="radio" name="print_awb" id="print_awb_1" value="1" {PRINT_AWB_1} class="field_radio" />
+			<label for="print_awb_1">&nbsp;Pdf</label>
+		</div>
+		<div class="field_name w50">
+			<input type="radio" name="print_awb" id="print_awb_2" value="2" {PRINT_AWB_2} class="field_radio" />
+			<label for="print_awb_2">&nbsp;Print</label>
+		</div>
+	</div>
+	<div class="separator_empty" style="height: 20px;"></div>
+	<div class="field_row">
+		<input type="submit" name="but_submit" class="button w70" value="Salveaza" style="margin-left: 285px;"/>
+	</div>	
+	<div class="separator_empty" style="height: 20px;"></div>
+	<h3>Schimbare Parola</h3>
+	<div class="field_row">
+		<div class="field_name">Parola Curenta</div>
+		<input type="password" id="pass" name="pass" value="" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Parola Noua</div>
+		<input type="password" id="pass1" name="pass1" value="" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Parola Noua</div>
+		<input type="password" id="pass2" name="pass2" value="" class="field_input w200">
+	</div>
+	
+	<div class="field_row">
+		<input type="submit" name="but_submit2" class="button w70" value="Salveaza" style="margin-left: 285px;"/>
+	</div>
+	
+</form>
+<div class="separator_empty" style="height: 10px;"></div>

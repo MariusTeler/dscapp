@@ -1,0 +1,53 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		ComboCentre('centru');
+	});
+
+</script>
+<form action="" id="generare_transport" method="post" name="generare_transport">
+	<input type="hidden"  name="step" value="2"/>
+	<input type="hidden"  name="cod" value="{COD}"/>
+	
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<fieldset style="min-width: 100px; height: 43px;">
+			<legend>
+				<label class="field_label" for="operatie">Centru Incarcare</label>
+			</legend>
+			<div class="field_name w210" id="lista_centre">
+				<input type="hidden" name="centru" id="centru" class="field_input  w200" value="{CENTRU}" />
+				<input type="text" name="centru_NUME" id="centru_NUME" class="field_input  w200" value="{CENTRU_NUME}" placeholder="Centru" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 50px; height: 43px;">
+			<legend>Denumire</legend>
+			<div class="field_name w100">
+				<input type="text" name="denumire" id="denumire" class="field_input w90" value="{DENUMIRE}" placeholder="Denumire" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 50px; height: 43px;">
+			<legend>Kg Max</legend>
+			<div class="field_name w100">
+				<input type="text" name="kg_max" id="kg_max" class="field_input w90" value="{KG_MAX}" placeholder="Kg Max" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 50px; height: 43px; width: 260px;">
+			<legend>Observatii</legend>
+			<div class="field_name w280">
+				<input type="text" name="observatii" id="observatii" class="field_input w250" value="{OBSERVATII}" placeholder="Observatii" />
+			</div>
+		</fieldset>
+		<div class="field_name w120 class_btn" style="margin-top: 15px; margin-left: 10px;">
+			<input type="button" name="search" class="button" value="Salvare Ruta" onclick="GenerareRuta();" />
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<fieldset style="width: 955px">
+			<legend>
+				<label class="field_label"> <span style="padding-right: 10px;">Centre de destinatie:</span> <span style="padding-left: 10px;" onclick="$('.centre_destinatie').attr('checked', true);" >Selecteaza tot</span> <span onclick="$('.centre_destinatie').attr('checked', false);">Deselecteaza tot</span> </label>
+			</legend>
+			{CENTRE_DESTINATIE}
+		</fieldset>
+		<div class="separator_empty" style="height: 5px;"></div>
+	</div>
+</form>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="eroare" placeholder="Eroare" style="display: none;"></div>

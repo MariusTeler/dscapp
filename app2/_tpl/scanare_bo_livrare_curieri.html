@@ -1,0 +1,83 @@
+	<div style="padding:0px 0px 2px 0px;">
+        <fieldset style="min-width: 120px; height: 43px;">
+			<legend>
+				<label class="field_label">Data</label>
+			</legend>
+			<div class="field_name w100">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="Data" readonly/>
+			</div>
+		</fieldset>	
+        <fieldset style="min-width: 180px; height: 43px;">
+			<legend>
+				<label class="field_label">Centru</label>
+			</legend>
+			<div class="field_name">
+				{CENTRE}
+			</div>
+		</fieldset>	
+        <fieldset style="min-width: 200px; height: 43px;">
+			<legend>
+				<label class="field_label">Agent</label>
+			</legend>
+			<div class="field_name w160">
+				<input type="hidden" name="agent" id="agent" class="field_input " value="" title="Agenti"/>
+				<input type="text" name="agent_nume" id="agent_nume" class="field_input w160 h10" style="padding: 5px;" value="" title="Agent"/>
+			</div>
+		</fieldset>	
+		<div class="field_name w300 class_btn" style="margin-top: 15px; margin-left: 40px;">
+        	<input type="button" name="search" class="button" value="Afisare"  onclick="AfisareBoLivrareCurieri();" />
+	        <input type="button" name="print" class="button" value="Print"  onclick="PrintareBoLivrareCurieri();"/>
+	    </div>
+	</div>
+<div class="separator_empty" style="height: 5px;"></div>
+<h3>Lista borderouri:</h3>
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="borderouri_livrare_curieri"></table>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+
+<script type="text/javascript">
+    function ComboBoLivrareCurieri(field) {
+            $("#"+field+"_nume").autocomplete({
+                source : function(request, response) {
+                    var centru = parseInt($('#centru').val());
+                    $.ajax({
+                        type: "GET",
+                        url : HTTP + "agenti/autocomplete",
+                        dataType : "json",
+                        data : 'maxRows='+8+'&name_startsWith='+request.term+'&centru='+centru,
+                        success : function(data) {
+                            response($.map(data.rezultat, function(item) {
+                                return {
+                                    id : item.id,
+                                    label : item.label,
+                                    value : item.value
+                                }
+                            }));
+                        }
+                    });
+                },
+                minLength : 1,
+                select : function(event, ui) {
+                    $("#" + field).val(ui.item.id);
+                    $("#" + field + "_nume").val(ui.item.value);
+                },
+                open : function(event, ui) {
+                    $("#" + field).val("");
+                },
+                change : function(event, ui) {
+                    if($("#" + field + "_nume").val() == '')
+                    {
+                        $("#" + field).val("");
+                    }
+                },
+                close : function() {
+                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+                }
+            });
+        }
+	$(document).ready(function() {
+        AfisareDataOnly();
+        ComboBoLivrareCurieri('agent');
+		Grid_BoLivrareCurieri();
+	});
+</script>

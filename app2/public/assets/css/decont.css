@@ -1,0 +1,215 @@
+.decontatRowClass {color: #2d9900 !important; }
+    .ag_dezactivat{
+        color: #ECECEC !important;
+    }
+    .input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:first-child > .btn-group:not(:first-child) > .btn, .input-group-btn:first-child > .btn:not(:first-child), .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group > .btn, .input-group-btn:last-child > .dropdown-toggle, .input-group .form-control:not(:first-child):not(:last-child), .input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child){
+        border-bottom-left-radius:4px;
+        border-top-left-radius: 4px;
+    }
+    .app-decont-area .addCode{
+        background: #35D400;
+        padding: 9px 12px;
+    }
+    .app-decont-area .addCode:hover{
+        background: #30bc00;
+    }
+
+    .app-decont-area .addCode.remove{
+        background: #D43500;
+        color: #FFF;
+    }
+    .app-decont-area .addCode.remove:hover, .footer-app-acction a.iesire-app:hover{
+        color: #b02c00;
+    }
+    .input-group {
+        margin: 0 5px 0 0;
+        float: left;
+    }
+
+    .input-group label{
+        display: block;
+    }
+
+    .input-group-btn{
+        vertical-align: bottom;
+    }
+    .agent-decont-select .bootstrap-select{
+        display: block;
+        width: 230px;
+    }
+
+    .app-decont-area input.btn-danger {
+        color: white;
+    }
+
+    #agent_decont_selectat, #back_btn, #next_btn{
+        display: none;
+    }
+
+    .decont-inpus input:focus {
+        background-color: yellow;
+    }
+
+    #barcode_input:focus {
+        background-color: #30bc00;
+        font-weight: bold;
+    }
+
+    .decont-inpus input.btn-danger:focus {
+        background-color: #c9302c;
+        border-color: #ac2925;
+    }
+
+    .decont-inpus input.btn-danger::placeholder {
+        color: pink;
+    }
+
+    .step_1, .step_2, .step_3{
+        /*display: none;*/
+        visibility: hidden;
+    }
+
+    .tip-decont-cheltuiala-select .bootstrap-select{
+        display: block;
+        width: 120px;
+    }
+    .modal{
+        background: transparent;
+        width: 100%;
+        max-width:100%;
+    }
+
+    .modal-dialog-ok{
+        top:40% !important;
+        transform: translate(0, -40%) !important;
+        -ms-transform: translate(0, -40%) !important;
+        -webkit-transform: translate(0, -40%) !important;
+    }
+
+    .modal-dialog-xxx {
+        position:absolute;
+        top:50% !important;
+        transform: translate(0, -50%) !important;
+        -ms-transform: translate(0, -50%) !important;
+        -webkit-transform: translate(0, -50%) !important;
+        margin:auto 5%;
+    }
+
+    #lista_coduri_fact{
+        margin-left: 10px;
+        list-style: url;
+    }
+
+    .li_cod_exp_multiplu, .li_ch_multiplu{
+        width: 160px;
+        display: inline-flex;
+    }
+    
+    .fontRed, .fontRed.ui-state-highlight{
+        color: #cd001c;
+    }
+
+    .label-ag{
+        width: 200px;
+        display: inline-flex;
+    }
+    .count-nr{
+        width: 50px;
+        display: inline-block;
+        text-align: right;
+    }
+    .decount-val{
+        width: 90px;
+        display: inline-block;
+        text-align: right;
+    }
+    .total-ag-incasat{
+        font-weight: bold;
+    }
+    #agent_totaluri li{
+        list-style: none;
+    }
+
+    #detalii-exp .modal-body{
+        background: #eeeeee url(/assets/images/ui-bg_highlight-soft_100_eeeeee_1x100.png) 50% top repeat-x;
+        color: #000;
+    }
+    #detalii-exp .modal-body .label{
+        font-size: inherit;
+        font-weight: bold;
+        line-height: 16px;
+        color: inherit;
+        text-align: left;
+        display: inline;
+        padding: 0;
+    }
+
+    #detalii-exp .modal-dialog{
+        width: 615px;
+    }
+
+    .dashboard-acction{
+        margin: 25px 0;
+        float: right;
+        text-align: right;
+    }
+
+    #inchide-zi-decont .modal-body ul {
+        list-style: none;
+        width: 300px;
+        border-right: solid 1px #ccc;
+        padding-right: 10px;
+        float: left;
+    }
+
+    #inchide-zi-decont .modal-body ul li span{
+        font-weight: bold;
+        width: 145px;
+        float: right;
+        display: block;
+        text-align: right;
+    }
+
+    .info-dash {
+        display: block;
+        width: 100%;
+        clear: right;
+    }
+    .info-dash ul.valori {
+        list-style: none;
+        width: 600px;
+        border-right: solid 1px #ccc;
+        padding-right: 10px;
+        float: left;
+    }
+
+    .info-dash ul.valori li span{
+        font-weight: bold;
+        width: 195px;
+        float: right;
+        display: block;
+        text-align: right;
+    }
+
+    .info-dash ul {
+        list-style: none;
+    }
+
+    .in-progress{
+        color: #cccccc;
+    }
+    .detaliere{
+        margin-left: 10px;
+        float: left;
+        text-align: center;
+    }
+    .detaliere span {
+        font-style: italic;
+    }
+
+    a.reincarca-rstante{
+        color: red;
+    }
+    .content.decont-colectare{
+        background-color: darkorange !important;
+    }

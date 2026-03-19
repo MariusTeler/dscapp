@@ -1,0 +1,424 @@
+<script>
+
+	function Grid_ExpeditiiClienti() {
+		jQuery("#liste_expeditii_clienti").jqGrid(
+				{
+					url : HTTP + 'expeditiiclienti/json/expeditii_clienti/' + $('#filtru_afisare').val(),
+					datatype : "json",
+					colNames : ['Expeditor','Localitate','Expeditii','Data','Status','Operator','Curier','Optiuni'],
+					colModel : [ {
+						name : 'expeditor',
+						index : 'cl.nume',
+						width: 200
+					}, {
+						name : 'expeditor_localitate',
+						index : 'lc.nume_lc',
+						width: 100
+					}, {
+						name : 'expeditii',
+						index : 'expeditii',
+						formatter: 'number',
+						sorttype: 'number',
+						formatoptions: {
+							decimalPlaces: 0
+						},
+						search:false,
+						width: 60,
+						align:'center'
+					}, {
+						name : 'data',
+						index : 'ep.data_expeditie',
+						sorttype : 'date',
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d',
+							newformat : 'Y-m-d'
+						},
+						align: 'center',
+						width: 60
+					}, {
+						name : 'status',
+						sortable:false,
+						search:false,
+						align: 'center',
+						width: 100
+					}, {
+						name : 'operator',
+						sortable:false,
+						search:false,
+						width: 100
+					}, {
+						name : 'curier',
+						sortable:false,
+						search:false,
+						align: 'center',
+						width: 100
+					}, {
+						name : 'optiuni',
+						align: 'center',
+						sortable:false,
+						search:false,
+						width: 250
+					} ],
+					rowNum : 15,
+					rowList : [ 15, 50, 100 ],
+					width : 970,
+					height : 'auto',
+					mtype : "GET",
+					rownumbers : false,
+					gridview : true,
+					sortname : 'ep.data_expeditie',
+					viewrecords : true,
+					sortorder : "desc",
+					pager : '#paginatie',
+					caption : 'Lista Clienti / Expeditii',
+					multiselect : false,
+					subGrid: true,
+					subGridRowExpanded: function(subgrid_id, row_id) {
+						var subgrid_table_id, pager_id;
+						subgrid_table_id = subgrid_id+"_t";
+						pager_id = "p_"+subgrid_table_id;
+						$("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>");
+
+						jQuery("#"+subgrid_table_id).jqGrid({
+							url : HTTP + 'expeditiiclienti/json/liste_expeditii_clienti/'+row_id + '/' + $('#filtru_afisare').val(),
+							datatype : "json",
+							colNames : [ 'Expeditie','Anulata','Printata','Printata de','Destinatar','Localitate','Data','Valoare'],
+							colModel : [ {
+								name : 'expeditie',
+								index : 'ep.expeditie',
+								sorttype : 'int',
+								width: 60,
+								align: 'right'
+							}, {
+								name : 'anulata',
+								index : 'ep.anulata',
+								formatter: 'int',
+								sorttype: 'int',
+								formatoptions: {
+									decimalPlaces: 0
+								},
+								align: 'right',
+								width: 50
+							},{
+								name : 'printata',
+								index : 'ep.printed_at',
+								sorttype : 'date',
+								formatter : 'date',
+								formatoptions : {
+									srcformat : 'Y-m-d',
+									newformat : 'Y-m-d'
+								},
+								width: 60,
+								align: 'center'
+							},{
+								name : 'printata_de',
+								index : 'u.user',
+								width: 180
+							},{
+								name : 'destinatar',
+								index : 'cl.nume',
+								width: 180
+							}, {
+								name : 'destinatar_localitate',
+								index : 'lc.nume_lc',
+								width: 100
+							}, {
+								name : 'data_expeditie',
+								index : 'ep.data_expeditie',
+								sorttype : 'date',
+								formatter : 'date',
+								formatoptions : {
+									srcformat : 'Y-m-d',
+									newformat : 'Y-m-d'
+								},
+								width: 60,
+								align: 'center'
+							},{
+								name : 'valoare_totala',
+								index : 'ep.valoare_totala',
+								formatter: 'number',
+								sorttype: 'number',
+								align: 'right',
+								width: 60
+							}],
+							rowNum : 20,
+							pager: pager_id,
+							sortname: 'ep.expeditie',
+							sortorder: "desc",
+							height: '100%',
+							multiselect: true,
+							ondblClickRow : function(id) {
+								AfisareDetaliiExpeditieCuID_Client(id)
+							},
+						});
+						jQuery("#"+subgrid_table_id).jqGrid('navGrid',"#"+pager_id,{edit:false,add:false,del:false})
+					}
+				});
+		$("#liste_expeditii_clienti").jqGrid('bindKeys');
+		$("#liste_expeditii_clienti").jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false
+		});
+		$("#liste_expeditii_clienti").jqGrid('navGrid', '#paginatie', {
+			del : false,
+			add : false,
+			edit : false,
+			search : false
+		});
+	}
+
+	function ModificaClientExpeditii(id) {
+		var acction = $('#select_acction_'+id).val();
+
+		if(acction == 'Alege'){
+			AfiseazaEroare("Selectioneaza o actiune !");
+		}
+
+
+		var row_id = id;
+		var el_id = 'liste_expeditii_clienti_'+id+'_t';
+		var grid = $('#'+el_id);
+		if(!grid.length) {
+			AfiseazaEroare("Deschide lista si selectioneaza minimum o expeditie !");
+			return false;
+		}
+		var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+		if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o expeditie !"); return false; }
+		if(sel_ids.length > 300) { AfiseazaEroare("Borderoul este limitat la maximum 300 de expeditii !"); return false; }
+		var postData = {};
+
+		for(var $i=0, $l=sel_ids.length; $i<$l; $i++) postData[$i] = sel_ids[$i];
+		var postData = JSON.stringify(postData);
+
+		ModificaExpeditiiClient(postData,acction,el_id,row_id);
+
+		//console.log(postData);
+	}
+
+	function AfiseazaEroare(mesaj, title, height, width) {
+		if (!height)
+			height = 200;
+		if (!width)
+			width = 300;
+		$("#eroare").html(mesaj);
+		if (!title)
+			title = 'Eroare'
+		$("#eroare").attr('title', title);
+		$("#eroare").dialog({
+			modal : true,
+			draggable : false,
+			height : height,
+			width : width,
+			resizable : false,
+			buttons : {
+				Ok : function() {
+					$(this).dialog("destroy");
+				}
+			}
+		});
+	}
+
+	function ModificaExpeditiiClient(exp,type,el_id,row_id){
+		if (typeof exp === "undefined") {
+			return false;
+		}
+
+		$('#confirmare_expeditie').html('<p>Doriti sa modificati expeditiile?</p>');
+		$("#confirmare_expeditie").dialog("destroy");
+		$("#confirmare_expeditie").dialog({
+			width : 300,
+			height : 160,
+			draggable : false,
+			resizable : false,
+			modal: true,
+			buttons: {
+				"DA": function() {
+					$(this).dialog("close");
+					$.post(HTTP + 'expeditiiclienti/modifica_expeditii/'+type,{
+						data: exp,
+					}, function(response) {
+						var m_delete = response.split('|||');
+						PrepareResponse(m_delete[0]);
+						if (m_delete[0] == 1) {
+							// $('#form_expeditie')[0].reset();
+							$("#"+el_id).jqGrid('setGridParam', {
+								url : HTTP + 'expeditiiclienti/json/liste_expeditii_clienti/'+row_id
+							}).trigger("reloadGrid");
+						} else {
+							AfiseazaEroare(m_delete[1]);
+						}
+						return true;
+					});
+				},
+				'Nu': function() {
+					$(this).dialog("close");
+				}
+			},
+			close : function() {
+				$(this).dialog("destroy");
+			}
+		});
+	}
+
+
+	function ModificaExpeditieClient(exp,type){
+		if (typeof exp === "undefined") {
+			return false;
+		}
+
+
+		var postData = {};
+		postData[0] = exp;
+		var postData = JSON.stringify(postData);
+
+
+		$('#confirmare_expeditie').html('<p>Doriti sa modificati expeditiile?</p>');
+		$("#confirmare_expeditie").dialog("destroy");
+		$("#confirmare_expeditie").dialog({
+			width : 300,
+			height : 160,
+			draggable : false,
+			resizable : false,
+			modal: true,
+			buttons: {
+				"DA": function() {
+					$(this).dialog("close");
+					$.post(HTTP + 'expeditiiclienti/modifica_expeditii/'+type,{
+						data: postData,
+					}, function(response) {
+						var m_delete = response.split('|||');
+						PrepareResponse(m_delete[0]);
+						if (m_delete[0] == 1) {
+							// $('#form_expeditie')[0].reset();
+							$('#go').click();
+						} else {
+							AfiseazaEroare(m_delete[1]);
+						}
+						return true;
+					});
+				},
+				'Nu': function() {
+					$(this).dialog("close");
+				}
+			},
+			close : function() {
+				$(this).dialog("destroy");
+			}
+		});
+	}
+
+	function VerificareExpeditieClient(){
+		var expeditie = $('#expeditie').val();
+
+		$.post(HTTP + 'expeditiiclienti/detalii_expeditie_client/'+expeditie,{},function(response){
+			update = response.split('|||');
+			jQuery('#verificari_detalii_expeditie').html(response);
+		});
+
+	}
+
+	function UpdateExpeditiiClienti() {
+		$("#liste_expeditii_clienti").jqGrid('setGridParam', {
+			url : HTTP + 'expeditiiclienti/json/expeditii_clienti/'+$('#filtru_afisare').val()
+		}).trigger("reloadGrid");
+	}
+
+$(document).ready(function() 
+{
+	$('.tab').tabs();
+});
+</script>
+<style>
+	.ui-tabs .ui-tabs-panel{
+		padding: 0;
+	}
+	.ui-tabs{
+		padding: 0;
+		border: none;
+		background: transparent;
+	}
+	.ui-tabs .ui-tabs-nav{
+		padding: 0;
+	}
+</style>
+<div class="tab">
+	<ul>
+		<li>
+			<a href="#tabs-1" onclick="UpdateExpeditiiClienti()">Clienti</a>
+		</li>
+		<li>
+			<a href="#tabs-2">Cautare AWB</a>
+		</li>
+	</ul>
+	<div id="tabs-1">
+		<script>
+			$(document).ready(function()
+			{
+				Grid_ExpeditiiClienti();
+
+				ComboAgenti3_Old_All('AG_PREL');
+
+			});
+		</script>
+		<div class="separator_empty h10">&nbsp;</div>
+		<select id="filtru_afisare" onchange="UpdateExpeditiiClienti();">
+			<option value="0">Toate expeditiile</option>
+			<option value="1">Expeditii active</option>
+			<option value="2">Expeditii anulate</option>
+		</select>
+		<div class="separator_empty h10">&nbsp;</div>
+		<table id="liste_expeditii_clienti"></table>
+		<div id="paginatie" class="pagination_jqgrid"></div>
+		<div class="separator_empty h10">&nbsp;</div>
+
+		<div style="display: none;">
+			<div id="detalii_expeditie">&nbsp;</div>
+			<div id="eroare" title="Eroare">&nbsp;</div>
+			<div id="receptie_borderou" title="Receptie Borderou">
+				<div style="padding: 5px 0px;">Agent Preluare:</div>
+				<div >
+					<input type="text" name="AG_PREL_NUME" id="AG_PREL_NUME" class="field_input" value="{AG_PREL_NUME}" rel="{AG_PREL_NUME}" title="" style=" width: 220px;"/>
+					<input type="hidden" name="AG_PREL" id="AG_PREL" class="field_input" value="{AG_PREL}" />
+				</div>
+
+				<div style="padding: 5px 0px;">Nr Comanda:</div>
+				<div >
+					<input type="text" name="id_comanda" id="id_comanda" class="field_input" value="" rel="" title="" style=" width: 220px;"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="tabs-2">
+		<script type="text/javascript">
+
+			function VerificareAfisare(evt){
+				var theEvent = evt || window.event;
+				var key = theEvent.key || theEvent.which || theEvent.keyCode;
+				if(key == 'Enter' || key == 13)
+					VerificareIstoricExpeditie();
+			}
+		</script>
+		<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+			<fieldset style="width: 322px; height: 50px;">
+				<legend>
+					Expeditie
+				</legend>
+				<div class="field_name w200">
+					<input type="text" name="expeditie" id="expeditie" class="field_input  w190" style="padding: 6px;" value="" title="Cod Bare" onkeydown="VerificareAfisare(event);"/>
+				</div>
+				<div class="field_name w120">
+					<input type="button" name="go" id="go" class="button" value="Afisare Istoric" title="Afisare Istoric" style="margin-left: 10px;" onclick="VerificareExpeditieClient();" />
+				</div>
+			</fieldset>
+			<div class="separator_empty" style="height: 5px;"></div>
+		</div>
+		<!--<div id="eroare" title="Eroare" style="display: none;"></div>-->
+		<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+		<fieldset style="width: 100%;" id="verificari_detalii_expeditie">
+		</fieldset>
+		<div id="confirmare_expeditie" title="Confirmare"></div>
+		<!--<div id="detalii_expeditie"></div>-->
+		<div style="clear: both"></div>
+	</div>
+</div>

@@ -1,0 +1,59 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".button").button();
+	});
+</script>		
+<legend>
+	<label class="field_label">Detalii Comanda <span style="color:red;">{ID_COMANDA}</span></label>
+</legend>
+<div class="field_row">
+	<div class="field_name w100">
+		Nume Client
+	</div>
+	<div class="field_name w220">
+		<strong>{CLIENT_NUME}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Localitate
+	</div>
+	<div class="field_name w220">
+		<strong>{LOCALITATE}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Adresa
+	</div>
+	<div class="field_name w220">
+		<strong>{ADRESA}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Contact
+	</div>
+	<div class="field_name w220">
+		<strong>{CONTACT}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Telefon
+	</div>
+	<div class="field_name w220">
+		<strong>{TELEFON}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Observatii
+	</div>
+	<div class="field_name w220">
+		<strong>{OBSERVATII}</strong>
+	</div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<input type="button" name="anulare" class="button" {ASCUNDE} value="Anulare Comanda" onclick="AnulareComandaPreluata();"/>

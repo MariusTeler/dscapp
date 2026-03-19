@@ -1,0 +1,61 @@
+<script>
+ 	$(document).ready(function(){
+		$( ".button" ).button();
+	});
+</script>
+<legend>
+	<label class="field_label">Detalii Comanda <span style="color:red">{ID_COMANDA}</span></label>
+</legend>
+<div class="field_row">
+	<div class="field_name w100">
+		Nume Client
+	</div>
+	<div class="field_name w350">
+		<strong>{CLIENT_NUME}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Localitate
+	</div>
+	<div class="field_name w350">
+		<strong>{LOCALITATE}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Adresa
+	</div>
+	<div class="field_name w350">
+		<strong>{ADRESA}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Contact
+	</div>
+	<div class="field_name 100">
+		<strong>{CONTACT}</strong>
+	</div>
+	<div class="field_name w100">
+		Telefon
+	</div>
+	<div class="field_name w100">
+		<strong>{TELEFON}</strong>
+	</div>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Observatii
+	</div>
+	<div class="field_name w220">
+		<strong>{OBSERVATII}</strong>
+	</div>
+</div>
+
+<input type="hidden" name="cod_comanda" id="cod_comanda" class="field_input" value="{ID}" />
+
+<div class="separator_empty" style="height: 5px;"></div>
+<!-- <input type="button" name="adauga_client" class="button" value="Adauga Client" onclick="AdaugaClient();" />
+<input type="button" name="adauga_contact" class="button" value="Adauga Contact" onclick="AdaugaClient();"/>
+<input type="button" name="modifica_date" class="button" value="Modifica Date" onclick="ModificaDateClient();" style="margin-left: 130px;"/> -->

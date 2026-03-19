@@ -1,0 +1,43 @@
+<script type="text/javascript">
+	function ValidareRecantariri(tip){
+		$("#detalii_expeditie").dialog("destroy");
+		var grid = jQuery('#cautare_vrecantariri');
+		var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+		if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o recantarire!"); return false; }
+		else if(sel_ids.length>200) { AfiseazaEroare("Nu se pot selectiona mai mult de 200 recantariri !"); return false; }
+		var postData = {};
+
+		for(var i=0, l=sel_ids.length; i<l; i++) postData[i] = sel_ids[i];
+		var postData = JSON.stringify(postData);
+		var url = HTTP + 'recantariri/validare/validare';
+		$.post(url, { tip: tip, ids: postData }, function(response) {
+			if(response < 0) AfiseazaEroare(" Erori la update ... anunta IT-ul! Error cod : " + response);
+			else if(response > 0) AfiseazaEroare(response + " expeditii nu au fost validate !");
+			jQuery("#cautare_vrecantariri").trigger("reloadGrid");
+		});
+		return true;
+	}
+
+	$(document).ready(function() {
+        Grid_vRecantariri();
+	});
+</script>
+<div style="padding:0px 0px 2px 0px;">
+	<fieldset style="min-width: 120px;">
+		<legend>
+			<label class="field_label">Actiuni</label>
+		</legend>
+		<div class="field_name w320">
+			<input type="button" name="search" class="button" value="Validare"  onclick="ValidareRecantariri(1);" />
+			<input type="button" name="exporta" class="button" value="Anulare" onclick="ValidareRecantariri(2);" />
+		</div>
+	</fieldset>
+	<div class="separator_empty"></div>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="cautare_vrecantariri"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 2px;"></div>
+<div id="detalii_expeditie"></div>

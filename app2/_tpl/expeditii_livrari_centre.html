@@ -1,0 +1,89 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioada();
+		Grid_LivrariCentre();
+		Grid_LivrariDetalii();
+        Grid_ListeExpeditiiAgenti();
+	});
+
+</script>
+<form action="{HTTP}expeditii/print_activitate_centru/" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="restante_expeditii" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Selectie</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w70" value="{DATA_START}" title="Pana la" />
+			</div>
+			<div class="field_name w110" style="line-height: 20px;">
+				<input type="checkbox" name="fara_retururi" id="fara_retururi" value="1"  onchange="VerificareCamp('fara');"/>
+				<label for="fara_retururi">Fara Retururi</label>
+			</div>
+			<div class="field_name w120" style="line-height: 20px;">
+				<input type="checkbox" name="numai_retururi" id="numai_retururi" value="1"  onchange="VerificareCamp('numai');"/>
+				<label for="numai_retururi">Numai Retururi</label>
+			</div>
+			<div class="field_name w100" style="line-height: 20px;">
+				<input type="checkbox" name="ramburs" id="ramburs" value="1" />
+				<label for="ramburs">Cu Ramburs</label>
+			</div>
+			<div class="field_name w50" style="line-height: 20px;">
+				<input type="checkbox" name="cash" id="cash" value="1"  onchange="VerificareCamp('cash');"/>
+				<label for="cash">Cash</label>
+			</div>
+			<div class="field_name w70" style="line-height: 20px;">
+				<input type="checkbox" name="factura" id="factura" value="1" onchange="VerificareCamp('factura');" />
+				<label for="factura">Factura</label>
+			</div>
+			<div class="field_name w100">
+				<select style="width: 90px;" id="platitor" name="platitor" class="field_combobox" >
+					<option selected="" value="0">Platitor</option>
+					<option value="1">Expeditor</option>
+					<option value="2">Destinatar</option>
+					<option value="3">Tert</option>
+				</select>
+			</div>
+			<div class="field_name w80 class_btn" style="margin-top: 5px; margin-left: 10px;">
+        		<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareLivrari();" />
+	    	</div>
+		</fieldset>
+
+	</div>
+</form>
+<div class="separator_empty" style="height: 10px;"></div>
+<table id="liste_centre"></table>
+<div id="paginatie_liste_centre" class="pagination_jqgrid"></div>
+<div class="separator_empty h10"></div>
+<table id="liste_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div style="float: left; width: 630px;">
+	<div class="separator_empty h15"></div>
+	<table id="liste_expeditii_detalii"></table>
+	<div id="paginatie_detalii" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div style="float: right; width: 330px;">
+	<div class="separator_empty h15"></div>
+	<table id="liste_expeditii_agenti"></table>
+	<div id="paginatie_agenti" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+</form>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+
+
+<div id="detalii_expeditie" style="display: none;"></div>  

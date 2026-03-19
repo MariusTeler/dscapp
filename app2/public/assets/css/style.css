@@ -1,0 +1,944 @@
+*{margin:0px;padding:0px;}
+form{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    background: #e1e1e1 url('/assets/images/body_bg.png') top left repeat;
+    font-size: 12px;
+    font-style: normal;
+    font-family: "Trebuchet MS","Verdana","Arial";
+    color: #232222;
+    line-height: normal;
+}
+.main{   
+    width: 990px;    
+    margin: 0px auto;
+}
+
+/*prima pagina*/
+.content_login1{
+    background: #e1e1e1;
+    width: 350px;
+    height: 135px;
+    padding: 25px;
+    padding-bottom: 5px;
+    border-radius:8px; 
+    box-shadow: 0px 1px 5px 0px #4a4a4a;
+}
+
+.content_login{
+    background: url(/assets/images/bg2.png) repeat-x scroll 0 0 #e5e5e5;
+    width:260px;
+    box-shadow: 0px 0px 15px 0px #111111;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 200px auto 0px;
+    padding: 25px;
+    padding-bottom: 5px;
+}
+/*meniu*/
+#nav {
+    font-size: 14px;
+    margin: 0px;
+	min-width:970px;
+    padding: 7px 6px 0;
+    background: #282828;
+    line-height: 100%;
+    border-radius: 0 0 1em 1em;
+    box-shadow: 0 1px 3px #4a4a4a;
+    z-index: 999;
+}
+#nav li {
+    margin: 0;
+    padding: 0 0 5px;
+    float: left;
+    position: relative;
+    list-style: none;
+}
+
+
+/* main level link */
+#nav a {
+    font-weight: bold;
+    color: #c0c0c0;
+    text-decoration: none;
+    display: block;
+    padding:  8px 10px;
+    margin: 0;
+    border-radius: 1.6em;
+}
+#nav a:hover {
+    color: #da6666;
+}
+
+/* main level link hover */
+#nav .current a, #nav li:hover > a {	
+    color: #da6666;
+}
+
+/* sub levels link hover */
+#nav ul li:hover a, #nav li:hover li a {
+    color: #c0c0c0;    
+}
+#nav ul a:hover {    
+    background: #c0c0c0;
+    border-radius: 0px;
+    box-shadow: 0px;        
+}
+#nav ul li a:hover {    
+    color: #282828;       
+}
+
+
+/* dropdown */
+#nav li:hover > ul {
+    display: block;
+}
+
+/* level 2 list */
+#nav ul {
+    display: none;
+    margin: 0;
+    padding: 0;
+    width: 190px;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background: #282828;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px #4a4a4a;
+    z-index: 999;
+}
+#nav ul li {
+    float: none;
+    margin: 0;
+    padding: 0;
+    z-index: 999;
+}
+
+#nav ul a {
+    font-weight: normal;
+}
+
+/* level 3+ list */
+#nav ul ul {
+    left: 181px;
+    top: -3px;
+}
+
+/* rounded corners of first and last link */
+#nav ul li:first-child > a {
+	border-top-left-radius: 9px;
+	border-top-right-radius: 9px;
+}
+#nav ul li:last-child > a {
+	border-bottom-left-radius: 9px;
+	border-bottom-right-radius: 9px;
+}
+
+/* clearfix */
+#nav:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+* html #nav {
+    height: 1%;
+}
+#nav .nav_sep{
+    height: 0px;
+    border-top: 1px solid #c0c0c0;
+    display: block;
+    margin: 0px 10px;
+    width: 170px;
+}
+
+/*meniu*/
+
+.title_page{
+    font-size: 20px;
+    font-weight: bold;
+    line-height: normal;
+    padding-top: 10px;
+    margin: 5px 5px 0px;    
+    width: 580px;
+    float: left;
+}
+.title_info{
+    float: right;
+    width: 320px;
+    height: 27px;
+    padding: 10px 10px 0px;
+    margin: 5px 5px 0px;    
+}
+
+.title_border{
+    height: 1px;
+    border-bottom: 1px solid #282828;
+    margin-bottom: 5px;
+}
+.content{
+    clear: both;
+    margin-top: 10px;
+	min-width: 970px;
+    padding: 0px 10px;
+    min-height: 450px;
+    background: #ededed;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px #4a4a4a;
+}
+
+
+
+
+
+
+
+/*autocomplete*/
+
+.ac_results {
+	padding: 0px;
+	border: 1px solid black;
+	background-color: white;
+	overflow: hidden;
+	z-index: 99999;
+}
+
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.ac_results li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: default;
+	display: block;
+	/* 
+	if width will be 100% horizontal scrollbar will apear 
+	when scroll mode will be used
+	*/
+	/*width: 100%;*/
+	font: menu;
+	font-size: 12px;
+	/* 
+	it is very important, if line-height not setted or setted 
+	in relative units scroll will be broken in firefox
+	*/
+	line-height: 16px;
+	overflow: hidden;
+}
+
+.ac_loading {
+	background: white url('/assets/images/indicator.gif') right center no-repeat;
+}
+
+
+
+.frozen-div{
+	top: 24px !important;
+}
+.frozen-bdiv{
+	top: 70px !important;
+}
+
+
+
+
+/***********************/
+/*  Detalii expeditie  */
+/***********************/
+.detalii_expeditie{
+	margin: 0px; 
+	font-size: 12px;
+	font-weight: normal; 
+	font-family: 'Trebuchet MS','Verdana','Arial';
+	line-height: 16px;
+}
+.detalii_expeditie fieldset{
+	border: 1px solid #aaa;
+	min-width: 50px;
+}
+
+.detalii_expeditie .label{
+	font-weight: bold;
+	line-height: 16px;
+}
+.detalii_expeditie .text{
+	background: #eee;
+	color: #000;
+	padding: 3px 5px;
+	line-height: 13px;
+	padding: 1px 5px;
+	margin: 2px 0px;
+	min-height: 13px;
+}
+.detalii_expeditie .ml{
+	margin-left: 5px;	
+}
+
+
+
+
+
+/***********************/
+/*  Urmarire expeditie  */
+/***********************/
+.afisare_istoric{
+    float: left;
+    width: 600px;    
+}
+.editare_istoric{
+    float: right;
+    width: 350px;
+    border-left: 1px solid #aaa;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+.myAltRowClass {color: #FF0000 !important; }
+
+.exp_returnat .exp_referire_class ,.exp_returnat .exp_data_referire_class, .exp_returnat .rbs_tip_exp_referire_class{
+	color: #00ccff !important;
+}
+
+
+/***********************/
+/*  Rapoarte expeditii  */
+/***********************/
+.lista_centre{
+	clear: both;
+	list-style: none;
+	margin-left: 20px;
+}
+.lista_centre li{
+	float: left;
+	padding: 5px;
+	width: 145px;
+}
+.lista_centre label{
+	padding-left: 5px;
+}
+
+/***********************/
+/*  Rapoarte expeditii  */
+/***********************/
+
+
+
+
+
+
+
+
+
+/***********************/
+/*  liste expeditii  */
+/***********************/
+
+
+			.A4content {
+				width: 717px;
+				background: white;
+				padding: 0px 10px;
+			}
+			.nume-firma {
+				width: 717px;
+				height: 32px;
+			}
+			.nume-firma p {
+				font-size: 18px;
+				font-weight: bold;
+			}
+			.header {
+				width: 717px;
+				height: 50px;
+			}
+			.curs-valutar {
+				width: 206px;
+				height: 50px;
+				float: left;
+			}
+			.curs-valutar span {
+				font-size: 10px;
+			}
+			.curs-valutar p {
+				font-size: 10px;
+				font-weight: bold;
+			}
+			.nume-formular {
+				width: 511px;
+				height: 50px;
+				float: right;
+			}
+			.nume-formular .nume {
+				margin-left: 10px;
+				font-size: 18px;
+				text-decoration: underline;
+			}
+			.nume-formular .loc-data {
+				font-size: 18px;
+				font-weight: bold;
+				text-decoration: underline;
+				margin-left: -200px;
+				padding-top: 10px;
+				text-align: center;
+			}
+			.detalii {
+				width: 717px;
+				height: 30px;
+				border-bottom: 1px solid black;
+			}
+			.detalii .total-expeditii {
+				float: left;
+				width: 96px;
+				height: 30px;
+			}
+			.detalii .plicuri {
+				float: left;
+				width: 56px;
+				height: 30px;
+			}
+			.detalii .colete {
+				float: left;
+				width: 92px;
+				height: 30px;
+			}
+			.detalii .greutate {
+				float: left;
+				width: 240px;
+				height: 30px;
+			}
+			.detalii .interval-operare {
+				float: right;
+				width: 233px;
+				height: 30px;
+			}
+			.detalii .interval-operare p {
+				margin-top: 0px;
+				text-align: right;
+				font-size: 10px;
+			}
+			.detalii p {
+				font-size: 10px;
+				margin-top: 12px;
+			}
+			.detalii p span {
+				font-size: 10px;
+				font-weight: bold;
+			}
+			.cap-tabel {
+				width: 717px;
+				height: 30px;
+				border-bottom: 1px solid black;
+			}
+			.cap-tabel .destinatarul {
+				width: 142px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .expeditorul {
+				width: 80px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .nr_exp {
+				width: 92px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .plic_col {
+				width: 41px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .greutate_tabel {
+				width: 47px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel p {
+				font-size: 10px;
+				font-weight: bold;
+				margin-top: 8px;
+			}
+			.cap-tabel .plc_col {
+				font-size: 10px;
+				font-weight: bold;
+				margin-top: 4px;
+			}
+			.livrat {
+				float: left;
+				width: 217px;
+				height: 30px;
+			}
+			.cap-tabel .livrat .sus {
+				width: 217px;
+				height: 13px;
+				border-bottom: 1px solid black;
+			}
+			.cap-tabel .livrat .sus .up {
+				margin-top: 2px;
+				width: 217px;
+				text-align: center;
+			}
+			.cap-tabel .livrat .down {
+				width: 70px;
+				height: 15px;
+				float: left;
+			}
+			.cap-tabel .livrat .down .dwn {
+				margin-top: 1px;
+				width: 70px;
+				text-align: center;
+			}
+			.locatie {
+				width: 717px;
+				border-bottom: 1px solid black;
+				border-top: 1px solid black;
+				clear: both;
+			}
+			.locatie p {
+				font-size: 12px;
+				line-height: 15px;
+				font-weight: bold;
+			}
+			.detalii_livrare {
+				width: 402px;
+				margin: 0px;
+				padding: 0px;
+			}
+			.detalii_livrare p {
+				font-size: 10px;
+				margin-top: 4px;
+			}
+			.detalii_livrare .destinatarul {
+				width: 125px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .expeditorul {
+				width: 96px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .nr_exp {
+				width: 92px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .plic_col {
+				width: 41px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .greutate_tabel {
+				width: 47px;
+				float: left;
+				line-height: 15px;
+			}
+			.obs {
+				line-height: 15px;
+				width: 402px;
+				clear: both;
+			}
+			.obs p {
+				font-size: 11px;
+				font-weight: bold;
+			}
+			.tabel_content{
+				width: auto;
+				height: auto;
+				clear: both;
+			}
+			
+			.tabel_content .tabel-stanga {
+				width: 402px;
+				height: auto;
+				border-right: 1px solid black;
+				float: left;
+			}
+			.tabel_content .tabel-dreapta {
+				width: 313px;
+				height: auto;
+				float: right;
+			}
+			p{
+				margin: 0px;
+				padding: 0px;
+			}
+			.ascuns{
+				display: none;
+			}
+/***********************/
+/*  Liste expeditii  */
+/***********************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.listare_clienti{
+	float: left;
+	width: 550px;
+}
+
+.detalii_client{
+	float:right;
+	width: 400px;
+}
+#mesaj_confirmare{
+	float: left;
+	width: 330px;
+	text-align: center;
+}
+.lista_centre{
+	clear: both;
+	list-style: none;
+	margin-left: 20px;
+}
+.lista_centre li{
+	float: left;
+	padding: 5px;
+	width: 145px;
+}
+.lista_centre label{
+	padding-left: 5px;
+}
+
+.button{
+	height: 28px !important;
+}
+
+
+/*expeditii*/
+.expeditii_listare{
+    float: left;
+    width: 970px;
+}
+.expeditii_content{
+    clear: both;    
+    text-align: center;
+}
+#expeditii_loading{
+    padding-top: 100px;
+}
+.expeditii_left{
+    float: left;
+    width: 484px;
+}
+.expeditii_right{
+    float: right;
+    width: 484px;
+}
+.fourrow{float: left;}
+
+
+.camp_modificat{
+    color:#ff0000;
+/*    border: 1px solid #ff0000;*/
+}
+
+
+.detalii_client{
+	float:right;
+	width: 400px;
+}
+
+#mesaj_confirmare{
+	float: left;
+	width: 330px;
+	text-align: center;
+}
+.lista_centre{
+	clear: both;
+	list-style: none;
+	margin-left: 20px;
+}
+.lista_centre li{
+	float: left;
+	padding: 5px;
+	width: 145px;
+}
+.lista_centre label{
+	padding-left: 5px;
+}
+
+
+
+.bold{
+	font-weight: bold;
+}
+.verde{
+	color: green;
+}
+.rosu{
+	color: red;
+}
+.content_left{
+	float: left;
+}
+.content_right{
+	float: right;
+}
+
+.capitalize{
+	text-transform: uppercase;
+}
+
+.rowColorRED { color: red;}
+.rowColorGRAY { color: blue; }
+.rowColorGREEN { color: green; }
+.rowColorBROWN{color: #880000; font-weight: bold;}
+
+
+
+
+.campuri input{
+	-webkit-box-shadow: inset 1px 1px 0px 0px #ddd;
+	box-shadow: inset 1px 1px 0px 0px #ddd;
+	font-size: 11px;
+}
+
+.campuri input:focus{
+	-webkit-box-shadow: inset 1px 1px 0px 0px #aaa;
+	box-shadow: inset 1px 1px 0px 0px #aaa;
+	border: 1px solid #000000;
+	outline: none;
+}
+
+.campuri textarea{
+	-webkit-box-shadow: inset 1px 1px 0px 0px #ddd;
+	box-shadow: inset 1px 1px 0px 0px #ddd;
+	font-size: 11px;
+}
+
+.campuri textarea:focus{
+	-webkit-box-shadow: inset 1px 1px 0px 0px #aaa;
+	box-shadow: inset 1px 1px 0px 0px #aaa;
+	border: 1px solid #000000;
+	outline: none;
+}
+
+.campuri select{
+	-webkit-box-shadow: inset 1px 1px 0px 0px #ddd;
+	box-shadow: inset 1px 1px 0px 0px #ddd;
+	font-size: 11px;
+}
+
+.campuri select:focus{
+	-webkit-box-shadow: inset 1px 1px 0px 0px #aaa;
+	box-shadow: inset 1px 1px 0px 0px #aaa;
+	border: 1px solid #000000;
+	outline: none;
+}
+
+
+.campuri .content_plateste{
+	height: 13px;
+	width: 11px;
+	float: left;
+	margin-top: 1px;
+}
+.campuri .content_plateste_focus{
+	border: 1px solid #000;
+}
+
+
+.campuri .content_checkbox{
+	height: 14px;
+	width: 13px;
+	float: left;
+	margin-top: 5px;
+}
+.campuri .content_checkbox_focus{
+	border: 1px solid #000;
+	width: 13px;
+	height: 13px;
+}
+/*expeditii*/
+
+
+
+#footer{
+    padding-top: 20px;
+    font-size:11px;
+    font-weight:bold;
+}
+#footer a{
+    color: red;
+    text-decoration: none;
+}
+#footer a:hover{
+    text-decoration: underline;
+}
+
+
+#switcher ul{
+	display: block;
+	margin-top: -26px !important;
+	width: 192px !important;
+}
+
+.lista_drepturi{
+	width: 900px;
+	list-style: none;
+	margin: 0px;
+	padding-bottom: 40px;
+}
+
+.lista_drepturi li{
+	float: left;
+	padding: 5px 0px;
+}
+.lista_drepturi li label{
+	float: left;
+	padding: 0px 5px;
+	min-width: 220px;
+	width: 220px;
+}
+.lista_drepturi .drepturi_acces{
+	padding: 5px;
+	float: left;
+}
+
+
+.selected-tab{
+	 text-decoration: underline;
+}
+
+
+.ui-autocomplete { height: 200px; overflow-y: scroll; overflow-x: hidden;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*client*/
+#import-expeditii{clear: both; padding: 10px 0px; width: 980px; height: 400px;  overflow: scroll;}
+#import-destinatari{clear: both; padding: 10px 0px; width: 980px; height: 400px;  overflow: scroll;}
+
+#lista-expeditii-import{width: 100%;}
+#lista-expeditii-import thead th{padding: 2px;}
+#lista-expeditii-import tbody td{border-left: 1px solid #000;border-bottom: 1px solid #000; padding: 0px 2px; line-height: 14px; font-size: 12px;}
+
+#lista-expeditii-import .top{height: 20px; font-size: 13px; background: #333 !important;; color: #fff;border-left: 1px solid #fff;border-bottom: 1px solid #fff;}
+#lista-expeditii-import .hover { background-color: #ccc; }
+#lista-expeditii-import tr:hover { background-color: #ccc; }
+
+
+.field_import{width: 150px;font-size: 12px; padding: 2px 3px;}
+.progress-label {
+float: left;
+margin-left: 50%;
+margin-top: 5px;
+font-weight: bold;
+text-shadow: 1px 1px 0 #fff;
+}
+
+
+#verificari_detalii_expeditie div{
+	float: left;
+}
+
+/* rambursuri */
+.decontatRowClass{
+	color: #990000 !important;
+}
+
+.spreClientRowClass{
+	color: #30aa00 !important;;
+}
+.validatRowClass{
+	color: #FFA500 !important;
+}
+.refuzatRowClass{
+	color: #BE06CE !important;
+}
+#istoric_detalii_expeditii_detalii li{
+	list-style: none;
+}
+#istoric_detalii_expeditii_detalii li span{
+	margin: 5px 0 0 14px;
+
+}
+#istoric_detalii_expeditii_detalii .name_field{
+	width: 140px;
+	font-weight: bold;
+	display: inline-block;
+}
+#istoric_detalii_expeditii_detalii .old_value_field{
+	color:darkred;
+}
+#istoric_detalii_expeditii_detalii .new_value_field{
+	color: darkgreen;
+}
+table.ui-jqgrid-btable { height: 1px; }
+
+.content{
+	position: relative;
+}
+#progress_area{
+	position: absolute;
+	right: 20px;
+	top: 10px;
+	z-index: 1;
+}
+#progress_area_buton{
+	margin: 0 20px;
+}
+.progress_area_mess{
+	border: solid 1px #ccc;
+	display: none;
+	background: #FFFFFF;
+	padding: 10px;
+	box-shadow: 7px 7px 5px 0px rgba(0,0,0,0.75);
+}
+.progress_area_mess li {
+	list-style: none;
+}
+.in-progress{
+	color: #ec971f;
+	text-decoration: blink;
+}
+
+.detalii_punct_de_lucru{
+	width: 650px;
+}

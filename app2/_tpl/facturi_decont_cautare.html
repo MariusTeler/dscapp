@@ -1,0 +1,150 @@
+<script>
+$(document).ready(function() {
+	SetareDate();
+	MakeDialog();
+	InitConfirmDialog();
+	ComboAgenti('curier_livrare');
+	ComboClientiContract('expeditor');
+	Grid_FacturiCautareDecont();
+});
+	function Cautare(evt){
+    	var theEvent = evt || window.event;
+    	var key = theEvent.key || theEvent.which || theEvent.keyCode;
+    	if(key == 'Enter' || key == 13) 
+			AfisareFacturiDecont();
+    }
+</script>
+<form action="{HTTP}facturi/decont/export" id="export_lista" method="post" name="export_lista">
+	<div>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="operatie">Operatie</label>
+			</legend>
+			<div class="field_name w110">
+				<select style="width: 100px;" id="operatiune" name="operatiune" class="field_combobox" >
+					<option selected="selected" value="1">Factura</option>
+					<option value="2">Expeditie</option>
+				</select>
+			</div>
+			<div class="field_name w130">
+				<input type="text" name="search" id="search" class="field_input auto-hint w120" value="{SEARCH}" placeholder="Valoare Cautata" onkeydown="return Cautare(event);" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="perioada" onclick="CautareFacturiDecont(1);">Perioada livrare</label>
+				<input type="checkbox" name="perioada" id="perioada" value="1" class="field_checkbox" onclick="CautareFacturiDecont(1);" />
+			</legend>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="" placeholder="De la" disabled="true" />
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="" placeholder="Pana la" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 130px;">
+			<legend>
+				<label class="field_label" for="curier" onclick="CautareFacturiDecont(2);">Curier</label>
+				<input type="checkbox" name="curier" id="curier" value="1" class="field_checkbox" onclick="CautareFacturiDecont(2);" />
+			</legend>
+			<div class="field_name w130">
+				<input type="hidden" name="curier_livrare" id="curier_livrare" value=""/>
+				<input type="text" name="curier_livrare_nume" id="curier_livrare_nume" class="field_input auto-hint w120" value="" placeholder="Curier livrare" disabled="true" />
+			</div>
+		</fieldset>
+        <fieldset style="min-width: 130px;">
+			<legend>
+				<label class="field_label" for="client" onclick="CautareFacturiDecont(3);">Client</label>
+				<input type="checkbox" name="client" id="client" value="1" class="field_checkbox" onclick="CautareFacturiDecont(3);" />
+			</legend>
+			<div class="field_name w130">
+				<input type="hidden" name="expeditor" id="expeditor" value=""/>
+				<input type="text" name="expeditor_nume" id="expeditor_nume" class="field_input auto-hint w120" value="" placeholder="Expeditor" disabled="true" />
+			</div>
+		</fieldset>
+
+		<div class="field_name w130 class_btn" style="margin-top: 10px; margin-left: 10px;">
+			<input type="button" name="search" class="button" value="Cauta"  onclick="AfisareFacturiDecont();" />
+			<input type="button" name="export" class="button" value="Export"  onclick="ExportFacturiDecont();" />
+		</div>
+		<div class="separator_empty"></div>
+		<fieldset style="min-width: 90%; width:90%">
+			<legend>
+				<label class="field_label">Numar expeditii : <span id="text_lines">0</span></label>
+			</legend>
+			<textarea id="expeditii_area" name="expeditii_area" style="width:100%" rows="5" placeholder="Expeditii separate cu , sau Enter"></textarea>
+		</fieldset>
+	</div>
+</form>
+
+<div class="separator_empty h10">&nbsp;</div>
+<table id="jqGrid_decont_cautare_facturi"></table>
+<div id="jqGrid_paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div id="detalii_expeditie"></div>
+
+<div id="dialog-form" title="Detalii factura" style="display:none;width:560px">
+	<input type="hidden" name="id" id="id" value=""/>
+	<input type="hidden" name="agent_id" id="agent_id" value=""/>
+	<div id="modal-error-message" style="color:red;display:none;width:100%;text-align:center">Factura invalida</div>
+	<table width="100%" cellspacing="15">
+		<tr>
+			<th width="15%" style="text-align:left">Curier</th><td colspan="3"><span id="agent"></span></td>
+		</tr>
+		<tr>
+			<th width="15%" style="text-align:left">Factura</th><td width="30%"><span id="factura"></span></td>
+			<th width="15%" style="text-align:left">Incasat</th><td width="30%"><span id="tipPlata"></span></td>
+		</tr>
+		<tr>
+			<th width="15%" style="text-align:left">Expeditii</th><td colspan="3"><span id="expeditii"></span></td>
+		</tr>
+		<tr>
+			<th style="text-align:left" colspan = "2">Rambursuri la expeditii</th><td colspan="2"><span id="rambursuri"></span></td>
+		</tr>
+		<tr>
+			<th width="15%" style="text-align:left">Suma incasata</th><td width="30%"><span id="transport"></span> LEI</td>	
+			<th width="15%" style="text-align:left">Data incasarii</th><td width="30%"><span id="data"></span></td>
+		</tr>
+	</table>
+	<form id="dialog-client">
+		<fieldset style="width: 600px">
+			<legend>
+				<label class="field_label">Client</label>
+			</legend>
+			<div class="field_name w100">
+				Nume client
+			</div>
+			<div>
+				<input type="text" name="client" id="d-client" class="field_input auto-hint w170" value=""/>
+			</div>
+			<div class="separator_empty" style="height: 1px;"></div>
+			<div class="field_name w100">
+				CUI
+			</div>
+			<div class="field_name w100">
+				<input type="text" name="cui" id="d-cui" class="field_input auto-hint w170" value=""/>
+			</div>
+		</fieldset>
+		<fieldset style="width: 600px">
+			<legend>
+				<label class="field_label">Adresa</label>
+			</legend>
+			<div class="field_row">
+				<textarea name="adresa" id="d-adresa" class="field_textarea" style="width: 590px; height: 40px;"></textarea>
+			</div>
+		</fieldset>
+	</form>
+	<div class="separator_empty" style="height: 5px;"></div>
+</div>
+<div id="dialog-confirm" title="Confirmare" style="display:none">
+	<div id="confirm-error-message" style="color:red;display:none;width:100%;text-align:center">Factura invalida</div>
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+		Confirma stergere chitanta fiscala <span id="ch"></span><br/>
+		Esti sigur?
+	</p>
+</div>

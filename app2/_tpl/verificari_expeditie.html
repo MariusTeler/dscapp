@@ -1,0 +1,61 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Verificari_IstoricExpeditie();
+		Grid_IstoricCodBare();
+		Verificari_IstoricRecantariri();
+	});
+
+	function VerificareAfisare(evt){
+    	var theEvent = evt || window.event;
+    	var key = theEvent.key || theEvent.which || theEvent.keyCode;
+    	if(key == 'Enter' || key == 13) VerificareIstoricExpeditie();
+    }
+
+</script>
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<fieldset style="width: 440px; height: 50px;">
+			<legend>
+				Expeditie
+			</legend>			
+			<div class="field_name w200">
+				<input type="text" name="expeditie" id="expeditie" class="field_input  w190" style="padding: 6px;" value="" title="Cod Bare" onkeydown="VerificareAfisare(event);"/>
+			</div>			
+			<div class="field_name w120">
+				<input type="button" name="go" id="go" class="button" value="Afisare Istoric" title="Afisare Istoric" style="margin-left: 10px;" onclick="VerificareIstoricExpeditie();" />
+			</div>
+		</fieldset>
+		<div class="separator_empty" style="height: 5px;"></div>
+	</div>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+<fieldset style="width: 960px;" id="verificari_detalii_expeditie">
+</fieldset>
+<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+<fieldset style="width: 960px;">
+	<legend >
+		Istoric Expeditie
+	</legend>
+	<table id="istoric_expeditie"></table>
+</fieldset>
+<div class="separator_empty" style="height: 10px;"></div>
+<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+
+<div class="racantarire_expeditie" style="display: none">
+	<fieldset style="width: 960px;">
+		<legend >
+			Istoric Recantariri
+		</legend>
+		<table id="istoric_recantariri"></table>
+	</fieldset>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+</div>
+
+<fieldset style="width: 960px;">
+	<legend >
+		Istoric Scanari
+	</legend>
+	<table id="istoric_codbare"></table>
+</fieldset>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="detalii_expeditie"></div>

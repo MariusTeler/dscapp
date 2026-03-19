@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Puisor</title>
+    <style>
+
+        p {
+            margin: 0;
+        }
+        body {
+            width: 400px;
+            font-family: Arial;
+            font-weight: normal;
+            font-size: 12px;
+        }
+        th{
+            font-weight: normal;
+        }
+        td,th{
+            overflow: hidden;
+        }
+        .labels{
+            font-size: 8pt;
+        }
+        .expeditor{
+            font-size: 7pt;
+            line-height: 10pt;
+        }
+        .descriere{
+            font-size: 7pt;
+        }
+        .observatii{
+            font-size: {observatii_font_size}pt;
+        }
+        .footer{
+            font-size: 7pt;
+        }
+        .footer-oras{
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .telephone{
+            font-size: 12pt;
+            line-height: 16pt;
+        }
+        #destinatar_area {
+            display: none;
+            max-height:100px;
+            overflow: scroll;
+        }
+    </style>
+</head>
+<body>
+    <table class="tg" border="0" cellpadding="0" cellspacing="0" width="346dp">
+        <tr>
+            <td>
+                <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr valign="bottom">
+                        <td align="right" width="50%">
+                            <strong class="footer-oras">{destinatar_centru}{destinatar_centru_zona}</strong>
+                        </td>
+                        <td align="center">
+                            <strong class="footer-oras">NT:&nbsp;{expeditie}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="80" align="center" class="tg-yw4l" colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <th class="tg-yw4l" colspan="4" height="72" align="left">
+<span class="expeditor">Expeditor:<br>
+<strong>{expeditor_nume}</strong><br>
+CIF : {expeditor_cui} {expeditor_j}<br>
+{expeditor_adresa} / Contact: {expeditor_contact} / Tel: {expeditor_telefon} / Loc: <strong>{expeditor_localitate} ({expeditor_judet})</strong>, CO: <strong>{expeditor_centru_cod}</strong>
+</span></th>
+                    </tr>
+                </table>
+                <table class="tg" style="text-align: left" cellpadding="2" width="100%" border="1">
+                    <tr valign="top">
+                        <th class="tg-yw4l" rowspan="5" width="55%" height="20" valign="top">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tr>
+        <th  height="119pt">
+<span class="labels">Destinatar:</span><br>
+<strong>{destinatar_nume}</strong> <br>
+{destinatar_adresa} / <strong>{destinatar_localitate} ({destinatar_judet_id})</strong><br>
+<span class="labels">Contact:</span> {destinatar_contact}<br>
+Tel.: {destinatar_telefon}</th>
+    </tr>
+    <tr>
+        <th height="25pt" class="descriere" style="border-top: solid 1px #000000">Desc.:{detalii_doc}</th>
+    </tr>
+</table>
+
+                        </th>
+                        <th class="tg-yw4l" colspan="3" width="45%" align="center"><span class="labels">Colectat:</span><strong>{data_expeditie_format}</strong></th>
+                    </tr>
+                    <tr valign="middle">
+                        <td class="tg-yw4l" align="center">{tip_exp}</td>
+                        <td class="tg-yw4l" align="center">{piese}</td>
+                        <td class="tg-yw4l" align="center">{greutate} kg</td>
+                    </tr>
+                    <tr>
+                        <td class="tg-yw4l" colspan="3" align="center"><span class="labels">Asigurare:</span> {asigurare_text}</td>
+                    </tr>
+                    <tr>
+                        <th class="labels" colspan="3" valign="middle" height="69pt" align="center">{detalii_nt}</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-yw4l" height="30pt" colspan="3" rowspan="1" align="center">
+                            <span class="labels" style="text-align: center;"><strong>DE INCASAT</strong></span><br>
+                            <span class="labels">{transport_text}:</span> <strong>{valoare_totala_tva}</strong><br>
+                            <span class="labels">RBS:</span>&nbsp;<strong>{ramburs_text}</strong>&nbsp;<span class="observatii">{ramburs_tip_plata}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="3" height="37pt" class="observatii">Obs.:&nbsp;{observatii}</th>
+                    </tr>
+                </table>
+
+                <table cellspacing="0" border="0" width="100%">
+                    <tr>
+                        <td class="tg-yw4l" colspan="4" align="right" class="footer">
+                            <span class="footer">{footer_contact}   </span><strong class="telephone">021-9501</strong>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

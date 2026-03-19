@@ -1,0 +1,105 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Grid_ListaComenziDistribuite();
+		ClientiComboLocalitatiOnly('DISTRIBUITE_LOC');
+	});
+
+</script>
+<div class="content_left" style="width: 550px;">
+	<fieldset>
+		<legend>
+			<label class="field_label" for="client">Perioada</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+			De la:
+		</div>
+		<div class="field_name" style="width: 101px;">
+			<input type="text" name="distribuite_data_start" id="distribuite_data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+		</div>
+		<div class="field_name w60" style="line-height: 20px;">
+			Pana la:
+		</div>
+		<div class="field_name" style="width: 101px;">
+			<input type="text" name="distribuite_data_final" id="distribuite_data_final" class="field_input  w70" value="{DATA_START}" title="Pana la"/>
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 200px;">
+		<legend>
+			<label class="field_label" for="client">Localitate</label>
+		</legend>
+		<div class="field_name w200">
+			<input type="hidden" name="DISTRIBUITE_LOC" id="DISTRIBUITE_LOC" class="field_input auto-hint" value="{LOC}" />
+			<input type="text" name="DISTRIBUITE_LOC_NUME" id="DISTRIBUITE_LOC_NUME" class="field_input combo_client w190" value="{LOC_NUME}" title="Localitate"  onkeyup="AfiseazaComenziDistribuite();"/>
+		</div>
+	</fieldset>
+</div>
+<div class="content_right w380" style="width: 405px;" >
+	<div class="separator_empty" style="height: 20px;"></div>
+	<input type="button" name="preluare" class="button" value="Preluare Comanda" style="margin-left: 0px;" onclick="document.location='{HTTP}comenzi/preluare'" />
+	<input type="button" name="preluare" class="button" value="Comenzi Preluate" onclick="document.location='{HTTP}comenzi/comenzi_preluate'"/>
+	<input type="button" name="preluare" class="button" value="Comenzi Distribuite" onclick="document.location='{HTTP}comenzi/comenzi_distribuite'"/>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div class="content_left" style="width: 590px;">
+	<h3>Lista Comenzi:</h3>
+	<table id="comenzi_distribuite_listare"></table>
+	<div id="comenzi_distribuite_paginatie" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="content_right w400" style="width: 360px; margin-right: 15px;">
+	<fieldset id="detalii_comanda">
+		<legend>
+			<label class="field_label" for="client">Detalii Comanda <span style="color:red;">{ID_COMANDA}</span></label>
+		</legend>
+		<div class="field_row">
+			<div class="field_name w100">
+				Nume Client
+			</div>
+			<div class="field_name w200">
+				<strong>{CLIENT_NUME}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w130">
+				Operator Preluare
+			</div>
+			<div class="field_name w90">
+				<strong>{OPERATOR_PRELUARE}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w90">
+				Telefon Client
+			</div>
+			<div class="field_name w90">
+				<strong>{TELEFON_CLIENT}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w130">
+				Operator Distribuire
+			</div>
+			<div class="field_name w90">
+				<strong>{OPERATOR_DISTRIBUIRE}</strong>
+			</div>
+		</div>
+		<div class="field_row">	
+			<div class="field_name w90">
+				Telefon Curier
+			</div>
+			<div class="field_name w90">
+				<strong>{TELEFON_CURIER}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w50">
+				Mesaj
+			</div>
+			<div class="field_name w350">
+				<strong>{MESAJ}</strong>
+			</div>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+	</fieldset>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>

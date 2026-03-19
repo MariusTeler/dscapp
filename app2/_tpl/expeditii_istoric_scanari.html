@@ -1,0 +1,53 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        Grid_IstoricScanareExpeditii();
+		Grid_IstoricStatusExpeditii();
+		Grid_IstoricCheckpointsExpeditii();
+    });
+</script>
+
+
+<form action="{HTTP}expeditii/export_istoric_scanari/" id="export_lista" method="post" name="export_lista">
+	<div class="urmarire_expeditii" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="{DATA_START}" title="De la" readonly/>
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="{DATA_FINAL}" title="Pana la" readonly/>
+			</div>
+		</fieldset>
+		
+		<div class="field_name w260 class_btn" style="margin-top: 20px; margin-left: 10px;">
+			<input type="button" name="afiseaza" class="button" value="Afiseaza"  onclick="AfisareIstoricScanariExpeditii();" />
+- 			<input type="button" name="exporta" class="button" value="Exporta" onclick="ExportIstoricScanariExpeditii();" /> 
+		</div>
+	</div>
+</form>
+
+<div class="separator_empty h5"></div>
+<table id="istoric_scanari_expeditii"></table>
+
+<div class="separator_empty h10"></div>
+<div id="expeditii_continut" class="expeditii_content">
+		<div class="afisare_status field_name" style="width: 380px;">
+			<table id="istoric_status_expeditii"></table>
+		</div>
+		<div class="afisare_checkpoints field_name" style="width: 580px;">
+			<table id="istoric_checkpoints_expeditii"></table>
+		</div>
+    <div id="mesaj_expeditie" class="title_info"></div>
+    <div class="separator_empty h10"></div>
+</div>
+
+<div id="detalii_expeditie" style="display: none;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>

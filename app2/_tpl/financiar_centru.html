@@ -1,0 +1,108 @@
+<script type="text/javascript" src="/assets/js/financiar.js?v={ONLOAD_JS_VERSION}"></script>
+<div class="separator_empty" style="height: 5px;"></div>
+<div style="float: left; width: 560px;">
+    <fieldset>
+        <div class="field_name w300">
+            <h4>CASA RBS : <span id="valoare_rbs_cash_cont_banca">{CASA_RBS_CASH_CONT}</span></h4>
+	    </div>
+        {BUTON_INCARCARE_CASA_RBS}
+        {BUTON_INCARCARE_TREZORERIE_RBS}
+    </fieldset>
+    
+    <div class="separator_empty" style="height: 10px;"></div>
+	<table id="financiar_centru_dash_rbs"></table>
+	<div id="paginatie_financiar_centru_dash_rbs" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div style="float: right; width: 400px;">
+    <fieldset>
+        <div class="field_name w220">
+            <h4>CASA Fa/Ch : <span id="valoare_fa_ch_cash_cont">{CASA_FA_CH_CASH_CONT}</span></h4>
+        </div>
+        {BUTON_INCARCARE_CASA_FA_CH}
+        {BUTON_INCARCARE_TREZORERIE_FA_CH}
+    </fieldset>
+    
+    <div class="separator_empty" style="height: 10px;"></div>
+	<table id="financiar_centru_dash_fa_ch"></table>
+	<div id="paginatie_financiar_centru_dash_fa_ch" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="field_name w200" style="clear: both;">
+    <h4 style="font-size: 12px;">
+        Aprobate salarii <span id="valoare_salarii">{TOTAL_SALARII_APROBATE}</span> RON<br/>
+        Confirmate salarii <span id="valoare_salarii">{TOTAL_SALARII_CONFIRMATE}</span> RON
+    </h4>
+</div>
+<div class="field_name class_btn w100">
+    <input type="button" class="button" value="Confirma salarii"  onclick="ConfirmaSalarii();" />
+</div>
+
+<div class="separator_empty" style="height: 10px;"></div>
+
+<table id="financiar_centru_rbs_cash_cont_decontate"></table>
+<div id="paginatie_financiar_centru_rbs_cash_cont_decontate" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<table id="financiar_centru_rbs_cash_aprobate"></table>
+<div id="paginatie_financiar_centru_rbs_cash_aprobate" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<table id="financiar_centru_facturi_cash_decontate"></table>
+<div id="paginatie_financiar_centru_facturi_cash_decontate" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<table id="financiar_centru_client_ctr_cash_decontate"></table>
+<div id="paginatie_financiar_centru_client_ctr_cash_decontate" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<table id="financiar_centru_incasari_card"></table>
+<div id="paginatie_financiar_centru_incasari_card" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<table id="financiar_centru_cash_nedecontate"></table>
+<div id="paginatie_financiar_centru_cash_nedecontate" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<table id="financiar_centru_istoric"></table>
+<div id="paginatie_financiar_centru_istoric" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="confirmare" style="display: none;"></div> 
+<div id="incarcare_dialog" title="Incarcare" style="display: none;">
+	<h3>
+		<span id="tip_incarcare"></span>
+    </h3>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<form>
+		<fieldset>
+			<legend class="legend">
+				Suma
+			</legend>
+			<input type="text" name="incarcare_amount" id="incarcare_amount" class="field_input w280" placeholder="Suma"   onkeydown="return numbersonly(this, event, true);"/>
+		</fieldset>
+		<fieldset>
+			<legend class="legend">
+				Descriere
+			</legend>
+			<input type="text" name="incarcare_descriere" id="incarcare_descriere" class="field_input w280" placeholder="Descriere"/>
+		</fieldset>
+	</form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+		AfisarePerioada();
+        Grid_FinanciarCentru_DashboardRbs();
+        Grid_FinanciarCentru_DashboardFaCh();
+		Grid_FinanciarCentru_RbsCashDecontate();
+		Grid_FinanciarCentru_RbsCashAprobate();
+		Grid_FinanciarCentru_CashNedecontate();
+		Grid_FinanciarCentru_FacturiDecontateCash();
+		Grid_FinanciarCentru_ClientCtrDecontateCash();
+		Grid_FinanciarCentru_IncasariCard();
+        Grid_FinanciarCentru_IstoricCentru();
+	});
+
+</script>

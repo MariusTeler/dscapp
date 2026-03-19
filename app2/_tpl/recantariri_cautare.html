@@ -1,0 +1,55 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+        AfisarePerioada();
+        Grid_Recantariri();
+		ComboClientiContract('platitor');
+	});
+</script>
+<div style="padding:0px 0px 2px 0px;">
+	<form action="" id="export_lista" method="post" name="export_lista"  target="_blank">
+		<input type="hidden" id="expeditii" name="expeditii" value="" />
+		<input type="hidden" id="table_filters" name="table_filters" value="{TABLE_FILTERS}" />
+	<fieldset>
+		<legend>
+			<label class="field_label" for="perioada">Data recantarire</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+			De la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" placeholder="De la" readonly/>
+		</div>
+		<div class="field_name w60" style="line-height: 20px;">
+			Pana la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_FINAL}" placeholder="Pana la" readonly/>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			<label class="field_label">Platitor</label>
+		</legend>
+		<input type="hidden" name="platitor" id="platitor" />
+		<input type="text" name="platitor_nume" id="platitor_nume" class="field_input capitalize auto-hint" placeholder="Platitor"/>
+	</fieldset> 
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label">Actiuni</label>
+		</legend>
+		<div class="field_name w230">
+			<input type="button" name="search" class="button" value="Afisare"  onclick="CautareRecantariri();"/>
+			<input type="button" name="search" class="button" value="Export"  onclick='ExportRecantariri();'/>
+		</div>
+	</fieldset>
+	<div class="separator_empty"></div>
+	
+	</form>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="cautare_recantariri"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 2px;"></div>
+<div id="detalii_expeditie"></div>

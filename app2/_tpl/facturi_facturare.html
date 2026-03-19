@@ -1,0 +1,71 @@
+<form action="" id="lista_facturare" name="export_lista" target="_blank">
+
+	<input type="hidden" name="client" id="client" class="field_input  w200" value="0" />
+
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<div class="separator_empty" style="height: 5px;"></div>
+		
+		<fieldset style="width: 350px;">
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name w110">
+				<input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w70" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name w110">
+				<input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_FINAL}" title="Pana la" />
+			</div>
+		</fieldset>
+		<fieldset style="margin-top: 9px; padding: 3px; width: 590px; min-width: 190px;">
+			<div class="field_name w100">
+				<label for="doar_nefacturate">Nefacturate</label>
+				<input type="checkbox" value="1" name="doar_nefacturate" id="doar_nefacturate">
+			</div>
+			<div class="field_name w80">
+				<label for="mod_plata_normala">Per NT</label>
+				<input type="checkbox" value="1" id="mod_plata_normala">
+			</div>
+			<div class="field_name w80">
+				<label for="mod_plata_periodica">Periodica</label>
+				<input type="checkbox" value="1" id="mod_plata_periodica" checked="checked">
+			</div>
+			<div class="field_name w60">
+				
+			</div>
+			<input type="button" name="search" class="button" value="Afisare"  onclick="AfisareClientiListeFacturi();"  style= "margin-left: 60px"/>
+			<input type="button" name="search" class="button" value="Print"  onclick="PrintListeFacturi('vizualizare_liste_facturi');" />
+			<input type="button" name="search" class="button" value="Centralizator"  onclick="ExportCentralizatorFacturi();" />
+			<input type="button" name="search" class="button" value="Exporta"  onclick="ExportFacturi();" />
+		</fieldset>
+	</div>
+	<div class="separator_empty h10"></div>
+	
+	<div class="left" style="width:310px">
+		<table id="liste_clienti"></table>
+		<div id="paginatie_clienti" class="pagination_jqgrid"></div>
+	</div>
+	<div class="left" style="margin-left: 10px; width: 650px;">
+		<table id="liste_facturi"></table>
+		<div id="paginatie_facturi" class="pagination_jqgrid"></div>			
+	</div>
+	
+	<div class="separator_empty h10"></div>
+	<input type="button" name="view" class="button" value="Recalculare tarife expeditii" onclick="ActualizareTarifeExpeditii();"  />
+</form>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		Grid_ListeFacturi();
+		Grid_ListeClienti();
+	});
+</script>
+
+<div id="detalii_expeditie" style="display: none;"></div> 
+<div id="confirmare_expeditie" title="Confirmare"></div>

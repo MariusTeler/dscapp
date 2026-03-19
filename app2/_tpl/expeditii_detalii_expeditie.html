@@ -1,0 +1,370 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$( ".button" ).button();
+		$('#codbare').val('{NR_EXP}');
+		DetaliiIstoricExpeditii('{NR_EXP}');
+		Grid_IstoricCodBare('{NR_EXP}', 'istoric_codbare_popup');
+		Verificari_IstoricRecantariri('{NR_EXP}')
+	});
+	function AfisareScanari() {
+		$('#detalii_scan_popup').slideToggle();
+	}
+	function AfisareRecantariri() {
+		$('#detalii_recantariri_popup').slideToggle();
+	}
+	function schimbaExpeditie(nt) {
+		AfisareDetaliiExpeditieCuID(nt);
+	}
+</script>
+<style>
+	.detalii_scan_popup #paginatie{
+		display: none;
+	}
+	#afisare_recantariri{
+		display: none;
+	}
+	.datalii_exp_popup{
+		padding: 5px 10px 5px 0;
+		text-decoration: none;
+	}
+	.datalii_exp_popup.activ{
+		color: #00b500;
+	}
+</style>
+<div class="detalii_expeditie">
+	{EXPEDITII_ASOCIATE}
+	<fieldset class="w582 left"  style="min-height: 45px;">
+		<div class="label">
+			{TEXT_CODURI_BARE}
+			<a href="#" id="afisare_scanari" style="float: right; margin: 0 10px;" onclick="AfisareScanari();return false;">Scanari</a>
+			<a href="#" id="afisare_recantariri" style="float: right; margin: 0 10px;" onclick="AfisareRecantariri();return false;">Recantariri</a>
+		</div>
+		<div class="text ui-state-highlight" style="min-height: 23px; width: 390px; float: left;">
+			{CODURI}
+		</div>
+		<div style="float: right; width: 180px;">
+			<input type="button" name="print" class="button" value="Print" onclick="PrintExpeditie({NR_EXP});"/>
+			<input type="button" style = "{SHOW_EDIT}" name="edit" class="button" value="Edit" onclick="DetaliiExpeditiiEditare('{HTTP}expeditii/introducere/{NR_EXP}');"/>
+			<input type="button" style = "{SHOW_JPG}" class="button" value="Confirmare" onclick="opDownloadConfirmare({NR_EXP});"/>
+		</div>
+	</fieldset>
+	<div class="separator_empty">&nbsp;</div>
+	<input type="hidden" id="codbare" value="{NR_EXP}">
+	<div id="detalii_recantariri_popup" style="display: none;">
+		<table id="istoric_recantariri"></table>
+	</div>
+	<div id="detalii_scan_popup" style="display: none;">
+		<table id="istoric_codbare_popup"></table>
+		<div id="paginatie_istoric_codbare_popup" class="pagination_jqgrid"></div>
+	</div>
+	<fieldset class="w582">
+		<div class="label left w410">
+			Expeditor
+		</div>
+		<div class="label left w79 ml">
+			Km. prel.
+		</div>
+		<div class="label left w79 ml">
+			Km. loc
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="text ui-state-highlight left w400" style="text-transform: uppercase;">
+			{EXPEDITOR_NUME} ({EXPEDITOR_LOCALITATE_NUME})
+		</div>
+		<div class="text ui-state-highlight left w67 ml">
+			{KM_EXT_PREL}
+		</div>
+		<div class="text ui-state-highlight left w67 ml">
+			{EXPEDITOR_LOCALITATE_KM}
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="text ui-state-highlight left w569">
+			{EXPEDITOR_ADRESA}
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="label w150 left">
+			Persoana Contact
+		</div>
+		<div class="text ui-state-highlight left w200 ml" style="text-transform: uppercase;">
+			{EXPEDITOR_CONTACT}
+		</div>
+		<div class="text ui-state-highlight left w200 ml" style="width: 197px;">
+			{EXPEDITOR_TELEFON}
+		</div>
+	</fieldset>
+
+	<div class="separator_empty"></div>
+
+	<fieldset class="w582">
+		<div class="label left w410">
+			Destinatar
+		</div>
+		<div class="label left w79 ml">
+			Km. livr.
+		</div>
+		<div class="label left w79 ml">
+			Km. loc
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="text ui-state-highlight left w400" style="text-transform: uppercase;">
+			{DESTINATAR_NUME} ({DESTINATAR_LOCALITATE_NUME})
+		</div>
+		<div class="text ui-state-highlight left w67 ml">
+			{KM_EXT_LIV}
+		</div>
+		<div class="text ui-state-highlight left w67 ml">
+			{DESTINATAR_LOCALITATE_KM}
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="text ui-state-highlight left w569">
+			{DESTINATAR_ADRESA}
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="label w150 left">
+			Persoana Contact
+		</div>
+		<div class="text ui-state-highlight left w200 ml" style="text-transform: uppercase;">
+			{DESTINATAR_CONTACT}
+		</div>
+		<div class="text ui-state-highlight left w200 ml" style="width: 197px;">
+			{DESTINATAR_TELEFON}
+		</div>
+	</fieldset>
+
+	<div class="separator_empty"></div>
+
+	<fieldset class="w582">
+		<div class="label left w125">
+			Curier Preluare
+		</div>
+		<div class="text ui-state-highlight left w188 ml">
+			{AG_PREL_NUME}
+		</div>
+
+		<div class="label left w125 ml">
+			Curier Livrare
+		</div>
+		<div class="text ui-state-highlight left w188 ml">
+			{AG_LIV_NUME}
+		</div>
+	</fieldset>
+
+	<div class="separator_empty"></div>
+
+	<div class="left w240">
+
+		<fieldset style="width: 226px;">
+			<div class="label w70 left">
+				Plicuri
+			</div>
+			<div class="label w70 left ml">
+				Colete
+			</div>
+			<div class="label w70 left ml">
+				Paleti
+			</div>
+
+			<div class="separator_empty"></div>
+
+			<div class="text ui-state-highlight w59 left">
+				{TIP_OBJ_1}
+			</div>
+			<div class="text ui-state-highlight w59 left ml">
+				{TIP_OBJ_2}
+			</div>
+			<div class="text ui-state-highlight w59 left ml">
+				{TIP_OBJ_3}
+			</div>
+		</fieldset>
+
+		<div class="separator_empty"></div>
+
+		<fieldset style="width: 226px;">
+			<div class="label w105 left">
+				G. fizica
+			</div>
+			<div class="label w110 left ml">
+				G. volum.
+			</div>
+
+			<div class="separator_empty"></div>
+
+			<div class="text ui-state-highlight w95 left">
+				{GREUTATE}
+			</div>
+			<div class="text ui-state-highlight w100 left ml">
+				{GREUTATE_VOL}
+			</div>
+		</fieldset>
+
+	</div>
+
+	<div class="left w340">
+		<fieldset>
+			<div class="label w100 left">
+				Primitor
+			</div>
+			<div class="text ui-state-highlight w210 left">
+				{PRIMITOR}
+			</div>
+
+			<div class="separator_empty"></div>
+
+			<div class="label w100 left">
+				Observatii / Detalii doc.
+			</div>
+			<div class="text ui-state-highlight w210 left" style="height: 53px; overflow: scroll;">
+				{OBSERVATII}
+			</div>
+		</fieldset>
+	</div>
+
+	<div class="separator_empty"></div>
+
+	<fieldset class="w582">
+		<div class="label left w60">
+			Val. Asig.
+		</div>
+		<div class="text ui-state-highlight left w59 ml">
+			{ASIGURARE}
+		</div>
+
+		<div class="label left w60 ml">
+			Proc. Asig.
+		</div>
+		<div class="text ui-state-highlight left w59 ml">
+			{PROC_ASIG}
+		</div>
+
+		<div class="label left w60 ml">
+			Ramburs
+		</div>
+		<div class="text ui-state-highlight left w59 ml">
+			{RAMBURS}
+		</div>
+
+		<div class="label left w60 ml">
+			Tip plata
+		</div>
+		<div class="text ui-state-highlight left w59 ml">
+			{TIP_PLATA}
+		</div>
+	</fieldset>
+
+	<div class="separator_empty"></div>
+
+	<fieldset class="w582">
+		<div class="label left w60">
+			Retur NT
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{RET_NT}
+		</div>
+		<div class="label left w60 ml">
+			Retur Doc.
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{RET_DOC}
+		</div>
+		<div class="label left w80 ml">
+			Retur ambalaj
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{RET_AMB}
+		</div>
+		<div class="label left w80 ml">
+			Retur colet
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{RET_COLET}
+		</div>
+		<div class="label left w100 ml">
+			Deschidere colet
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{COPEN}
+		</div>
+	</fieldset>
+	<div class="separator_empty"></div>
+
+	<fieldset class="w582">
+		<div class="label left w70">
+			Liv. sambata
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{LIV_SAMB}
+		</div>
+		<div class="label left w60 ml">
+			Liv. sediu
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{LIV_SED}
+		</div>
+		<div class="label left w70 ml">
+			SMS livrare
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{SMS}
+		</div>
+		<!-- <div class="label left w100 ml">
+			Retur nota com.
+		</div>
+		<div class="text ui-state-highlight left w30 ml">
+			{RETUR_NC}
+		</div> -->
+	</fieldset>
+	<div class="separator_empty"></div>
+
+	<fieldset class="w582">
+		<div class="label left w100">
+			Platitor
+		</div>
+		<div class="text ui-state-highlight left w470" style="width: 469px;">
+			{PLATITOR_NUME} ({PLATITOR_CENTRU}) - {MOD_PLATA}
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="label left w100">
+			Platit Nr. Act
+		</div>
+		<div class="text ui-state-highlight left w180">
+			{INVOICE}
+		</div>
+		<div class="label left w100 ml">
+			Suma Platita
+		</div>
+		<div class="text ui-state-highlight left w167 ml">
+			{SUMAMNT}
+		</div>
+
+		<div class="separator_empty"></div>
+
+		<div class="text ui-state-highlight w569">
+			{DETALII_SCANARE} / {DETALII_PLATA}
+		</div>
+	</fieldset>
+
+	<div class="separator_empty"></div>
+
+	<fieldset class="w582">
+		<table id="istoric_expeditii_detalii"></table>
+		<div id="paginatie_istoric_Detalii" class="pagination_jqgrid"></div>
+		<div class="separator_empty"></div>
+	</fieldset>
+	<div id="istoric_detalii_expeditii_detalii"></div>
+	<div class="separator_empty"></div>
+
+</div>

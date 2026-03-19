@@ -1,0 +1,21 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+    	$('#sxls').attr('disabled', true);
+		startVerificareXlsExpeditii();
+	});
+</script>
+<div style="padding-top: 4px; display:inline-block; width:600px">
+	<div style="border:1px solid #ccc; width:100%; height:20px; background:#eee;">
+    	<div id="progressor" style="background:#07c; width:0%; height:100%;"></div>
+	</div>
+	<div id="results" style="border:1px solid #000; width:100%; height:300px; background:#eee; overflow: scroll;">{RESULTS}</div>
+</div>
+<div style="padding-top: 4px; display:inline-block; margin-left : 30px; vertical-align : top">
+	<form enctype="multipart/form-data" action="{HTTP}importuri-xls/expeditii/step3" method="post" name="foxls" >
+		<input type="hidden" id="fxls" name="fxls" value="{FISIER}" />
+		<input type="hidden" id="cod_cl" name="cod_cl" value="{COD_CL}" />
+		<input type="hidden" id="merror" name="merror" value="0" />
+		<input type="button" class="button" value="Back" title="Back" onclick="window.location = '{HTTP}importuri-xls/expeditii';"/>		
+		<input type="submit" id="sxls" name="sxls" class="button" value="Next" title="Next" style="margin-left: 10px;"/>
+	</form>
+</div>

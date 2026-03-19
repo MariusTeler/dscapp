@@ -1,0 +1,23 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+        if($('#merror').val() == 1) {
+			$('#sxls').attr('disabled', true);
+        	add_log('Fisierul initial are erori !!! <br/> Va rog sa il corectati si sa reluati procedura de import');
+        }
+	});
+</script>
+<div style="padding-top: 4px; display:inline-block; width:600px">
+	<div style="border:1px solid #ccc; width:100%; height:20px; background:#eee;">
+    	<div id="progressor" style="background:#07c; width:0%; height:100%;"></div>
+	</div>
+	<div id="results" style="border:1px solid #000; width:100%; height:300px; background:#eee; overflow: scroll;">{RESULTS}</div>
+</div>
+<div style="padding-top: 4px; display:inline-block; margin-left : 30px; vertical-align : top">
+	<form enctype="multipart/form-data" action="" method="post" name="import" >
+		<input type="hidden" id="fxls" name="fxls" value="{FISIER}" />
+		<input type="hidden" id="cod_cl" name="cod_cl" value="{COD_CL}" />
+		<input type="hidden" id="merror" name="merror" value="{MERROR}" />
+		<input type="button" class="button" value="Back" title="back" onclick="window.location = '{HTTP}importuri-xls/expeditii';"/>		
+		<input type="button" id="sxls" onclick="startImportXlsExpeditii();"  class="button" value="Start import"/>
+	</form>
+</div>

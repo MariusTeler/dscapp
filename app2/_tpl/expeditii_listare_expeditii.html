@@ -1,0 +1,82 @@
+<script type="text/javascript">
+	$(document).ready(function() {     
+        Grid_ListeExpeditii();
+        Grid_ListeExpeditiiDetalii();
+        Grid_ListeExpeditiiAgenti();
+		ComboCentre('centru');
+    });
+</script>
+
+
+
+
+<form action="{HTTP}expeditii/vizualizare_liste_expeditii/" id="export_lista" method="post" name="export_lista">
+<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+    <div class="separator_empty" style="height: 5px;"></div>
+    <fieldset class="h40">
+        <legend>
+            <label class="field_label" for="perioada">Perioada</label>
+        </legend>
+        <div class="field_name w50" style="line-height: 20px;">De la:</div>
+        <div class="field_name w110">
+            <input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" title="De la" />
+        </div>
+        <div class="field_name w60" style="line-height: 20px;">Pana la:</div>
+        <div class="field_name w110">
+            <input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_START}" title="Pana la" />
+        </div>
+    </fieldset>
+
+    <fieldset class="h40" style="min-width: 50px;">
+        <legend>
+            <label class="field_label" for="operatie">Liste Pentru</label>
+        </legend>
+        <div class="field_name w110">
+            <select id="operatiune" name="operatiune" class="field_combobox  w100" onchange="SchimbareLista(this.value);">
+                <option selected="selected" value="1">Bucuresti</option>
+                <option value="2">Toata Tara</option>
+                <option value="3">Pt. Centru</option>
+            </select>
+        </div>    
+        <div class="field_name w130" id="lista_centre" style="display: none;">
+            <input type="hidden" name="centru" id="centru" class="field_input  w120" value="0" />
+            <input type="text" name="centru_NUME" id="centru_NUME" class="field_input  w120" value="{CENTRU_NUME}" title="Centru" />
+        </div>
+    </fieldset>
+    
+    <div class="field_name w310 class_btn" style="padding-top: 15px;">
+        <input type="button" name="search" class="button" value="Afiseaza" onclick="AfisareListeExpeditii();" />
+        <input type="button" name="view" class="button" value="Vizualizare" onclick="VizualizareListeExpeditii();"/>
+        <input type="button" name="view" class="button" value="Export" onclick="ExportListeExpeditii();"/>
+        <input type="button" name="print" class="button" value="Print" onclick="PrintListeExpeditii();"/>
+    </div>
+    <div class="separator_empty h5" ></div>
+
+   
+    
+    
+</div>
+<div class="separator_empty h10"></div>
+<table id="liste_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div style="float: left; width: 630px;">
+	<div class="separator_empty h15"></div>
+	<table id="liste_expeditii_detalii"></table>
+	<div id="paginatie_detalii" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div style="float: right; width: 330px;">
+	<div class="separator_empty h15"></div>
+	<table id="liste_expeditii_agenti"></table>
+	<div id="paginatie_agenti" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+</form>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+
+
+<div id="detalii_expeditie" style="display: none;"></div> 

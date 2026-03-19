@@ -1,0 +1,160 @@
+<form action="" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<fieldset style="min-width: 120px; height: 43px;">
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name" style="width: 136px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w110" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name" style="width: 136px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w110" value="{DATA_FINAL}" title="Pana la" />
+			</div>
+		</fieldset>
+ 		<fieldset style="min-width: 60px; height: 43px;">
+			<legend>
+				<label class="field_label">Categ</label>
+			</legend>
+			<div class="field_name w60">
+				<select style="width: 60px;" id="categorie" name="categorie" class="field_combobox">
+					<option selected="selected" value="1">Toate</option>
+					<option value="2">Plicuri</option>
+					<option value="3">Colete+Paleti</option>
+				</select>
+			</div>
+		</fieldset>	
+		<fieldset style="min-width: 60px; height: 43px;">
+			<legend>
+				<label class="field_label">Scan</label>
+			</legend>
+			<div class="field_name w60">
+				<select style="width: 60px;" id="tip_scanare" name="tip_scanare" class="field_combobox">
+					{CHECKPOINTS}
+				</select>
+			</div>
+		</fieldset>	
+		<fieldset style="min-width: 70px; height: 43px;">
+			<legend>
+				<label class="field_label">Centru</label>
+			</legend>
+			<div class="field_name w70">
+				<input type="hidden" name="centru" id="centru" class="field_input " value="{CENTRU}" title="Cetnru"   />
+				<input type="text" name="centru_nume" id="centru_nume" class="field_input w60 h10" style="padding: 5px;" value="{CENTRU_NUME}" title="Centru"/>
+			</div>
+		</fieldset>	
+		<fieldset style="min-width: 70px; height: 43px;">
+			<legend>
+				<label class="field_label">Agent</label>
+			</legend>
+			<div class="field_name w70">
+				<input type="hidden" name="agent" id="agent" class="field_input " value="{AGENT}" title="Agenti"   />
+				<input type="text" name="agent_NUME" id="agent_NUME" class="field_input w60 h10" style="padding: 5px;" value="{AGENTI_NUME}" title="Agent"/>
+			</div>
+		</fieldset>	
+		<fieldset style="min-width: 70px; height: 43px;">
+			<legend>
+				<label class="field_label">Ruta</label>
+			</legend>
+			<div class="field_name w70">
+				<input type="hidden" name="ruta" id="ruta" class="field_input " value="{RUTA}" title="Rute"   />
+				<input type="text" name="ruta_NUME" id="ruta_NUME" class="field_input w60 h10" style="padding: 5px;" value="{RUTA_NUME}" title="Ruta"/>
+			</div>
+		</fieldset>	
+		<fieldset style="min-width: 60px; height: 43px;">
+			<legend>
+				<label class="field_label">Bord.</label>
+			</legend>
+			<div class="field_name w60">
+				<input type="text" name="borderou" id="borderou" class="field_input  w50" value="{BORDEROU}" title="Borderou" />
+			</div>
+		</fieldset>		
+		<fieldset style="min-width: 70px; height: 43px;">
+			<legend>
+				<label class="field_label">Optiuni</label>
+			</legend>
+			<div class="field_name w70 class_btn" >
+				<input type="button" name="search" class="button" value="Afiseaza"  onclick="vAfisareIstoricScanareListeExpeditii();" />
+			</div>
+			<div class="field_name w60 class_btn" >
+				<input type="button" name="search" class="button" value="Export"  onclick="vExportIstoricScanareListeExpeditii();" />
+			</div>
+		</fieldset>		
+		<div class="separator_empty" style="height: 5px;"></div>
+	</div>
+	<div><input type="checkbox" value="1" id="puisori" name="puisori" />&nbsp;Nu afisa puisorii</div>
+</form>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+<fieldset style="width: 960px;">
+	<legend >
+		Lista Expeditii
+	</legend>
+	<table id="liste_istoric_scanare"></table>
+	<div id="paginatie" class="pagination_jqgrid"></div>
+</fieldset>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<div id="detalii_expeditie" style="display: none;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="mesaj_confirmare" title="Confirmare" style="display: none;">Sunteti sigur?</div>    
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		vGrid_IstoricScanare();
+		ComboAgenti3_Old_All('agent');
+		ComboCentre1('centru');
+		ComboRute('ruta');
+		$('#data_start').datetimepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			timeFormat : 'HH:mm',
+			hour: 10,
+			controlType: 'select',
+			oneLine: true,
+			onSelect: function (selectedDateTime){
+				var start = $(this).datetimepicker('getDate');
+				$('#data_final').datetimepicker('option', 'minDate', new Date(start.getTime()) );
+			},
+			onClose: function(dateText, inst) {
+				var endDateTextBox = $('#data_final');
+				if (endDateTextBox.val() != '') {
+					var testStartDate = new Date(dateText);
+					var testEndDate = new Date(endDateTextBox.val());
+					if (testStartDate > testEndDate)
+						endDateTextBox.val(dateText);
+				}
+				else {
+					endDateTextBox.val(dateText);
+				}
+			}
+		});
+		$('#data_final').datetimepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			timeFormat : 'HH:mm',
+			hour: 23,
+			controlType: 'select',
+			oneLine: true,
+			onSelect: function (selectedDateTime){
+				var end = $(this).datetimepicker('getDate');
+				$('#data_start').datetimepicker('option', 'maxDate', new Date(end.getTime()) );
+			},
+			onClose: function(dateText, inst) {
+				var startDateTextBox = $('#data_start');
+				if (startDateTextBox.val() != '') {
+					var testStartDate = new Date(startDateTextBox.val());
+					var testEndDate = new Date(dateText);
+					if (testStartDate > testEndDate)
+						startDateTextBox.val(dateText);
+				}
+				else {
+					startDateTextBox.val(dateText);
+				}
+			}
+		});
+	});
+</script>

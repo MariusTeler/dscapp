@@ -1,0 +1,205 @@
+<div style="padding:0px 0px 2px 0px;" class=" left w360" >
+<form id="comanda_form" action="" method="post">
+	<input type="hidden" name="client_id" id="client_id" value="{COD_CL}"/>
+	<input type="hidden" name="client_nume" id="client_nume" value="{CLIENT}"/>
+	<input type="hidden" name="JSON_PCS" id="JSON_PCS" class="field_input" value='{JSON_PCS}' />
+
+	<div id="messageBox" style="color:red"></div>
+	<select id="expeditorSelect" style="width:300px"></select>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="field_row">
+		<div class="field_name">Data colectarii</div>
+		<input type="text" name="collect_at" id="collect_at" class="field_input auto-hint w160" required readonly="true"/>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Interval colectare</div>
+		<select name="h_start" id="h_start" class="field_combobox" style="width:40px">
+			{H_START}
+		</select>
+		<select name="h_end" id="h_end" class="field_combobox" style="width:40px">
+			{H_END}
+		</select>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Ridica de la</div>
+		<input type="text" name="ridica_de_la" id="ridica_de_la" class="field_input auto-hint w200" value="" placeholder="Nume sau firma de la care se ridica (optional)"/>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Localitate</div>
+		<input type="text" name="localitate" id="localitate" class="field_input auto-hint w200" value="{LOCALITATE}" required/>
+		<input type="hidden" name="localitate_id" id="localitate_id" value="{LOCALITATE_ID}"/>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Adresa</div>
+		<input type="text" id="adresa" name="adresa" value="{ADRESA}" class="field_input w200" required>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Contact</div>
+		<input type="text" id="contact" name="contact" value="{CONTACT}" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Telefon</div>
+		<input type="text" id="telefon" name="telefon" value="{TELEFON}" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Colete</div>
+		<input type="text" id="nr_obj_colet" name="nr_obj_colet" value="" class="field_input"  style="width:40px" required>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Paleti</div>
+		<input type="text" id="nr_obj_palet" name="nr_obj_palet" value="0" class="field_input"  style="width:40px"  required>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Greutate totala (kg)</div>
+		<input type="text" id="kg_obj" name="kg_obj" value="" class="field_input" style="width:40px" required>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Volum (m3)</div>
+		<input type="text" id="vol_obj" name="vol_obj" value="" class="field_input" style="width:40px">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Observatii</div>
+		<textarea rows="4" class="field_textarea" name="observatii" id="observatii" style="width:200px;height: 60px;"></textarea>
+	</div>
+	<div class="field_row">
+		<input type="submit" name="but_submit" class="button w70" value="Trimite" style="margin-left: 285px; margin-top:2px"/>
+	</div>	
+	<div class="separator_empty" style="height: 20px;"></div>
+</form>
+</div>
+<div class="right w600">
+	<div id="comenzi_continut" class="comenzi_content">
+		<div class="comenzi_istoric">
+			<div style="clear:both;"></div>
+			<table id="istoric_comenzi"></table>
+			<div id="paginatie_istoric" class="pagination_jqgrid"></div>
+		</div>
+		<div class="separator_empty"></div>
+	</div>
+</div>
+<div id="confirmare" style="display: none;">&nbsp;</div>
+<script>
+	let arrPcs = {};
+	$(document).ready(function() 
+	{
+		ComboLocalitatiClient('','localitate',false);
+		Client_Grid_ListeComenzi_Short();
+		arrPcs = JSON.parse($('#JSON_PCS').val());
+		ClientHydrateSelect('expeditorSelect', arrPcs, $("#client_id").val());
+
+		let validateInterval = function() {
+			// Clear any existing error on h_end
+			$("#h_end").removeClass('error');
+			$("#h_end").next('label.error').remove();
+			
+			// Revalidate h_start
+			customValidator.element("#h_start");
+		}
+
+		jQuery.validator.addMethod("hStartEnd", function() {
+			let vHStart = parseInt($("#h_start").val());
+			let vHEnd = parseInt($("#h_end").val());
+			if($("#collect_at").datepicker('getDate').getDate() > (new Date()).getDate()) 
+				return vHStart < vHEnd;
+			return vHStart >= (new Date()).getHours() && vHStart < vHEnd;
+		});
+		let customValidator = $("#comanda_form").validate({
+			ignore: "",
+			rules: {
+				collect_at: {
+					required: true
+				},
+				h_start: {
+					hStartEnd : true
+				},
+				localitate_nume: {
+					required: true
+				},
+				localitate_id: {
+					required: true,
+					number: true
+				},
+				adresa: {
+					required: true
+				},
+				nr_obj_colet: {
+					required: true,
+					number: true
+				},
+				nr_obj_palet: {
+					required: true,
+					number: true
+				},
+				kg_obj: {
+					required: true,
+					number: true
+				},
+				vol_obj: {
+					number: true
+				}
+			},
+			messages: {
+				collect_at: {
+					required: 'data colectarii'
+				},
+				h_start: {
+					hStartEnd : 'Interval gresit'
+				},
+				localitate: {
+					required: 'localitatea'
+				},
+				localitate_id: {
+					required: 'Selectati localitatea din lista'
+				},
+				adresa: {
+					required: 'adresa'
+				},
+				nr_obj_colet: {
+					required: 'nr. colete',
+					number: 'Colete : numar intreg valid'
+				},
+				nr_obj_palet: {
+					required: 'nr. paleti',
+					number: 'Paleti : numar intreg valid'
+				},
+				kg_obj: {
+					required: 'cantitatea',
+					number: 'Cantitate : numar intreg valid'
+				},
+				vol_obj: {
+					number: 'Volum : numar intreg valid'
+				}
+			},
+			submitHandler: function(form) {
+				Client_AdaugaComanda();
+			}
+		});
+		$("#collect_at").datepicker({
+			changeMonth : true,
+			changeYear : false,
+			showOn : "both",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			minDate: new Date('{COLLECT_AT}'),
+			onSelect: function(dateSelected) {
+				validateInterval();
+			}
+		});
+		$( "#expeditorSelect" ).change(function() {
+			let expeditor_id = $(this).find('option:selected').val();
+			if(arrPcs[expeditor_id]){
+				$('#client_id').val(expeditor_id);
+				$('#client_nume').val(arrPcs[expeditor_id].nume);
+				$('#localitate_id').val(arrPcs[expeditor_id].localitate_id);
+				$('#localitate').val(arrPcs[expeditor_id].localitate);
+				$('#adresa').val(arrPcs[expeditor_id].adresa);
+			}
+		});
+		$("#collect_at").datepicker('setDate', new Intl.DateTimeFormat('ro-RO').format(new Date('{COLLECT_AT}')) );
+		// Clear h_end error when h_start or h_end changes
+		$("#h_start, #h_end").change(function() {
+			validateInterval();
+		});
+	});
+</script>

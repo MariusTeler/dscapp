@@ -1,0 +1,60 @@
+<script>
+$(document).ready(function() 
+{
+	Client_Grid_ListeRetururi();
+});
+function Cautare(evt){
+	var theEvent = evt || window.event;
+	var key = theEvent.key || theEvent.which || theEvent.keyCode;
+	if(key == 'Enter' || key == 13) 
+		ClientAfisareRetururi();
+}
+</script>
+
+<form id="export_lista" method="post" name="export_lista">
+	<div class="cautare_retururi" >
+		<fieldset>
+			<legend>
+				<label class="field_label" for="awb">Nr. Retur</label>
+			</legend>
+			<div class="field_name w120">
+				<input type="text" name="awb" id="awb" value="" title="" onkeydown="return Cautare(event);"/>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="perioada" onclick="CautareExpeditii(1);">Perioada</label>
+				<input type="checkbox" name="perioada" id="perioada" value="1" class="field_checkbox" onclick="ClientListeExpeditii(1);" {PERIOADA} />
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="" title="De la" disabled="true" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="" title="Pana la" disabled="true" />
+			</div>
+		</fieldset>
+		
+		<div class="field_name w130 class_btn" style="margin-top: 15px; margin-left: 10px;">
+			<input type="button" name="search" class="button" value="Cauta"  onclick="ClientAfisareRetururi();" />
+			<input type="button" name="exporta" class="button" value="Export" onclick="ClientExportRetururi('liste_retururi');" />
+		</div>
+		
+	</div>
+</form>
+
+<div class="separator_empty h10">&nbsp;</div>
+<table id="liste_retururi"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div id="detalii_expeditie" style="display: none;">&nbsp;</div>

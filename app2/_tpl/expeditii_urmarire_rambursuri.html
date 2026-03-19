@@ -1,0 +1,81 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Grid_UrmarireRambursuri();
+	});
+
+</script>
+<div style="padding:0px 0px 2px 0px;">
+	<form action="{HTTP}expeditii/print_urmarire_rambursuri/" id="export_lista" method="post" name="export_lista"  target="_blank">
+		
+		<input type="hidden" id="form_gs_centru_livrare" name="form_gs_centru_livrare" value="" />
+		<input type="hidden" id="form_gs_centru_colectare" name="form_gs_centru_colectare" value="" />
+		<input type="hidden" id="form_gs_expeditor" name="form_gs_expeditor" value="" />
+		<input type="hidden" id="form_gs_destinatar" name="form_gs_destinatar" value="" />
+		<input type="hidden" id="form_gs_livrat" name="form_gs_livrat" value="" />
+		<input type="hidden" id="form_gs_status" name="form_gs_status" value="" />
+		
+	<fieldset>
+		<legend>
+			<label class="field_label" for="perioada">Perioada</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+			De la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" title="De la" />
+		</div>
+		<div class="field_name w60" style="line-height: 20px;">
+			Pana la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_START}" title="Pana la" />
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label" for="perioada">Actiuni</label>
+		</legend>
+		<div class="field_name w110">
+            <select style="width: 100px;" id="status_rmb" name="status_rmb" class="field_combobox">
+                <option selected="selected" value="5">Toate</option>
+                <option value="0">In Derulare</option>
+                <option value="6">Cu NT Ramburs</option>
+                <option value="8">Cu NT Rmb Livrat</option>
+                <option value="7">Fara NT Ramburs</option>
+                <option value="1">Incasat</option>
+                <!-- <option value="2">Achitat Op</option>
+                <option value="3">Refuzat</option>
+                <option value="4">Inchis</option> -->
+            </select>
+        </div>
+    </fieldset>  
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label" for="perioada">Actiuni</label>
+		</legend>
+		<div class="field_name w200">
+			<input type="button" name="search" class="button" value="Afisare"  onclick="AfisareUrmarireRambursuri();"/>
+			<input type="button" name="search" class="button" value="Print" onclick='PrintUrmarireRambursuri();'/>
+			<input type="button" name="search" class="button" value="Export"  onclick='ExportUrmarireRambursuri();'/>
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 100px; height: 43px; width: 273px;">
+		<legend>
+			<label class="field_label" id="detalii_exp"></label>
+		</legend>
+		<div id="detaliii_exp_ramburs"></div>
+	</fieldset>
+	<div class="separator_empty"></div>
+	
+	</form>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="urmarire_rambursuri"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="mesaj_confirmare" title="Confirmare" style="display: none;">
+	Sunteti sigur?
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<div id="detalii_expeditie"></div>

@@ -1,0 +1,71 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioadaOra();
+		Grid_DiferenteCentru();
+		ComboCentre1('centru');
+	});
+
+</script>
+<form action="" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<fieldset style="height: 43px; min-width: 140px;">
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 151px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w120" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w80" style="line-height: 20px; ">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 151px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w120" value="{DATA_FINAL}" title="Pana la" />
+			</div>
+		</fieldset>
+ 		<fieldset style="min-width: 80px; height: 43px;">
+			<legend>
+				<label class="field_label">Categorie</label>
+			</legend>
+			<div class="field_name w110">
+				<select style="width: 100px;" id="categorie" name="categorie" class="field_combobox">
+					<option selected="selected" value="1">Toate</option>
+					<option value="2">Plicuri</option>
+					<option value="3">Colete+Paleti</option>
+				</select>
+			</div>
+		</fieldset>	
+		<fieldset style="min-width: 80px; height: 43px;">
+			<legend>
+				<label class="field_label">Centru Verificare</label>
+			</legend>
+			<div class="field_name w130">
+				<input type="hidden" name="centru" id="centru" class="field_input " value="{CENTRU}" title="Cetnru"   />
+				<input type="text" name="centru_nume" id="centru_nume" class="field_input w120 h10" style="padding: 5px;" value="{CENTRU_NUME}" title="Centru"/>
+			</div>
+		</fieldset>		
+		<fieldset style="min-width: 130px; height: 43px;">
+			<legend>
+				<label class="field_label">Optiuni</label>
+			</legend>
+			<div class="field_name w130 class_btn" >
+				<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareDiferenteCentru();" />
+				<input type="button" name="search" class="button" value="Exporta"  onclick="ExportaDiferenteCentru();" />
+			</div>
+		</fieldset>		
+		<div class="separator_empty" style="height: 5px;"></div>
+	</div>
+</form>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+<fieldset style="width: 960px;">
+	<legend >
+		Lista Expeditii
+	</legend>
+	<table id="liste_istoric_scanare"></table>
+	<div id="paginatie" class="pagination_jqgrid"></div>
+</fieldset>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="detalii_expeditie"></div>

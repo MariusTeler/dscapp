@@ -1,0 +1,215 @@
+<form action="" id="comanda_form" method="post" name="comanda_form">
+	<script type="text/javascript">
+		$(document).ready(function() {
+			Grid_ClientiListare($('#user_dispecerat').val());
+			ClientiComboLocalitatiOnly('localitate');
+			
+			let validateInterval = function() {
+				// Clear any existing error on h_end
+				$("#h_end").removeClass('error');
+				$("#h_end").next('label.error').remove();
+				
+				// Revalidate h_start
+				customValidator.element("#h_start");
+			}
+
+			jQuery.validator.addMethod("hStartEnd", function() {
+				let vHStart = parseInt($("#h_start").val());
+				let vHEnd = parseInt($("#h_end").val());
+				if($("#collect_at").datepicker('getDate').getDate() > (new Date()).getDate()) 
+					return vHStart < vHEnd;
+				return vHStart >= (new Date()).getHours() && vHStart < vHEnd;
+			});
+			var customValidator = $("#comanda_form").validate({
+				ignore: "",
+				rules: {
+					collect_at: {
+						required: true
+					},
+					client_nume: {
+						required: true
+					},
+					h_start: {
+						hStartEnd : true
+					},
+					localitate_nume: {
+						required: true
+					},
+					localitate_id: {
+						required: true,
+						number: true
+					},
+					adresa: {
+						required: true
+					},
+					nr_obj_colet: {
+						required: true,
+						number: true
+					},
+					nr_obj_palet: {
+						required: true,
+						number: true
+					},
+					kg_obj: {
+						required: true,
+						number: true
+					},
+					vol_obj: {
+						number: true
+					}
+				},
+				messages: {
+					client_nume: {
+						required: 'Client inexistent'
+					},
+					collect_at: {
+						required: 'data colectarii'
+					},
+					h_start: {
+						hStartEnd : 'Interval gresit'
+					},
+					localitate_nume: {
+						required: 'localitatea'
+					},
+					localitate_id: {
+						required: 'Selectati localitatea din lista'
+					},
+					adresa: {
+						required: 'adresa'
+					},
+					nr_obj_colet: {
+						required: 'nr. colete',
+						number: 'Colete : numar intreg valid'
+					},
+					nr_obj_palet: {
+						required: 'nr. paleti',
+						number: 'Paleti : numar intreg valid'
+					},
+					kg_obj: {
+						required: 'cantitatea',
+						number: 'Cantitate : numar intreg valid'
+					},
+					vol_obj: {
+						number: 'Volum : numar intreg valid'
+					}
+				},
+				submitHandler: function(form) {
+					AdaugaComanda();
+				}
+			});
+			$("#collect_at").datepicker({
+				changeMonth : true,
+				changeYear : false,
+				showOn : "both",
+				buttonImage : HTTP + "assets/images/calendar.gif",
+				buttonImageOnly : true,
+				dateFormat : 'dd.mm.yy',
+				minDate: new Date('{COLLECT_AT}'),
+				onSelect: function(dateSelected) {
+					validateInterval();
+				}
+			});
+			$("#collect_at").datepicker('setDate', new Intl.DateTimeFormat('ro-RO').format(new Date('{COLLECT_AT}')) );
+			// Clear h_end error when h_start or h_end changes
+			$("#h_start, #h_end").change(function() {
+				validateInterval();
+			});
+		});
+	</script>
+	<div class="content_left" style="width: 530px;">
+		<fieldset>
+			<div class="field_row">
+				<div class="field_name w100">
+					Dispecerat
+				</div>
+				<input type="hidden" value="{USER_DISPECERAT_ID}" id="user_dispecerat"/>
+				<select name="dispecerate" id="dispecerate" class="combo_box w90" onChange="refreshClientiDispecerat(this.value)"><option value=""></option>
+				{DISPECERATE}
+				</select>
+			</div>
+		</fieldset>
+	</div>
+	<div class="content_right" style="width: 440px;" >
+		<input type="button" name="distribuire" class="button" value="Distribuire comenzi" style="margin-left:310px" onclick="document.location='{HTTP}comenzi/distribuire'" />
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="content_left w550">
+		<table id="clienti_listare"></table>
+		<div id="clienti_paginatie" class="pagination_jqgrid"></div>
+		<div class="separator_empty" style="height: 10px;"></div>
+	</div>
+	<div class="content_right w420">
+		<table id="persoane_contact_listare"></table>
+		<div id="persoane_contact_paginatie" class="pagination_jqgrid"></div>
+		<div class="separator_empty" style="height: 10px;"></div>
+		<h3>Detalii Comanda: <span id="nr_comanda"></span></h3>
+		<div id="messageBox" style="color:red"></div>
+		<fieldset id="detalii_contact">
+			<div class="field_row" style="width:410px">
+				<label for="client_nume" class="field_name">Client</label>
+				<input type="text" name="client_nume" id="client_nume" class="field_input auto-hint w250" value="" placeholder="Client" required onChange="$('#client_id').val('');"/>
+				<input type="hidden" name="client_id" id="client_id" value=""/>
+			</div>
+			<div class="field_row">
+				<label for="ridica_de_la" class="field_name">Ridica de la</label>
+				<input type="text" name="ridica_de_la" id="ridica_de_la" class="field_input auto-hint w250" value="" placeholder="Nume sau firma de la care se ridica (optional)"/>
+			</div>
+			<div class="field_row">
+				<label for="localitate_nume" class="field_name">Localitate</label>
+				<input type="text" name="localitate_nume" id="localitate_nume" class="field_input auto-hint w250" value="" placeholder="Localitate" required/>
+				<input type="hidden" name="localitate_id" id="localitate_id" value=""/>
+			</div>
+			<div class="field_row">
+				<label for="adresa" class="field_name">Adresa</label>
+				<input type="text" id="adresa" name="adresa" value="" class="field_input w250" required>
+			</div>
+			<div class="field_row">
+				<label for="contact" class="field_name">Contact</label>
+				<input type="text" id="contact" name="contact" value="" class="field_input w250">
+			</div>
+			<div class="field_row">
+				<label for="telefon" class="field_name">Telefon</label>
+				<input type="text" id="telefon" name="telefon" value="" class="field_input w250">
+			</div>
+			<div class="field_row">
+				<label for="collect_at" class="field_name">Data colectarii</label>
+				<input type="text" name="collect_at" id="collect_at" class="field_input auto-hint w160" required readonly="true"/>
+			</div>
+			<div class="field_row">
+				<label for="h_start" class="field_name">Interval colectare</label>
+					<select name="h_start" id="h_start" class="field_combobox" style="width:60px" required>
+						{H_START}
+					</select>
+					<select name="h_end" id="h_end" class="field_combobox" style="width:60px" >
+						{H_END}
+					</select>
+			</div>
+			<div class="field_row">
+				<label for="nr_obj_colet" class="field_name">Colete</label>
+				<input type="text" id="nr_obj_colet" name="nr_obj_colet" value="" class="field_input"  style="width:40px" required>
+			</div>
+			<div class="field_row">
+				<label for="nr_obj_palet" class="field_name">Paleti</label>
+				<input type="text" id="nr_obj_palet" name="nr_obj_palet" value="0" class="field_input"  style="width:40px"  required>
+			</div>
+			<div class="field_row">
+				<label for="vol_obj" class="field_name">Greutate totala (kg)</label>
+				<input type="text" id="kg_obj" name="kg_obj" value="" class="field_input" style="width:40px" required>
+			</div>
+			<div class="field_row">
+				<label for="vol_obj" class="field_name">Volum (m3)</label>
+				<input type="text" id="vol_obj" name="vol_obj" value="" class="field_input" style="width:40px">
+			</div>
+			<div class="field_row">
+				<label for="observatii" class="field_name">Observatii</label>
+				<textarea rows="4" class="field_textarea w250" name="observatii" id="observatii" style="height: 60px;"></textarea>
+			</div>
+		</fieldset>
+		<div class="separator_empty" style="height: 10px;"></div>
+		<div style="margin-top: 5px; ">
+			<input type="submit" name="adauga" class="button" value="Preia Comanda"/>
+		</div>
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div id="confirmare" style="display: none;">&nbsp;</div>
+</form>

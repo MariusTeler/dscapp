@@ -1,0 +1,76 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        Grid_IstoricExpeditii();
+    });
+    function VerificareAfisare(evt){
+    	if(evt.keyCode==13) VerificareExpeditieConfirmare();
+    }
+    $(document).keydown(function(e) {
+    	var flag_a=0;
+    	var flag_b=0;
+    	if (e.altKey) {
+        	var code = (e.keyCode ? e.keyCode : e.which);
+            if(code==65 && flag_a==0){
+            	flag_a=1;
+        		EditareIstoric(1);
+        		return false;
+        	}	            		
+            else if(code==77 && flag_b==0){
+            	flag_b=1;
+            	EditareIstoric(2);
+            	return false;
+            }
+            return false;
+       }
+       
+    });
+</script>
+
+<div style="padding:0px 0px 2px 0px;" class=" left w360" >
+	<fieldset style="width: 341px;">
+		<legend>
+			<label class="field_label">Expeditie</label>
+		</legend>
+		<div class="field_name w180">
+			<input type="text" name="expeditie" id="expeditie" class="field_input  w170" value="" title="Verificare"  onkeydown = "numbersonly(this, event); VerificareAfisare(event);"  />
+		</div>
+		<div class="field_name w150">
+			<input type="button" name="search" class="button" value="Afiseaza"  onclick="VerificareExpeditieConfirmare();" />
+			<input type="button" name="search" class="button" value="Detalii"  onclick="AfisareDetaliiExpeditieCuID($('#expeditie').val());" />
+		</div>
+	</fieldset>
+	<div class="separator_empty" style="height: 5px;"></div>
+	<fieldset style="width: 341px;">
+		<div id="editare_istoric" class="editare_istoric" style="border: none; padding: 0px;">
+			<img id="expeditii_loading" src="/assets/images/admin/loading1.gif" alt="loading" title="loading" width="160" height="20" style="padding: 30px 50px;" />
+		</div>
+	</fieldset>
+	<div class="separator_empty" style="height: 5px;"></div>
+</div>
+
+<div class="right w600">
+	<h2>Istoric NT:<span id="istoric_nr_nt"></span></h2>
+	<div id="expeditii_continut" class="expeditii_content">
+		<div class="afisare_istoric">
+			<div style="clear:both;"></div>
+			<table id="istoric_expeditii"></table>
+			<div id="paginatie_istoric" class="pagination_jqgrid"></div>
+		</div>
+		<div class="separator_empty"></div>
+	</div>
+</div>
+
+<input type="hidden" name="EXPEDITOR_LOCALITATE" id="EXPEDITOR_LOCALITATE" value="{LOCALITATE}"/>
+<input type="hidden" name="cod_ist" id="cod_ist" value="{COD_IST}"/>
+<input type="hidden" name="cod_exp" id="cod_exp" value="{COD_EXP}"/>
+<input type="hidden" name="data_operatiei_old" id="data_operatiei_old" value="{DATA}"/>
+<input type="hidden" name="operatie_old" id="operatie_old" value="{OPERATIE_OLD}"/>
+<input type="hidden" name="comentariu_old" id="comentariu_old" value="{COMENTARIU_OLD}"/>
+<input type="hidden" name="ag_liv_old" id="ag_liv_old" value="{AG_LIV}"/>
+<input type="hidden" name="primitor_old" id="primitor_old" value="{PRIMITOR}"/>
+
+
+<div id="detalii_expeditie" style="display: none;"></div>
+<div id="mesaj_expeditie" class="title_info"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="mesaj_confirmare" title="Confirmare" style="display: none;">Sunteti sigur?</div>  

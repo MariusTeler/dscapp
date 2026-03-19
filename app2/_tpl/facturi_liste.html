@@ -1,0 +1,86 @@
+<script type="text/javascript">
+
+    function resetareWmeCom() {
+        var grid = jQuery('#g_facturi');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o factura, pentru a trimite catre wme!"); return false; }
+        $.ajax({
+            type: "POST",
+            url : HTTP + 'facturare/acc',
+            dataType : "json",
+            data : { resetare_wme_com: sel_ids },
+            cache: false,
+            success : function(data) {
+                $('#cautare_acc').click();
+                if(data.eroare == 1){
+                    AfiseazaEroare(data.mesaj);
+                }
+            }
+        });
+    }
+
+
+    $(document).ready(function(){
+    	SetareDate();
+        Grid_Facturi();
+        $("#filtru_val").keypress(function(e) {
+        	// Allow: backspace, delete, tab, escape
+        	if (e.which != 0 && e.which != 8 && e.which != 9 && e.which != 27 && e.which == 13 && (e.which < 48 || e.which > 57)) {
+               return false;
+    		}
+    		if(e.which == 13) {
+               return AfisareFacturi();
+       	 	}
+    	});
+    });
+</script>
+	<div class="liste_facturi" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="{DATA_START}" title="De la" readonly/>
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="{DATA_FINAL}" title="Pana la" readonly/>
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<select id="selectie_data" name="selectie_data">
+					<option value="1">Data factura</option>
+					<option value="2">Data adaugare</option>
+				</select>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label">Filtru</label>
+			</legend>
+			<div class="field_name w110">
+				<select id="filtru_sel" name="filtru_sel" class="field_combobox w100">
+					<option selected="selected" value="1">Factura:</option>
+					<option value="2">Expeditie:</option>
+				</select>
+			</div>
+			<div class="field_name w210">
+				<input type="text" name="filtru_val" id="filtru_val" class="field_input auto-hint w190" value="" />
+			</div>
+		</fieldset>
+		
+		<div class="field_name w200 class_btn" style="margin-top: 10px; margin-left: 5px;">
+			<input id="cautare_acc" type="button" name="afiseaza" class="button" value="Afiseaza"  onclick="AfisareFacturi();" />
+			<input class="button ui-button ui-widget ui-state-default ui-corner-all" id="resetare_wme_com" value="Resetare WME com" onclick="resetareWmeCom();" role="button" aria-disabled="false" type="button">
+		</div>
+	</div>
+<div class="separator_empty h5"></div>
+<table id="g_facturi"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10"></div>
+<div id="detalii_factura" style="display: none;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>

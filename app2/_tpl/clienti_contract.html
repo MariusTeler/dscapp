@@ -1,0 +1,556 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		$(".tab").tabs();
+		$(".button").button();
+
+		TableGreutate(0, 'table_loco_greutate', 'LOCO');
+		TableGreutate(1, 'table_national_greutate', 'NATIONAL');
+
+		TableGreutate(2, 'table_loco_greutate_paleti', 'LOCO');
+		TableGreutate(3, 'table_national_greutate_paleti', 'NATIONAL');
+
+	});
+</script>
+<input type="hidden" name="client_cod_client" id="client_cod_client" value="0"/>
+<input type="hidden" name="client_tip" id="client_tip" value="0"/>
+<input type="hidden" name="id_row_listare" id="id_row_listare" value="0"/>
+<input type="hidden" name="codul_clientului" id="codul_clientului" value="0"/>
+<!-- tarif general -->
+
+<fieldset  style="width: 734px;">
+
+	<fieldset style="width: 116px; min-width: 50px; height: 45px;">
+		<legend class="legend">
+			Monezi Tarifare
+		</legend>
+		<div class="field_name w110">
+			<div class="field_name w60" style="padding-top: 3px;">
+				Moneda
+			</div>
+			<select name="MONEDA" id="MONEDA" class="field_combobox  w50" placeholder="" rel="{MONEDA}" onchange="ValidareField(this.id);">
+				<option value="LEI" {MONEDA_LEI}>LEI</option>
+				<option value="EUR" {MONEDA_EUR}>EUR</option>
+			</select>
+		</div>
+	</fieldset>
+
+	<fieldset style=" height: 45px; width: 590px;">
+		<legend class="legend">
+			Km. Ext
+		</legend>
+
+		<div class="field_name" style="width: 280px; border-right:1px solid black">
+			<div class="field_name" style="padding-top: 3px; width:60px">
+				Preluare
+			</div>
+			<input type="text" name="TARIF_PREL" id="TARIF_PREL" class="field_input" value="{TARIF_PREL}" placeholder="" rel="{TARIF_PREL}" onchange="ValidareField(this.id);" style="width: 30px; margin-left:5px"/>
+			<select name="TARIF_PREL_TIP" id="TARIF_PREL_TIP" class="field_combobox  w80" placeholder="" rel="{TARIF_PREL_TIP}" onchange="ValidareField(this.id);">
+				<option value="0" {TARIF_PREL_TIP_0}>Tarif/Km</option>
+				<option value="1" {TARIF_PREL_TIP_1}>Tarif/Unic</option>
+			</select>
+			<div class="field_name" style="padding-top: 3px; width:50px; margin-left:5px">
+				Limita
+			</div>
+			<input type="text" name="KM_LIMIT_PREL" id="KM_LIMIT_PREL" class="field_input" value="{KM_LIMIT_PREL}" placeholder="" onchange="ValidareField(this.id);" style="width: 20px;"/>
+		</div>
+		<div class="field_name" style="width: 280px;">
+			<div class="field_name" style="padding-top:3px;padding-left:5px;width:50px">
+				Livrare
+			</div>
+			<input type="text" name="TARIF_LIVR" id="TARIF_LIVR" class="field_input" value="{TARIF_LIVR}" placeholder="" rel="{TARIF_LIVR}" onchange="ValidareField(this.id);" style="width: 30px; margin-left:5px"/>
+			&nbsp;&nbsp;
+			<select name="TARIF_LIVR_TIP" id="TARIF_LIVR_TIP" class="field_combobox  w80" placeholder="" rel="{TARIF_LIVR_TIP}" onchange="ValidareField(this.id);">
+				<option value="0" {TARIF_LIVR_TIP_0}>Tarif/Km</option>
+				<option value="1" {TARIF_LIVR_TIP_1}>Tarif/Unic</option>
+			</select>
+			<div class="field_name" style="padding-top: 3px; width:50px; margin-left:5px">
+				Limita
+			</div>
+			<input type="text" name="KM_LIMIT_LIVR" id="KM_LIMIT_LIVR" class="field_input" value="{KM_LIMIT_LIVR}" placeholder="" onchange="ValidareField(this.id);" style="width: 20px;"/>
+		</div>
+	</fieldset>
+
+	<fieldset style="height: 60px; width: 720px;">
+		<legend class="legend">
+			Taxe
+		</legend>
+
+		<div style="float: left; width: 230px; font-size: 12px;">
+			<div class="field_row">
+				<input type="checkbox" id="PLATA_RETUR" name="PLATA_RETUR" value="1" {PLATA_RETUR_VALUE} rel="{PLATA_RETUR}" onchange="ValidareField(this.id,1);">
+				&nbsp;<label id="LABEL_PLATA_RETUR" for="PLATA_RETUR">Taxa unica la retururi</label>
+			</div>
+			<div class="field_row">
+				<input type="checkbox" id="TAXA_RAMBURS" name="TAXA_RAMBURS" value="1" {TAXA_RAMBURS_VALUE} rel="{TAXA_RAMBURS}" onchange="ValidareField(this.id,1);">
+				&nbsp;<label id="LABEL_TAXA_RAMBURS" for="TAXA_RAMBURS">Taxa de ramburs include retururile</label>
+			</div>
+		</div>
+
+		<div style="float: left; width: 220px; font-size: 12px;">
+			<div class="field_row">
+				<input type="checkbox" id="TAXA_EXPEDIERE" name="TAXA_EXPEDIERE" value="1" {TAXA_EXPEDIERE_VALUE} rel="{TAXA_EXPEDIERE}" onchange="ValidareField(this.id,1);">
+				&nbsp;<label id="LABEL_TAXA_EXPEDIERE" for="TAXA_EXPEDIERE">Taxa retururi la initiala</label>
+			</div>
+			<div class="field_row">
+				<input type="checkbox" id="TAXA_DESTINATIE" name="TAXA_DESTINATIE" value="1" {TAXA_DESTINATIE_VALUE} rel="{TAXA_DESTINATIE}" onchange="ValidareField(this.id,1);">
+				&nbsp;<label id="LABEL_TAXA_DESTINATIE" for="TAXA_DESTINATIE">Plata la dest cu tarif expeditor</label>
+			</div>
+		</div>
+		<div style="float: left; width: 135px; font-size: 12px;">
+			<div class="field_row">
+				<input type="checkbox" id="TARIF_RETURNARE" name="TARIF_RETURNARE" value="1" {TARIF_RETURNARE_VALUE} rel="{TAXA_RETURNARE}" onchange="ValidareField(this.id,1);">
+				&nbsp;<label id="LABEL_TARIF_RETURNARE" for="TARIF_RETURNARE" placeholder="Bifat: se aplica tariful specificat la Returnare Loco sau National;                                Nebifat: se aplica tariful corespunzator Plic, Colet sau Palet">Tarif returnare</label>
+			</div>
+			<div class="field_row">
+				<input type="checkbox" id="RET_AMB" name="RET_AMB" value="1" {RET_AMB_VALUE} rel="{RET_AMB}" onchange="ValidareField(this.id,1);">
+				&nbsp;<label id="LABEL_RET_AMB" for="RET_AMB">Retur ambalaj</label>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset style="width: 720px;">
+		<div style="float: left; width: 180px; font-size: 12px;">
+			<label id="LABEL_TARIF_PROC_INDEXC" for="TARIF_PROC_INDEXC">Proc. index combustibil</label>
+			&nbsp;<input type="text" name="TARIF_PROC_INDEXC" id="TARIF_PROC_INDEXC" class="w40 numeric" value="{TARIF_PROC_INDEXC}" placeholder="0"/>
+		</div>
+		<div style="float: left; width: 180px; font-size: 12px;">
+			<label id="LABEL_TARIF_OPEN" for="TARIF_OPEN">Tarif deschidere colet</label>
+			&nbsp;<input type="text" name="TARIF_OPEN" id="TARIF_OPEN" class="w40 numeric" value="{TARIF_OPEN}" placeholder="0.00"/>
+		</div>
+		<div style="float: left; width: 110px; font-size: 12px;">
+			<label id="LABEL_TARIF_SMS" for="TARIF_SMS">Tarif SMS</label>
+			&nbsp;<input type="text" name="TARIF_SMS" id="TARIF_SMS" class="w40 numeric" value="{TARIF_SMS}" placeholder="0.00"/>
+		</div>
+		<div style="float: left; width: 150px; font-size: 12px;">
+			<label id="LABEL_KG_RET_AMB" for="KG_RET_AMB">Kg retur ambalaj</label>
+			&nbsp;<input type="text" name="KG_RET_AMB" id="KG_RET_AMB" class="w40 numeric" value="{KG_RET_AMB}" placeholder="0.00"/>
+		</div>
+	</fieldset>
+
+	<div class="field_row" style="padding: 5px 0px;">
+		<div class="field_name w100">
+			Observatii:
+		</div>
+		<input type="text" name="OBS_T" id="OBS_T" class="field_input auto-hint" style="width: 514px;" value="{OBS}" placeholder="" rel="{OBS}"  onchange="ValidareField(this.id);"/>
+		<input type="button" name="salveaza" class="button" value="Salvare" style="width: 80px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" onclick="SalvareTarife();" />
+	</div>
+</fieldset>
+
+
+
+
+<fieldset>
+	<div class="tab" style="width: 727px;">
+		<ul>
+			<li>
+				<a href="#tarif-loco" onclick="AfisareGreutate('asigurare_loco');">Tarif Loco</a>
+			</li>
+			<li>
+				<a href="#tarif-national" onclick="AfisareGreutate('asigurare_national');">Tarif National</a>
+			</li>
+		</ul>
+		<input type="hidden" name="LOCO_ID" id="LOCO_ID" value="0"/>
+		<input type="hidden" name="ID_TARIFE_DET_LOCO" id="ID_TARIFE_DET_LOCO" value="{ID_TARIFE_DET_LOCO}"/>
+		<input type="hidden" name="ID_TARIFE_DET_NATIONAL" id="ID_TARIFE_DET_NATIONAL" value="{ID_TARIFE_DET_NATIONAL}"/>
+		<input type="hidden" name="ID_TARIFE_DET_LOCO_PALET" id="ID_TARIFE_DET_LOCO_PALET" value="{ID_TARIFE_DET_LOCO_PALET}"/>
+		<input type="hidden" name="ID_TARIFE_DET_NATIONAL_PALET" id="ID_TARIFE_DET_NATIONAL_PALET" value="{ID_TARIFE_DET_NATIONAL_PALET}"/>
+		<input type="hidden" name="TIP_TARIF" id="TIP_TARIF" value="0"/>
+		<!-- 		tarif general loco -->
+
+		<div id="tarif-loco">
+			<div class="field_row">
+				<div class="field_name w100">
+					Plic
+				</div>
+				<input type="text" name="LOCO_PLIC" id="LOCO_PLIC" class="field_input w60 numeric" value="{LOCO_PLIC}" placeholder="" rel="{LOCO_PLIC}"/>
+				<div class="field_name w100" style="padding-left: 8px;">
+					Retur NT
+				</div>
+				<input type="text" name="LOCO_RETUR_NT" id="LOCO_RETUR_NT" class="field_input w60 numeric" value="{LOCO_RETUR_NT}" placeholder="" rel="{LOCO_RETUR_NT}"/>
+				<div class="field_name w100" style="padding-left: 8px;">
+					Liv. Sambata
+				</div>
+				<input type="text" name="LOCO_LIV_SAMBATA" id="LOCO_LIV_SAMBATA" class="field_input w60 numeric" value="{LOCO_LIV_SAMBATA}" placeholder="" rel="{LOCO_LIV_SAMBATA}"/>
+				<div class="field_name w90" style="padding-left: 8px;">
+					Liv. Sediu
+				</div>
+				<input type="text" name="LOCO_LIV_SEDIU" id="LOCO_LIV_SEDIU" class="field_input w60 numeric" value="{LOCO_LIV_SEDIU}" placeholder="" rel="{LOCO_LIV_SEDIU}"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100" >
+					Colet
+				</div>
+				<input type="text" name="LOCO_COLET" id="LOCO_COLET" class="field_input w60 numeric" value="{LOCO_COLET}" placeholder="" rel="{LOCO_COLET}"/>
+
+				<div class="field_name w100" style="padding-left: 8px;">
+					Palet
+				</div>
+				<input type="text" name="LOCO_PALET" id="LOCO_PALET" class="field_input w60 numeric" value="{LOCO_PALET}" placeholder="" rel="{LOCO_PALET}"/>
+
+				<div class="field_name w100" style="padding-left: 8px;">
+					Retur Doc
+				</div>
+				<input type="text" name="LOCO_RETUR_DOC" id="LOCO_RETUR_DOC" class="field_input w60 numeric" value="{LOCO_RETUR_DOC}" placeholder="" rel="{LOCO_RETUR_DOC}"/>
+
+				<div class="field_name w90" style="padding-left: 8px; display:none">
+					Retur ambalaj
+				</div>
+				<input type="hidden" name="LOCO_RETUR_AMB" id="LOCO_RETUR_AMB" class="field_input w60 numeric" value="{LOCO_RETUR_AMB}" placeholder="" rel="{LOCO_RETUR_AMB}"/>
+			</div>
+
+
+
+
+
+			<div class="field_row" style="font-size: 13px; font-weight: bold; line-height: 30px;">
+				<span id="tab-asigurare_loco" onclick="AfisareGreutate('asigurare_loco');" style="cursor: pointer;" class="selected-tab">Asigurare si Ramburs</span>
+				<span id="tab-greutate_colete_loco" onclick="AfisareGreutate('greutate_colete_loco');" style="cursor: pointer; padding-left: 20px;"  class="">Greutate Colete</span>
+				<span id="tab-greutate_paleti_loco" onclick="AfisareGreutate('greutate_paleti_loco');" style="cursor: pointer; padding-left: 20px; " class="" >Greutate Paleti</span>
+			</div>
+
+
+
+			<div id="asigurare_loco">
+
+				<div class="field_row">
+					<div class="field_name w80" style="padding-left: 0px;">
+						Returnare
+					</div>
+					<input type="text" name="LOCO_RETURNARE" id="LOCO_RETURNARE" class="field_input w40 numeric" value="{LOCO_RETURNARE}" placeholder="" rel="{LOCO_RETURNARE}"/>
+					<div class="field_name w100" style="padding-left: 8px;">
+						Asigurare
+					</div>
+					<input type="text" name="LOCO_PROC_ASIG" id="LOCO_PROC_ASIG" class="field_input w40 numeric" value="{LOCO_PROC_ASIG}" placeholder="" rel="{LOCO_PROC_ASIG}"/>
+					<div class="field_name w100" style="padding-left: 8px;">
+						Taxa Ramburs
+					</div>
+					<input type="text" name="LOCO_TAXA_RAMB" id="LOCO_TAXA_RAMB" class="field_input w40 numeric" value="{LOCO_TAXA_RAMB}" placeholder="" rel="{LOCO_TAXA_RAMB}"/>
+
+					<div class="field_name w130" style="padding-left: 8px;">
+						Asigurare Ramburs
+					</div>
+					<input type="text" name="LOCO_ASIG_RAMB" id="LOCO_ASIG_RAMB" class="field_input w40 numeric" value="{LOCO_ASIG_RAMB}" placeholder="" rel="{LOCO_ASIG_RAMB}"/>
+				</div>
+				<div class="field_row" style="text-align: right;">
+					<div class="mesaj_confirmare" id="mesaj_confirmare" style="margin-top: 10px;">
+						&nbsp;
+					</div>
+					<input type="button" name="adauga" class="button" value="Salvare tarif Loco" onclick="SalvareTarife2(1,'LOCO');"  style="width: 120px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 10px;" />
+				</div>
+			</div>
+
+
+			<div id="greutate_colete_loco" style="display: none;">
+				<div class="field_row">
+					<table id="table_loco_greutate" class="table_jqgrid"></table>
+					<div class="clear" style="height: 10px;"></div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						De la(Kg)
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						Pana la(Kg)
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						Tarif initial
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						Creste cu
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						La fiecare(Kg)
+					</div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:130px">
+						<input type="text" name="LOCO_G_INIT" id="LOCO_G_INIT" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="LOCO_G_FIN" id="LOCO_G_FIN" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="LOCO_VAL_INIT" id="LOCO_VAL_INIT" class="field_input w130 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="LOCO_INC_VAL" id="LOCO_INC_VAL" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="LOCO_INC_GREUT" id="LOCO_INC_GREUT" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+
+				</div>
+				<div class="field_row" style="text-align: right;">
+					<div class="mesaj_confirmare" id="mesaj_confirmare">
+						&nbsp;
+					</div>
+					<input type="button" name="adauga" class="button" value="Adauga" onclick="ModificareRowGreutate(1,'table_loco_greutate','LOCO');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Modifica" onclick="ModificareRowGreutate(2,'table_loco_greutate','LOCO');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Sterge" onclick="ModificareRowGreutate(3,'table_loco_greutate','LOCO');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+				</div>
+			</div>
+
+			<div id="greutate_paleti_loco" style="display: none;">
+
+				<div class="field_row">
+					<table id="table_loco_greutate_paleti" class="table_jqgrid"></table>
+					<div class="clear" style="height: 10px;"></div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						De la(Kg)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Pana la(Kg)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						De la(Km)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Pana la(Km)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Tarif initial
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Creste cu
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						La fiecare(Kg)
+					</div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:94px">
+						<input type="text" name="LOCO_G_INIT_PALET" id="LOCO_G_INIT_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="LOCO_G_FIN_PALET" id="LOCO_G_FIN_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="LOCO_KM_INIT_PALET" id="LOCO_KM_INIT_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="LOCO_KM_FIN_PALET" id="LOCO_KM_FIN_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="LOCO_VAL_INIT_PALET" id="LOCO_VAL_INIT_PALET" class="field_input w90 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="LOCO_INC_VAL_PALET" id="LOCO_INC_VAL_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="LOCO_INC_GREUT_PALET" id="LOCO_INC_GREUT_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+				</div>
+				<div class="field_row" style="text-align: right;">
+					<div class="mesaj_confirmare" id="mesaj_confirmare">
+						&nbsp;
+					</div>
+					<input type="button" name="adauga" class="button" value="Adauga" onclick="ModificareRowGreutate(1,'table_loco_greutate_paleti','LOCO_PALET');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Modifica" onclick="ModificareRowGreutate(2,'table_loco_greutate_paleti','LOCO_PALET');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Sterge" onclick="ModificareRowGreutate(3,'table_loco_greutate_paleti','LOCO_PALET');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+				</div>
+			</div>
+
+			<div class="separator_empty"></div>
+		</div>
+
+		<!-- 		tarif general national -->
+
+		<div id="tarif-national">
+			<div class="field_row">
+				<div class="field_name w100">
+					Plic
+				</div>
+				<input type="text" name="NATIONAL_PLIC" id="NATIONAL_PLIC" class="field_input w60 numeric" value="{NATIONAL_PLIC}" placeholder="" rel="{NATIONAL_PLIC}"/>
+				<div class="field_name w100" style="padding-left: 8px;">
+					Retur NT
+				</div>
+				<input type="text" name="NATIONAL_RETUR_NT" id="NATIONAL_RETUR_NT" class="field_input w60 numeric" value="{NATIONAL_RETUR_NT}" placeholder="" rel="{NATIONAL_RETUR_NT}"/>
+				<div class="field_name w100" style="padding-left: 8px;">
+					Liv. Sambata
+				</div>
+				<input type="text" name="NATIONAL_LIV_SAMBATA" id="NATIONAL_LIV_SAMBATA" class="field_input w60 numeric" value="{NATIONAL_LIV_SAMBATA}" placeholder="" rel="{NATIONAL_LIV_SAMBATA}"/>
+				<div class="field_name w90" style="padding-left: 8px;">
+					Liv. Sediu
+				</div>
+				<input type="text" name="NATIONAL_LIV_SEDIU" id="NATIONAL_LIV_SEDIU" class="field_input w60 numeric" value="{NATIONAL_LIV_SEDIU}" placeholder="" rel="{NATIONAL_LIV_SEDIU}"/>
+
+			</div>
+			<div class="field_row">
+				<div class="field_name w100" >
+					Colet
+				</div>
+				<input type="text" name="NATIONAL_COLET" id="NATIONAL_COLET" class="field_input w60 numeric" value="{NATIONAL_COLET}" placeholder="" rel="{NATIONAL_COLET}"/>
+
+				<div class="field_name w100" style="padding-left: 8px;">
+					Palet
+				</div>
+				<input type="text" name="NATIONAL_PALET" id="NATIONAL_PALET" class="field_input w60 numeric" value="{NATIONAL_PALET}" placeholder="" rel="{NATIONAL_PALET}"/>
+
+				<div class="field_name w100" style="padding-left: 8px;">
+					Retur Doc
+				</div>
+				<input type="text" name="NATIONAL_RETUR_DOC" id="NATIONAL_RETUR_DOC" class="field_input w60 numeric" value="{NATIONAL_RETUR_DOC}" placeholder="" rel="{NATIONAL_RETUR_DOC}"/>
+
+				<div class="field_name w90" style="padding-left: 8px; display:none">
+					Retur ambalaj
+				</div>
+				<input type="hidden" name="NATIONAL_RETUR_AMB" id="NATIONAL_RETUR_AMB" class="field_input w60 numeric" value="{NATIONAL_RETUR_AMB}" placeholder="" rel="{NATIONAL_RETUR_AMB}"/>
+			</div>
+
+
+			<div class="field_row" style="font-size: 13px; font-weight: bold; line-height: 30px;">
+				<span id="tab-asigurare_national" onclick="AfisareGreutate('asigurare_national');" style="cursor: pointer;" class="selected-tab">Asigurare si Ramburs</span>
+				<span id="tab-greutate_colete_national" onclick="AfisareGreutate('greutate_colete_national');" style="cursor: pointer; padding-left: 20px;" class="">Greutate Colete</span>
+				<span id="tab-greutate_paleti_national" onclick="AfisareGreutate('greutate_paleti_national');" style="cursor: pointer; padding-left: 20px;" class="">Greutate Paleti</span>
+			</div>
+
+
+			<div id="asigurare_national">
+				<div class="field_row">
+					<div class="field_name w80" style="padding-left: 0px;">
+						Returnare
+					</div>
+					<input type="text" name="NATIONAL_RETURNARE" id="NATIONAL_RETURNARE" class="field_input w40 numeric" value="{NATIONAL_RETURNARE}" placeholder="" rel="{NATIONAL_RETURNARE}"/>
+
+					<div class="field_name w100" style="padding-left: 8px;">
+						Asigurare
+					</div>
+					<input type="text" name="NATIONAL_PROC_ASIG" id="NATIONAL_PROC_ASIG" class="field_input w40 numeric" value="{NATIONAL_PROC_ASIG}" placeholder="" rel="{NATIONAL_PROC_ASIG}"/>
+					<div class="field_name w100" style="padding-left: 8px;">
+						Taxa Ramburs
+					</div>
+					<input type="text" name="NATIONAL_TAXA_RAMB" id="NATIONAL_TAXA_RAMB" class="field_input w40 numeric" value="{NATIONAL_TAXA_RAMB}" placeholder="" rel="{NATIONAL_TAXA_RAMB}"/>
+
+					<div class="field_name w130" style="padding-left: 8px;">
+						Asigurare Ramburs
+					</div>
+					<input type="text" name="NATIONAL_ASIG_RAMB" id="NATIONAL_ASIG_RAMB" class="field_input w40 numeric" value="{NATIONAL_ASIG_RAMB}" placeholder="" rel="{NATIONAL_ASIG_RAMB}"/>
+				</div>
+				<div class="field_row" style="text-align: right;">
+					<div class="mesaj_confirmare" id="mesaj_confirmare" style="margin-top: 10px;">
+						&nbsp;
+					</div>
+					<input type="button" name="adauga" class="button" value="Salvare tarif National" onclick="SalvareTarife2(1,'NATIONAL');"  style="width: 140px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 10px;" />
+				</div>
+			</div>
+
+
+			<div id="greutate_colete_national" style="display: none;">
+				<div class="field_row">
+					<table id="table_national_greutate" class="table_jqgrid"></table>
+					<div class="clear" style="height: 10px;"></div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						De la(Kg)
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						Pana la(Kg)
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						Tarif initial
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						Creste cu
+					</div>
+					<div class="field_name" style="width:130px;text-align:center;font-size:0.8em">
+						La fiecare(Kg)
+					</div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:130px">
+						<input type="text" name="NATIONAL_G_INIT" id="NATIONAL_G_INIT" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="NATIONAL_G_FIN" id="NATIONAL_G_FIN" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="NATIONAL_VAL_INIT" id="NATIONAL_VAL_INIT" class="field_input w130 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="NATIONAL_INC_VAL" id="NATIONAL_INC_VAL" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:130px">
+						<input type="text" name="NATIONAL_INC_GREUT" id="NATIONAL_INC_GREUT" class="field_input w160 numeric" value="" placeholder=""/>
+					</div>
+				</div>
+				<div class="field_row" style="text-align: right;">
+					<div class="mesaj_confirmare" id="mesaj_confirmare">
+						&nbsp;
+					</div>
+					<input type="button" name="adauga" class="button" value="Adauga" onclick="ModificareRowGreutate(1,'table_national_greutate','NATIONAL');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Modifica" onclick="ModificareRowGreutate(2,'table_national_greutate','NATIONAL');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Sterge" onclick="ModificareRowGreutate(3,'table_national_greutate','NATIONAL');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+				</div>
+			</div>
+
+			<div id="greutate_paleti_national" style="display: none;">
+
+				<div class="field_row">
+					<table id="table_national_greutate_paleti" class="table_jqgrid"></table>
+					<div class="clear" style="height: 10px;"></div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						De la(Kg)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Pana la(Kg)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						De la(Km)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Pana la(Km)
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Tarif initial
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						Creste cu
+					</div>
+					<div class="field_name" style="width:94px;text-align:center;font-size:0.8em">
+						La fiecare(Kg)
+					</div>
+				</div>
+				<div class="field_row">
+					<div class="field_name" style="width:94px">
+						<input type="text" name="NATIONAL_G_INIT_PALET" id="NATIONAL_G_INIT_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="NATIONAL_G_FIN_PALET" id="NATIONAL_G_FIN_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="NATIONAL_KM_INIT_PALET" id="NATIONAL_KM_INIT_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="NATIONAL_KM_FIN_PALET" id="NATIONAL_KM_FIN_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="NATIONAL_VAL_INIT_PALET" id="NATIONAL_VAL_INIT_PALET" class="field_input w90 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="NATIONAL_INC_VAL_PALET" id="NATIONAL_INC_VAL_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+					<div class="field_name" style="width:94px">
+						<input type="text" name="NATIONAL_INC_GREUT_PALET" id="NATIONAL_INC_GREUT_PALET" class="field_input w110 numeric" value="" placeholder=""/>
+					</div>
+				</div>
+				<div class="field_row" style="text-align: right;">
+					<div class="mesaj_confirmare" id="mesaj_confirmare">
+						&nbsp;
+					</div>
+					<input type="button" name="adauga" class="button" value="Adauga" onclick="ModificareRowGreutate(1,'table_national_greutate_paleti','NATIONAL_PALET');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Modifica" onclick="ModificareRowGreutate(2,'table_national_greutate_paleti','NATIONAL_PALET');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+					<input type="button" name="adauga" class="button" value="Sterge" onclick="ModificareRowGreutate(3,'table_national_greutate_paleti','NATIONAL_PALET');"  style="width: 70px; font-size: 12px; height: 22px; margin-left: 5px; margin-top: 1px;" />
+				</div>
+			</div>
+
+			<div class="separator_empty"></div>
+		</div>
+	</div>
+</fieldset>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>

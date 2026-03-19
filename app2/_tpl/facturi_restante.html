@@ -1,0 +1,60 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioada();
+		Grid_RestanteColectari();
+		Grid_RestanteLivrari();
+		Grid_RestanteFacturi();
+	});
+
+</script>
+<form action="{HTTP}facturi/export_restante_expeditii/" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="restante_expeditii" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Selectie</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w70" value="{DATA_START}" title="Pana la" />
+			</div>
+			<div class="field_name w80" style="line-height: 20px;">
+				Centru:
+			</div>
+			<div class="field_name w200">
+				{CENTRU}
+			</div>
+		</fieldset>
+		<div class="field_name w300 class_btn" style="margin-top: 15px; margin-left: 40px;">
+        	<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareRestante();" />
+	        <input type="submit" name="export" class="button ascuns" value="Export" />
+	    </div>
+	</div>
+</form>
+<div class="separator_empty" style="height: 5px;"></div>
+<h3>Restante Colectari: <span class="rosu" id="valoare_colectari"></span></h3>
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="restante_colectari"></table>
+<div id="paginatie_colectari" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3>Restante Livrari: <span class="rosu" id="valoare_livrari"></span></h3>
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="restante_livrari"></table>
+<div id="paginatie_livrari" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3>Restante Facturi CTR CASH: <span class="rosu" id="valoare_facturi"></span></h3>
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="restante_facturi"></table>
+<div id="paginatie_facturi" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+<input type="button" name="export_fa" class="button" value="Export Restante Facturi CTR"  onclick="ExportRestanteFacturi();" />
+<div id="eroare" title="Eroare" style="display: none;"></div>
+
+<div id="detalii_expeditie" style="display: none;"></div> 

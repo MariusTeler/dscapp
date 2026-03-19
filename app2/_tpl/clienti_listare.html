@@ -1,0 +1,23 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".button").button();
+		ClientiListare();
+	});
+</script>
+
+<input type="hidden" name="codul_clientului" id="codul_clientului" value="0"/>
+
+<div class="listare_clienti">
+	<table id="clienti_listare" class="table_jqgrid"></table>
+	<div id="clienti_listare_pag"></div>
+	<div class="clear" style="height: 10px;"></div>
+</div>
+<div class="clear" style="height: 10px;"></div>
+<div class="detalii_client" id="detalii_client" style=" width:385px">
+	{DETALII_CLIENT}
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="detalii_contract" title="Tarife" style=" font-size: 12px; display: none;">
+	{DETALII_CONTRACT}
+</div>
+<div class="separator_empty h10"></div>

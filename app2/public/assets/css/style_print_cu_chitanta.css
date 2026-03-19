@@ -1,0 +1,853 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	font-size: 10px;
+	font-style: normal;
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	line-height: normal;
+	width: 800px;
+}
+
+/*expeditii*/
+.expedite {
+	float: left;
+	width: 200px;
+	margin: 2px 4px;
+	font-size: 10px;
+}
+.expeditie_box {
+	float: left;
+	width: 99%;
+	border: 2px solid #111;
+	background-color: #fff;
+	margin: 2px 0px;
+	font-size: 12px;
+}
+.expeditie_box2 {
+	float: left;
+	width: 99%;
+	background-color: #fff;
+	margin: 2px 0px;
+	font-size: 12px;
+}
+.expeditie_box_row {
+	clear: both;
+	width: 96%;
+	padding: 0px 3px 3px;
+	font-size: 10px;
+}
+.g1 {
+	clear: none;
+	float: left;
+	width: 98%;
+}
+.g2 {
+	clear: none;
+	float: left;
+	width: 40%;
+}
+.g2_a {
+	clear: none;
+	float: left;
+	width: 52%;
+}
+.g2_b {
+	clear: none;
+	float: left;
+	width: 73%;
+}
+.g2_c {
+	clear: none;
+	float: left;
+	width: 17%;
+}
+.g3 {
+	clear: none;
+	float: left;
+	width: 32%;
+}
+.g4 {
+	clear: none;
+	float: left;
+	width: 24%;
+}
+.g5 {
+	clear: none;
+	float: left;
+	width: 18%;
+}
+.g6 {
+	clear: none;
+	float: left;
+	width: 12%;
+}
+.expeditie_box_index {
+	font-size: 13px;
+	font-weight: bold;
+	border: 1px solid #000;
+	line-height: 16px;
+	height: 16px;
+	margin: 2px;
+	float: left;
+	width: 14px;
+	text-align: center;
+	/*background: #333;*/
+	color:#000;
+}
+.expeditie_box_title {
+	float: left;
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 16px;
+	height: 16px;
+	margin: 2px;
+	width: 195px;
+	padding-left: 3px;
+	border: 1px solid #000;
+	/*background: #333;*/
+	color:#000;
+}
+.expeditie_box_row .label {
+	clear: both;
+	font-weight: normal;
+	display: block;
+	font-size: 11px;
+}
+
+.expeditie_box_row .label_checkbox {
+	clear: none;
+	float: left;
+	display: inline;
+	width: 75%;
+	padding-left: 3px;
+	font-weight: normal;
+	cursor: pointer;
+}
+.expeditie_box_row .label_checkbox1 {
+	clear: none;
+	float: left;
+	display: inline;
+	width: 89%;
+	padding-left: 3px;
+	font-weight: normal;
+	cursor: pointer;
+}
+.expeditie_box_row .label_checkbox2 {
+	clear: none;
+	float: left;
+	display: inline;
+	width: 72%;
+	padding-left: 3px;
+	font-weight: normal;
+	cursor: pointer;
+}
+.expeditie_box_row .label_info {
+	clear: none;
+	float: left;
+	display: inline;
+	width: 38%;
+	padding-right: 5px;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.expeditie_box_row .textarea {
+	clear: both;
+	width: 100%;
+	font-size: 14px;
+	font-weight: bold;
+	resize: none;
+	background: none;
+	background-color: #fff;
+	border: 0px;
+	border-left: 1px solid #111;
+	border-bottom: 1px solid #111;
+	box-shadow: none;
+	min-height: 10px;
+	border-radius: 0px;
+	margin: 0px;
+	padding: 0px;
+	padding-left: 3px;
+	overflow: hidden;
+}
+.expeditie_box_row .textarea_info {
+	float: left;
+	width: 85px;
+	font-size: 9px;
+	border-bottom: 1px solid #111;
+}
+.expeditie_box_row .textarea_name {
+	float: left;
+	width: 60px;
+	font-size: 12px;
+}
+.expeditie_box_row .textarea_name .checkbox {
+	height: 12px;
+	line-height: 12px;
+	margin-top: -3px;
+}
+/*expeditii*/
+.w40{width: 40px;}
+.w50 {
+	width: 50px;
+}
+.w60 {
+	width: 60px;
+}
+.w70 {
+	width: 70px;
+}
+.w80 {
+	width: 80px;
+}
+.w90 {
+	width: 90px;
+}
+.w100 {
+	width: 100px;
+}
+.w110 {
+	width: 110px;
+}
+.w120 {
+	width: 120px;
+}
+.w130 {
+	width: 130px;
+}
+.w140 {
+	width: 140px;
+}
+.w150 {
+	width: 150px;
+}
+.w160 {
+	width: 160px;
+}
+.w170 {
+	width: 170px;
+}
+.w180 {
+	width: 180px;
+}
+.w190 {
+	width: 190px;
+}
+.w200 {
+	width: 200px;
+}
+.w210 {
+	width: 210px;
+}
+.w220 {
+	width: 220px;
+}
+.w230 {
+	width: 230px;
+}
+.w240 {
+	width: 240px;
+}
+.w250 {
+	width: 250px;
+}
+.w260 {
+	width: 260px;
+}
+.w270 {
+	width: 270px;
+}
+.w280 {
+	width: 280px;
+}
+.w290 {
+	width: 290px;
+}
+.w300 {
+	width: 300px;
+}
+.w310 {
+	width: 310px;
+}
+.w320 {
+	width: 320px;
+}
+.w330 {
+	width: 330px;
+}
+.w340 {
+	width: 340px;
+}
+.w350 {
+	width: 350px;
+}
+.w360 {
+	width: 360px;
+}
+.w370 {
+	width: 370px;
+}
+.w380 {
+	width: 380px;
+}
+.w390 {
+	width: 390px;
+}
+.w400 {
+	width: 400px;
+}
+.w410 {
+	width: 410px;
+}
+.w420 {
+	width: 420px;
+}
+.w430 {
+	width: 430px;
+}
+.w440 {
+	width: 440px;
+}
+.w450 {
+	width: 450px;
+}
+.w460 {
+	width: 460px;
+}
+.w470 {
+	width: 470px;
+}
+.w480 {
+	width: 480px;
+}
+.w490 {
+	width: 490px;
+}
+.w500 {
+	width: 500px;
+}
+.w530 {
+	width: 530px;
+}
+
+.w105 {
+	width: 103px;
+}
+.w185 {
+	width: 183px;
+}
+.w118 {
+	width: 118px;
+}
+.w494 {
+	width: 494px;
+}
+.w708 {
+	width: 708px;
+}
+.w703 {
+	width: 703px;
+}
+.w52 {
+	width: 50px;
+}
+.w75 {
+	width: 75px;
+}
+.w55 {
+	width: 55px;
+}
+
+.h8 {
+	height: 8px;
+}
+.h9 {
+	height: 9px;
+}
+.h10 {
+	height: 10px;
+}
+.h15 {
+	height: 15px;
+}
+.h20 {
+	height: 20px;
+}
+.h25 {
+	height: 25px;
+}
+.h30 {
+	height: 30px;
+}
+.h35 {
+	height: 35px;
+}
+.h40 {
+	height: 40px;
+}
+.h45 {
+	height: 45px;
+}
+.h50 {
+	height: 50px;
+}
+.h32 {
+	height: 32px;
+}
+.h18 {
+	height: 18px;
+}
+.h550 {
+	height: 55px;
+}
+.h60 {
+	height: 60px;
+}
+.h66 {
+	height: 70px;
+}
+
+.fltForm1 {
+	float: left;
+	width: 670px;
+	height: 1500px;
+	margin: 10px 0 0 20px;
+	padding: 0px 5px 2px 5px;
+	border-style: outset;
+	background-color: #FFF;
+	font-size: 8pt;
+	color: #353E05;
+	overflow: visible;
+	border: none;
+}
+.separator_empty {
+	clear: both;
+	background: none;
+	height: 0px;
+	font-size: 0px;
+	line-height: 0px;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	_margin-top: -2px;
+}
+
+.page-break {
+	page-break-before: always;
+}
+
+.div_checkbox {
+	width: 20px;
+	height: 15px;
+	float: left;
+	display: block;
+}
+.div_checkbox_name {
+	height: 12px;
+	line-height: 12px;
+	padding: 0px;
+	margin: 0px;
+	padding-left: 3px;
+	float: left;
+	margin-top: 3px;
+	
+}
+
+
+
+/***********************/
+/*  liste expeditii  */
+/***********************/
+
+
+			.A4content {
+				width: 717px;
+				background: white;
+				padding: 0px 10px;
+			}
+			.nume-firma {
+				width: 717px;
+				height: 32px;
+			}
+			.nume-firma p {
+				font-size: 18px;
+				font-weight: bold;
+			}
+			.header {
+				width: 717px;
+				height: 50px;
+			}
+			.curs-valutar {
+				width: 206px;
+				height: 50px;
+				float: left;
+			}
+			.curs-valutar span {
+				font-size: 10px;
+			}
+			.curs-valutar p {
+				font-size: 10px;
+				font-weight: bold;
+			}
+			.nume-formular {
+				width: 511px;
+				height: 50px;
+				float: right;
+			}
+			.nume-formular .nume {
+				margin-left: 10px;
+				font-size: 18px;
+				text-decoration: underline;
+			}
+			.nume-formular .loc-data {
+				font-size: 18px;
+				font-weight: bold;
+				text-decoration: underline;
+				margin-left: -200px;
+				padding-top: 10px;
+				text-align: center;
+			}
+			.detalii {
+				width: 717px;
+				height: 30px;
+				border-bottom: 1px solid black;
+			}
+			.detalii .total-expeditii {
+				float: left;
+				width: 96px;
+				height: 30px;
+			}
+			.detalii .plicuri {
+				float: left;
+				width: 56px;
+				height: 30px;
+			}
+			.detalii .colete {
+				float: left;
+				width: 92px;
+				height: 30px;
+			}
+			.detalii .greutate {
+				float: left;
+				width: 240px;
+				height: 30px;
+			}
+			.detalii .interval-operare {
+				float: right;
+				width: 233px;
+				height: 30px;
+			}
+			.detalii .interval-operare p {
+				margin-top: 0px;
+				text-align: right;
+				font-size: 10px;
+			}
+			.detalii p {
+				font-size: 10px;
+				margin-top: 12px;
+			}
+			.detalii p span {
+				font-size: 10px;
+				font-weight: bold;
+			}
+			.cap-tabel {
+				width: 717px;
+				height: 30px;
+				border-bottom: 1px solid black;
+			}
+			.cap-tabel .destinatarul {
+				width: 142px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .expeditorul {
+				width: 80px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .nr_exp {
+				width: 92px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .plic_col {
+				width: 41px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel .greutate_tabel {
+				width: 47px;
+				height: 30px;
+				float: left;
+			}
+			.cap-tabel p {
+				font-size: 10px;
+				font-weight: bold;
+				margin-top: 8px;
+			}
+			.cap-tabel .plc_col {
+				font-size: 10px;
+				font-weight: bold;
+				margin-top: 4px;
+			}
+			.livrat {
+				float: left;
+				width: 217px;
+				height: 30px;
+			}
+			.cap-tabel .livrat .sus {
+				width: 217px;
+				height: 13px;
+				border-bottom: 1px solid black;
+			}
+			.cap-tabel .livrat .sus .up {
+				margin-top: 2px;
+				width: 217px;
+				text-align: center;
+			}
+			.cap-tabel .livrat .down {
+				width: 70px;
+				height: 15px;
+				float: left;
+			}
+			.cap-tabel .livrat .down .dwn {
+				margin-top: 1px;
+				width: 70px;
+				text-align: center;
+			}
+			.locatie {
+				width: 717px;
+				border-bottom: 1px solid black;
+				border-top: 1px solid black;
+				clear: both;
+			}
+			.locatie p {
+				font-size: 12px;
+				line-height: 15px;
+				font-weight: bold;
+			}
+			.detalii_livrare {
+				width: 402px;
+				margin: 0px;
+				padding: 0px;
+			}
+			.detalii_livrare p {
+				font-size: 10px;
+				margin-top: 4px;
+			}
+			.detalii_livrare .destinatarul {
+				width: 125px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .expeditorul {
+				width: 96px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .nr_exp {
+				width: 92px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .plic_col {
+				width: 41px;
+				float: left;
+				line-height: 15px;
+			}
+			.detalii_livrare .greutate_tabel {
+				width: 47px;
+				float: left;
+				line-height: 15px;
+			}
+			.obs {
+				line-height: 15px;
+				width: 402px;
+				clear: both;
+			}
+			.obs p {
+				font-size: 11px;
+				font-weight: bold;
+			}
+			.tabel_content{
+				width: auto;
+				height: auto;
+				clear: both;
+			}
+			
+			.tabel_content .tabel-stanga {
+				width: 402px;
+				height: auto;
+				border-right: 1px solid black;
+				float: left;
+			}
+			.tabel_content .tabel-dreapta {
+				width: 313px;
+				height: auto;
+				float: right;
+			}
+			p{
+				margin: 0px;
+				padding: 0px;
+			}
+			.ascuns{
+				display: none;
+			}
+/***********************/
+/*  Liste expeditii  */
+/***********************/
+
+
+
+
+
+/***********************/
+/*  Liste facturare  */
+/***********************/
+.lista_head{
+	clear: both;
+}
+.lista_head span{
+	height: 34px;
+	line-height: 17px;
+	font-size: 13px;
+	font-weight: bold;
+	vertical-align: middle;
+	float: left;
+	min-width: 50px;
+	text-align: center;
+}
+.lista_body{
+	clear: both;
+}
+.lista_body span{
+	height: 15px;
+	line-height: 15px;
+	font-size: 11px;
+	float: left;
+	min-width: 50px;
+	text-align: center;
+}
+.lista_data{
+	clear: both;
+}
+.lista_data span{
+	float: left;
+	height: 11px;
+	line-height: 15px;
+	font-size: 11px;
+	font-weight: bold;
+	border: none;
+}
+.al_left{
+	text-align: left !important;
+}
+.al_right{
+	text-align: right !important;
+	padding-right: 10px;
+}
+.pad_top{
+	padding-top: 10px !important;
+	height: 24px !important;
+}
+
+
+.lista_localitate{
+	height: 14px;
+	line-height: 14px;
+	font-size: 10px;
+	font-weight: bold;
+	clear: both;
+}
+
+.lista_total{
+	height: 17px;
+	line-height: 17px;
+	font-size: 13px;
+	font-weight: bold;
+	clear: both;
+}
+.lista_total span{
+	float: left;
+	height: 17px;
+	line-height: 17px;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.lista_total{
+	clear: both;
+	padding-top: 5px;
+}
+.lista_total span{
+	min-height: 17px;
+	line-height: 17px;
+	font-size: 13px;
+	float: left;
+	text-align: left;
+}
+.centralizator_col{
+	width: 340px; 
+	float: left; 
+	padding: 0px 10px;	
+}
+.centralizator_col_row{
+	clear: none;
+/*	border-bottom: 1px solid #000000;*/
+}
+.centralizator_col_row span{
+	min-height: 17px;
+	line-height: 17px;
+	font-size: 13px;
+	float: left;
+	text-align: center;
+}
+/***********************/
+/*  Liste facturare  */
+/***********************/
+
+
+.page_break{
+	clear: both;
+	page-break-before: always;
+}
+.barcode {
+	margin: 0;
+	vertical-align: top;
+	color: #000000;
+	height: 50px;
+}
+.barcode_nr{
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 22px;
+	padding-left: 10px;
+}
+
+/***********************/
+/*  Chitanta  */
+/***********************/
+
+/***********************/
+/*  Chitanta  */
+/***********************/
+
+
+
+
+
+
+
+
+
+
+
+
+

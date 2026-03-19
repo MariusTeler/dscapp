@@ -1,0 +1,35 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Grid_IstoricCodBare();
+	});
+	function VerificareAfisare(evt){
+    	var theEvent = evt || window.event;
+    	var key = theEvent.key || theEvent.which || theEvent.keyCode;
+    	if(key == 'Enter' || key == 13) AfisareIstoricCodBare();
+    }
+</script>
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<fieldset style="width: 402px; height: 50px;">
+			<legend>
+				CodBare
+			</legend>			
+			<div class="field_name w200">
+				<input type="text" name="codbare" id="codbare" class="field_input  w190" style="padding: 6px;" value="" title="Cod Bare" onkeydown="VerificareAfisare(event);"/>
+			</div>			
+			<div class="field_name w200">
+				<input type="button" name="go" id="go" class="button" value="Afisare" title="Afisare Istoric" style="margin-left: 10px;" onclick="AfisareIstoricCodBare();" />
+				<input type="button" name="go" id="go" class="button" value="Detalii" title="Detalii Expeditie" style="margin-left: 10px;" onclick="DetaliiIstoricCodBare();" />
+			</div>
+		</fieldset>
+		<div class="separator_empty" style="height: 5px;"></div>
+	</div>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+<fieldset style="width: 960px;">
+	<legend >
+		Lista Expeditii
+	</legend>
+	<table id="istoric_codbare"></table>
+</fieldset>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="detalii_expeditie"></div>

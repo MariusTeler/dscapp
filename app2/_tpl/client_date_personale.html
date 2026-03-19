@@ -1,0 +1,141 @@
+<script>
+	$(document).ready(function() {
+		$(".button").button();
+	});
+</script>
+<form id="form" action="" method="post" autocomplete="off">
+	<input type="hidden" name="step" value="2" />
+	<input type="hidden" name="cod" value="{COD}" />
+	<h3>Informatii Client</h3>
+		
+	<div class="field_row">
+		<div class="field_name">Nume</div>
+		<b>{EXPEDITOR}</b>
+	</div>
+	<div class="field_row">
+		<div class="field_name">CUI/CIF : J</div>
+		<b>{EXPEDITOR_CUI} : {EXPEDITOR_J}</b>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Localitate</div>
+		<b>{EXPEDITOR_LOCALITATE}</b>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Adresa</div>
+		<b>{EXPEDITOR_ADRESA}</b>
+	</div>
+	<div class="field_row">
+		<div class="field_name">Persoana Contact</div>
+		<input type="text" id="nume" name="nume" value="{NUME}" class="field_input w200">
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="field_row">
+		<div class="field_name">Telefon Contact</div>
+		<input type="text" id="telefon" name="telefon" value="{TELEFON}" class="field_input w200">
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="field_row">
+		<div class="field_name">Confirmare Adaugare</div>
+		<div class="field_name w50">
+			<input type="radio" name="print_add" id="print_add_1" value="1" {PRINT_ADD_1} class="field_radio" />
+			<label for="print_add_1">&nbsp;Da</label>
+		</div>
+		<div class="field_name w50">
+			<input type="radio" name="print_add" id="print_add_2" value="2" {PRINT_ADD_2} class="field_radio" />
+			<label for="print_add_2">&nbsp;Nu</label>
+		</div>
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="field_row">
+		<div class="field_name">Optiuni Awb : </div>
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="field_row">
+		<div class="field_name w60" style="margin-left:100px">
+			<input type="radio" name="print_awb" id="print_awb_2" value="2" {PRINT_AWB_2} class="field_radio" />
+			<label for="print_awb_2">&nbsp;Print</label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w400" style="margin-left:100px">
+			<input type="radio" name="print_awb" id="print_awb_1" value="1" {PRINT_AWB_1} class="field_radio" />
+			<label for="print_awb_1">&nbsp;Printeaza master pe A4 si cate 4 puisori pe A4</label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w450"  style="margin-left:100px"> 
+			<input type="radio" name="print_awb" id="print_awb_7" value="7" {PRINT_AWB_7} class="field_radio" />
+			<label for="print_awb_7">&nbsp;Printeaza master pe A4 si cate 2 puisori pe A4</label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w450"  style="margin-left:100px"> 
+			<input type="radio" name="print_awb" id="print_awb_3" value="3" {PRINT_AWB_3} class="field_radio" />
+			<label for="print_awb_3">&nbsp;Printeaza puisori pe etichete autocolante 70x100 mm </label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w450" style="margin-left:100px">
+			<input type="radio" name="print_awb" id="print_awb_4" value="4" {PRINT_AWB_4} class="field_radio" />
+			<label for="print_awb_4">&nbsp;Printeaza puisori pe etichete autocolante 100x150 mm </label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w450" style="margin-left:100px">
+			<input type="radio" name="print_awb" id="print_awb_5" value="5" {PRINT_AWB_5} class="field_radio" />
+			<label for="print_awb_5">&nbsp;Printeaza master si puisori pe etichete autocolante 100x150 mm </label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w450" style="margin-left:100px">
+			<input type="radio" name="print_awb" id="print_awb_6" value="6" {PRINT_AWB_6} class="field_radio" />
+			<label for="print_awb_6">&nbsp;Printeaza master si puisori pe etichete autocolante A4</label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w450" style="margin-left:100px">
+			<input type="radio" name="print_awb" id="print_awb_10" value="10" {PRINT_AWB_10} class="field_radio" />
+			<label for="print_awb_10">&nbsp;Printeaza la alegere : master vs master+puisori</label>
+		</div>
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div class="field_row">
+		<div class="field_name">Sms implicit</div>
+		<div class="field_name w50">
+			<input type="radio" name="def_sms" id="def_sms_1" value="1" {DEF_SMS_1} class="field_radio" />
+			<label for="def_sms_1">&nbsp;Da</label>
+		</div>
+		<div class="field_name w50">
+			<input type="radio" name="def_sms" id="def_sms_2" value="2" {DEF_SMS_2} class="field_radio" />
+			<label for="def_sms_2">&nbsp;Nu</label>
+		</div>
+	</div>
+	<div class="field_row">
+		<div class="field_name w450">
+			<div class="field_name">Text implicit observatii</div>
+			<textarea name="observatii" id="observatii" class="field_input w260">{OBSERVATII}</textarea>
+		</div>
+	</div>
+	<div class="field_row">
+		<input type="submit" name="but_submit" class="button w70" value="Salveaza" style="margin-left: 345px;"/>
+	</div>	
+	<div class="separator_empty" style="height: 30px;"></div>
+	<h3>Schimbare Parola</h3>
+	<div class="field_row">
+		<div class="field_name">Parola Curenta</div>
+		<input type="password" id="pass" name="pass" value="" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Parola Noua</div>
+		<input type="password" id="pass1" name="pass1" value="" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Parola Noua</div>
+		<input type="password" id="pass2" name="pass2" value="" class="field_input w200">
+	</div>
+	
+	<div class="field_row">
+		<input type="submit" name="but_submit2" class="button w70" value="Salveaza" style="margin-left: 285px;"/>
+	</div>
+</form>
+<div class="separator_empty" style="height: 10px;"></div>

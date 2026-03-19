@@ -1,0 +1,11 @@
+<form enctype="multipart/form-data" action="{HTTP}importuri-csv/expeditii/step2" method="post" name="foxls" >
+		<input type="hidden" id="fxls" name="fxls" value="{FISIER}" />
+		<input type="hidden" id="separator" name="separator" value="{SEPARATOR}" />
+		<input type="hidden" id="cod_cl" name="cod_cl" value="{COD_CL}" />
+		<input type="hidden" id="merror" name="merror" value="0" />
+		<input type="button" class="button" value="Back" title="Back" onclick="window.location = '{HTTP}importuri-csv/expeditii';"/>		
+		<input type="submit" id="sxls" name="sxls" class="button" value="Next" title="Next" style="margin-left:10px;"/>
+		<div id="import-expeditii" width="100%">
+			{CONTINUT}
+		</div>
+</form>

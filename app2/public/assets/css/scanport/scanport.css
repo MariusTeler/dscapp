@@ -1,0 +1,473 @@
+.app-menu{
+    list-style: none;
+    /*  width: 250px; */
+}
+.iesire-app{
+    display: none !important;
+}
+.navbar-default{
+    -webkit-box-shadow: 0px 4px 13px 0px rgba(0,0,0,0.28);
+    -moz-box-shadow: 0px 4px 13px 0px rgba(0,0,0,0.28);
+    box-shadow: 0px 4px 13px 0px rgba(0,0,0,0.28);
+}
+
+.container .breadcrumb {
+    background: transparent;
+    margin-bottom: 0;
+    padding: 10px 15px;
+    font-size: 30px;
+    display: block;
+    content: " ";
+
+}
+.app-menu .widecustom:hover, .app-login a:hover{
+    background: #CCCCCC none repeat scroll 0 0;
+}
+.app-menu .widecustom, .app-login a{
+    background: #d6d6d6 none repeat scroll 0 0;
+    display: block;
+    font-size: 20px;
+    margin: 5px auto;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    width: 250px;
+}
+/*
+        .app-menu ul{
+            margin-left: 20px;
+            display: inline-block;
+        }
+
+        .app-menu ul li {
+            display: none;
+        } */
+
+
+.app-menu select {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -webkit-padding-end: 20px;
+    -moz-padding-end: 20px;
+    -webkit-padding-start: 2px;
+    -moz-padding-start: 2px;
+    background-color: transparent; /* fallback color if gradients are not supported */
+    /* background-image: url(/assets/images/scanport/select-arrow.png), -webkit-linear-gradient(top, #E5E5E5, #F4F4F4); /* For Chrome and Safari */
+    /* background-image: url(/assets/images/scanport/select-arrow.png), -moz-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Fx (3.6 to 15) */
+    /* background-image: url(/assets/images/scanport/select-arrow.png), -ms-linear-gradient(top, #E5E5E5, #F4F4F4); /* For pre-releases of IE 10*/
+    /* background-image: url(/assets/images/scanport/select-arrow.png), -o-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Opera (11.1 to 12.0) */
+    /* background-image: url(/assets/images/scanport/select-arrow.png), linear-gradient(to bottom, #E5E5E5, #F4F4F4); /* Standard syntax; must be last */
+    background-position: center right;
+    background-repeat: no-repeat;
+    border: 1px solid #AAA;
+    border-radius: 2px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: #555;
+    font-size: inherit;
+    margin: 0;
+    overflow: hidden;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 20px;
+}
+
+.app-area{
+
+    text-align: center;
+    margin: 0 auto;
+}
+.app-area ul{
+    list-style: none;
+    padding: 0;
+}
+.hide-menu{
+    display: none;
+}
+
+
+
+
+.footer-app-acction a.stop-scan , .footer-app-acction a.prev-page {
+    display: none;
+    z-index: 999;
+}
+
+.full-path-text{
+    margin: 20px 0;
+}
+
+
+.footer-app-acction{
+    margin: 50px 0 0;
+}
+
+.footer-app-acction a.start-scan{
+    display: none;
+    background: #35D400;
+}
+
+.footer-app-acction a.start-scan:hover{
+    background: #30aa00;
+}
+
+
+
+.footer-app-acction a.stop-scan {
+    background: #D43500;
+    color: #FFFFFF;
+}
+
+.footer-app-acction a.stop-scan:hover {
+    background: #ba3000;
+}
+
+body { position:relative;}
+
+
+
+/*
+#barcode_input {
+    font-size: 20px;
+    padding: 3px;
+    width: 80%;
+    float: left;
+}
+*/
+.app-scan-area .addCode{
+    background: #35D400;
+}
+.app-scan-area .addCode:hover{
+    background: #30bc00;
+}
+
+.app-scan-area .addCode.remove{
+    background: #D43500;
+    color: #FFF;
+}
+.app-scan-area .addCode.remove:hover, .footer-app-acction a.iesire-app:hover{
+    color: #b02c00;
+}
+
+
+.footer-app-acction a.iesire-app{
+    background: transparent none repeat scroll 0 0;
+    color: #d43500;
+    height: 30px;
+    position: fixed;
+    right: 10px;
+    top: 5px;
+    width: 30px;
+}
+
+.footer-app-acction a.iesire-app:hover{
+    background: transparent none repeat scroll 0 0;
+    color: #962500;
+}
+
+#status_scan_select{
+    margin: 20px 0;
+}
+#barcodes {
+    clear: left;
+    height: 200px;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 20px 0;
+    text-align: left;
+    width: 245px;
+}
+#barcodes p {
+    margin: 0 20px 0 0;
+}
+
+#barcodes p:first-child {
+    font-size: 20px;
+    padding: 5px 0;
+}
+
+
+#barcodes p span{
+    float: right;
+}
+
+.app-menu{
+    display: none;
+}
+
+.app-login {
+    margin: 10% 0;
+}
+
+.content .cnp-login{
+    font-size: 20px;
+    margin: 0 auto !important;
+    padding: 3px;
+    width: 30% !important;
+}
+
+.app-login a{
+    clear: left;
+}
+.messages .error{
+    color: #990000;
+}
+.hideLogin{
+    display: none;
+}
+
+
+.report-codes{
+    font-size: 12px;
+    margin: 10px;
+}
+
+
+.username-text{
+    margin-right:10px;
+    font-weight: bold;
+    position: absolute;
+    right: 27px;
+    top: -9px;
+}
+
+
+.selectpicker{
+    width: 100%;
+}
+
+.app-menu .btn-group.bootstrap-select{
+    width: 250px !important;
+}
+
+
+
+.error-select .widecustom:hover{
+    background: #990000;
+}
+.error-select .widecustom{
+    background: #d43500;
+    color: #ffffff;
+}
+
+
+.navbar{
+    display: none;
+}
+
+.input-group {
+    width: 250px;
+    margin: 0 auto;
+}
+
+.container .navbar-default{
+    background: transparent;
+}
+
+.container .navbar{
+    border-radius: inherit;
+}
+
+
+
+
+.form-group input[type="checkbox"] {
+    display: none;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span {
+    width: 20px;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span:first-child {
+    display: none;
+}
+.form-group input[type="checkbox"] + .btn-group > label span:last-child {
+    display: inline-block;
+}
+
+.form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+    display: inline-block;
+}
+.form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+    display: none;
+}
+
+
+.wideinput{
+    width: 205px;
+}
+
+.deteriorat-check{
+    display: none;
+}
+
+#barcode_gen , #barcode_gen_pui{
+    display: none;
+}
+
+.loader{
+    background: rgba(0, 0, 0, 0) url("/assets/images/scanport/gears.gif") no-repeat scroll 0 0;
+    display: block;
+    height: 120px;
+    margin: 0 auto;
+    font-weight: bold;
+    padding: 124px 0;
+    width: 120px;
+    display: none;
+}
+.app-reweight-area .widecustom{
+    background: transparent;
+}
+.app-reweight-area .widecustom:hover{
+    background: transparent;
+}
+.widecustom-label{
+    display: block;
+    font-size: 14px;
+    margin: 5px auto;
+    padding: 5px;
+    text-align: left;
+    text-decoration: none;
+    width: 250px;
+}
+
+.app-reweight-area .trimite-recantarire{
+    background: #35D400;
+}
+.app-reweight-area .trimite-recantarire:hover{
+    background: #30bc00;
+}
+.error-class{
+    background: #d43500;
+    color:#FFFFFF;
+}
+
+.content{
+    width: 100%;
+}
+.no-connection:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.06;
+    background-image: url('no-connection.png');
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+
+.app_centru_recantarire .start-scan{
+    display: none;
+}
+
+.path-2_5 a, .path-2_6 a, .path-2_7 a, .path-2_8 a {
+    color: brown;
+}
+
+.path-2_5 a:hover, .path-2_6 a:hover, .path-2_7 a:hover, .path-2_8 a:hover {
+    color: #8b2424;
+}
+.rem-check{
+    display: none;
+}
+
+.container{
+    display: none;
+}
+.navbar-header{
+    position: relative;
+    width: 100%;
+}
+.app-scan-area-div .glyphicon{
+    line-height: inherit;
+}
+
+.messege_area{
+    position: absolute;
+    bottom: 32px;
+    width: 333px;
+    z-index: 1;
+}
+
+
+#mesaj_borderouri{
+   float: right;
+}
+
+.scanare-agent{
+    display: none;
+    width: 250px;
+    margin: 0 auto;
+}
+
+.hide-position{
+    position: absolute;
+    z-index: -1;
+}
+#scan_message{
+    color: red;
+    padding: 5px 0 0 0;
+    font-weight: bold;
+}
+
+#scanare_agent::-webkit-input-placeholder {
+    text-align: center;
+}
+
+#scanare_agent:-moz-placeholder { /* Firefox 18- */
+    text-align: center;
+}
+
+#scanare_agent::-moz-placeholder {  /* Firefox 19+ */
+    text-align: center;
+}
+
+#scanare_agent:-ms-input-placeholder {
+    text-align: center;
+}
+
+#scanare_agent.agent-negasit::-webkit-input-placeholder {
+    color: red;
+}
+#scanare_agent.agent-negasit:-moz-placeholder {
+    /* FF 4-18 */
+    color: red;
+}
+#scanare_agent.agent-negasit::-moz-placeholder {
+    /* FF 19+ */
+    color: red;
+}
+#scanare_agent.agent-negasit:-ms-input-placeholder {
+    /* IE 10+ */
+    color: red;
+}
+
+#scanare_agent.agent-gasit::-webkit-input-placeholder {
+    color: green;
+}
+#scanare_agent.agent-gasit:-moz-placeholder {
+    /* FF 4-18 */
+    color: green;
+}
+#scanare_agent.agent-gasit::-moz-placeholder {
+    /* FF 19+ */
+    color: green;
+}
+#scanare_agent.agent-gasit:-ms-input-placeholder {
+    /* IE 10+ */
+    color: green;
+}

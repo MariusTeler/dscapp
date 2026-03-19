@@ -1,0 +1,92 @@
+<div class="ui-jqgrid-titlebar ui-widget-header ui-corner-top ui-helper-clearfix">
+    	<span class="ui-jqgrid-title" id="istoric_nr_exp" style="padding-left: 5px;">{TIP_EXP}: {NR_EXP} {REFERIRE}</span>
+    </div>
+<fieldset style="width: 336px; margin-top:0px;">
+	<script type="text/javascript">
+		$(document).ready(function() {
+			ComboAgenti3_Old_All('AG_LIV');
+		$(".dataora").datetimepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			timeFormat : 'HH:mm:ss',
+			hour: 12,
+			stepMinute: 15,
+			controlType: 'select',
+			oneLine: true
+		});
+	});
+	</script>
+	<input type="hidden" name="EXPEDITOR_LOCALITATE" id="EXPEDITOR_LOCALITATE" value="{LOCALITATE}"/>
+	<input type="hidden" name="cod_ist" id="cod_ist" value="{COD_IST}"/>
+	<input type="hidden" name="expeditie" id="expeditie" value="{EXPEDITIE}"/>
+	<input type="hidden" name="cod_exp" id="cod_exp" value="{COD_EXP}"/>
+	<input type="hidden" name="data_operatiei_old" id="data_operatiei_old" value="{DATA}"/>
+	<input type="hidden" name="operatie_old" id="operatie_old" value="{OPERATIE_OLD}"/>
+	<input type="hidden" name="comentariu_old" id="comentariu_old" value="{COMENTARIU_OLD}"/>
+	<input type="hidden" name="ag_liv_old" id="ag_liv_old" value="{AG_LIV}"/>
+	<input type="hidden" name="primitor_old" id="primitor_old" value="{PRIMITOR}"/>
+	<div class="field_row">
+		<div id="field_operatie" class="field_name">
+			Operatiune:
+		</div>
+		{OPERATIE}
+	</div>
+	<div class="field_row">
+		<div id="field_data_operatiei" class="field_name">
+			Data Operatie:
+		</div>
+		<input type="text" name="data_operatiei" id="data_operatiei" class="field_input dataora  w150" value="{DATA}" title="Data operatiei" onblur="VerificareIstoric();" />
+	</div>
+	<div class="{STANDARD}" id="standard">
+		<div class="field_row">
+			<div id="field_comentariu" class="field_name">
+				Informatii suplimentare
+			</div>
+		</div>
+		<div class="field_row standard" id="content_comentariu">
+			{COMENTARIU}
+		</div>
+	</div>
+	<div class="{LIVRAT}" id="livrat">
+		<div class="field_row">
+			<div id="field_ag_liv" class="field_name">
+				Curier
+			</div>
+			<input type="text" name="AG_LIV_NUME" id="AG_LIV_NUME" class="field_input w150" value="{AG_LIV_NUME}" title="Curier" onblur="VerificareIstoric();"/>
+			<input type="hidden" name="AG_LIV" id="AG_LIV" class="field_input" style="margin-left: 10px;" value="{AG_LIV}" />
+			<input type="checkbox" name="AG_LIV_RETINUT" id="AG_LIV_RETINUT" {AG_LIV_RETINUT} rel="{AG_LIV_RETINUT}" value="1" class="field_checkbox" />
+		</div>
+		<div class="field_row">
+			<div id="field_primitor" class="field_name">
+				Primitor:
+			</div>
+			<input type="text" name="primitor" id="primitor" class="field_input  w170 capitalize" value="{PRIMITOR}" title="Primitor" onblur="VerificareIstoric();"/>
+		</div>
+		<div class="field_row {RETUR_DIV}">
+			<div class="field_name">
+				{RETUR_LABEL}
+			</div>
+			<input type="checkbox" value="1"name="inchide_ret" id="inchide_ret" {RETUR_CHECKBOX}/>
+		</div>
+	</div>
+	<div class="field_row pt5">
+		<input type="button" name="adauga" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Adauga"  onclick="EditareIstoric(1);"/>
+		<input type="button" name="modifica" class="button ui-button ui-widget ui-state-default ui-corner-all" value="Modifica"  onclick="EditareIstoric2(2);"/>
+	</div>
+	
+	<div class="field_row {CONFIRMARE}" style="margin-left: 20px;">
+		<div id="field_operatie" class="field_name">
+			Expeditor:
+		</div>
+		<strong>{EXPEDITOR} ({EXPEDITOR_LOCALITATE})</strong>
+	</div>
+	<div class="field_row {CONFIRMARE}"  style="margin-left: 20px;">
+		<div id="field_operatie" class="field_name">
+			Destinatar:
+		</div>
+		<strong>{DESTINATAR} ({DESTINATAR_LOCALITATE})</strong>
+	</div>
+</fieldset>
+

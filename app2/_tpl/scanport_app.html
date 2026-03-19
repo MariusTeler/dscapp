@@ -1,0 +1,145 @@
+<div class="clearfix">{ERROR}</div>
+
+<link type="text/css" rel="stylesheet" href="/assets/css/scanport/scanport.css?v={CSS_VERSION}" >
+<link type="text/css" rel="stylesheet" href="/assets/css/scanport/bootstrap.min.css" >
+<link type="text/css" rel="stylesheet" href="/assets/css/scanport/bootstrap-select.min.css" >
+
+<div class="navbar-header">
+    <ol class="breadcrumb"></ol>
+    <p class="navbar-text navbar-right username-text"></p>
+    <div style="clear: both"></div>
+</div>
+
+<div style="clear: both"></div>
+<div class="app-area">
+
+    <p class="messages"> </p>
+    <ul class="app-login hideLogin">
+        <li><input class="cnp-login form-control" placeholder="Id logare" name="cnp"/></li>
+    </ul>
+    <div class="loader">Se incarca ...</div>
+    <ul class="app-menu">
+        <h3 class="full-path-text"></h3>
+        <li class="app-scan-area scanare-agent">
+            <input id="scanare_agent" class="form-control" placeholder="SCANARE AGENT" type="text" readonly>
+            <div id="scan_message"></div>
+        </li>
+        {ELEMENTS}
+        <li class="app-scan-area hide-menu">
+            <div class="app-scan-area-div">
+                <div class="[ form-group ] deteriorat-check">
+                    <input type="checkbox" value="1" name="deteriorate-checkbox" class="deteriorate-check" id="deteriorate-checkbox" autocomplete="off"/>
+                    <div class="[ btn-group ]">
+                        <label for="deteriorate-checkbox" class="[ btn btn-default ]">
+                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                            <span> </span>
+                        </label>
+                        <label for="deteriorate-checkbox" class="[ btn btn-default wideinput ]">
+                            Deteriorate
+                        </label>
+                    </div>
+                </div>
+
+                 <div class="[ form-group ] rem-check">
+                    <input type="checkbox" value="1" name="rem-checkbox" class="deteriorate-check"  id="rem-checkbox" autocomplete="off"/>
+                    <div class="[ btn-group ]">
+                        <label for="rem-checkbox" class="[ btn btn-default ]">
+                            <span class="[ glyphicon glyphicon-ok ]"></span>
+                            <span> </span>
+                        </label>
+                        <label for="rem-checkbox" class="[ btn btn-default wideinput ]">
+                            Retur la magazie
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <input id="barcode_input" type="text" class="form-control" placeholder="cod de bare">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default addCode" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                    </span>
+                </div>
+
+                <!-- glyphicon glyphicon-minus
+                <div><input id="barcode_input" type="text"/><a href="#" class="addCode">+</a></div>
+                -->
+                <div style="clear:both;"></div>
+                <p class="report-codes"></p>
+                <div id="barcodes"></div>
+                <div style="clear: both"></div>
+            </div>
+        </li>
+        <li class="app-reweight-area hide-menu">
+            <div class="reweight-form widecustom">
+                <div class="form-group">
+                                <span class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">Cod de bare</button>
+                                    </span>
+                                    <input id="reweight_cod" autocomplete="off" type="text" class="form-control">
+                                </span>
+                </div>
+                <div class="form-group">
+                                <span class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">Kg</button>
+                                    </span>
+                                    <input id="reweight_kg" autocomplete="off" type="text" class="form-control">
+                                </span>
+                </div>
+                <div class="form-group">
+                                <span class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">Lungime (cm)</button>
+                                    </span>
+                                    <input id="reweight_lungime" autocomplete="off" type="text" class="form-control">
+                                </span>
+                </div>
+                <div class="form-group">
+                                <span class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">Latime (cm)</button>
+                                    </span>
+                                    <input id="reweight_latime" autocomplete="off" type="text" class="form-control">
+                                </span>
+                </div>
+                <div class="form-group">
+                                <span class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">Inaltime (cm)</button>
+                                    </span>
+                                    <input id="reweight_inaltime" autocomplete="off" type="text" class="form-control">
+                                </span>
+                </div>
+                <a href="#" class="trimite-recantarire btn widecustom">Trimite valori (RW)</a>
+            </div>
+        </li>
+
+
+        <li class="footer-app-acction">
+            <a href="#" class="start-scan btn widecustom">Porneste scanarea</a>
+            <a href="#" class="prev-page btn widecustom">Inapoi</a>
+            <a href="#" class="stop-scan btn widecustom">Finalizare scanare</a>
+            <a href="#" class="iesire-app widecustom"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+        </li>
+    </ul>
+
+
+</div>
+<div class="messege_area"><span id="mesaj_delogare"></span><span id="mesaj_borderouri"></span></div>
+
+<!-- <audio id="error_sound" src="sounds/error.mp3"></audio> -->
+<script type="application/javascript">
+    var logoutAfter = {DELOGARE_TIME}*60;
+    var ajaxUrl = 'scanport/ajax';
+    var auto_login = '{AUTO_LOGIN}';
+    var scan_agent = {SCAN_AGENT};
+</script>
+
+<script src="/assets/js/scanport/jquery-1.9.1.js"></script>
+<script src="/assets/js/scanport/tether.min.js"></script>
+<script src="/assets/js/scanport/bootstrap.min.js"></script>
+<script src="/assets/js/scanport/bootstrap-select.min.js"></script>
+<script src="/assets/js/scanport/bootstrap-notify.min.js"></script>
+<script src="/assets/js/scanport/jquery.json.min.js"></script>
+<script src="/assets/js/scanport/app-scan.js?v={JS_VERSION}"></script>

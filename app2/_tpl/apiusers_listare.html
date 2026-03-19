@@ -1,0 +1,282 @@
+<style>
+    .title_info a {
+        margin: 0 5px;
+        text-decoration: none;
+    }
+    .title_info {
+        text-align: right;
+    }
+    a.clienti_clienti{
+        text-decoration: underline;
+        font-weight: bold;
+    }
+    a.scanner_scanner{
+        text-decoration: underline;
+        font-weight: bold;
+    }
+    a.android_android{
+        text-decoration: underline;
+        font-weight: bold;
+    }
+</style>
+<script type="text/javascript">
+    var api_type = '{API_TYPE}';
+    var label_1 = label_2 = '';
+    var col_1 = col_2 = {};
+
+    switch (api_type){
+        case 'clienti':
+
+            col_1 = {
+                label: 'Utilizator',
+                name : 'users_id',
+                index : 'b.user',
+                editable : true,
+                edittype : 'select',
+                editoptions : {
+                    dataUrl :  HTTP + 'apiusers/utilizatori_agenti_data/'+api_type,
+                    edithidden: true
+                },
+                hidden: false
+            };
+
+            col_2 = {
+                label: 'Expeditor',
+                name : 'expeditor',
+                index : 'c.nume',
+                editable : false
+            };
+
+            break;
+        case 'android':
+            col_1 = {
+                label: 'Agent',
+                name : 'users_id',
+                index : 'b.nume_ag',
+                editable : true,
+                edittype : 'select',
+                editoptions : {
+                    dataUrl :  HTTP + 'apiusers/utilizatori_agenti_data/'+api_type,
+                    edithidden: true
+                },
+                hidden: false
+            };
+
+            col_2 = {
+                label: 'Centru',
+                name : 'nume',
+                index : 'c.nume',
+                editable : false
+            };
+            break;
+        case 'scanner':
+            col_1 = {
+                label: 'Agent',
+                name : 'users_id',
+                editable : false,
+                hidden: true
+            };
+            col_2 = {
+                label: 'Centru',
+                name : 'nume',
+                index : 'b.nume',
+                editable : false,
+                hidden:true
+            };
+            break;
+    }
+
+
+    $(document).ready(function(){
+        ApiUsersListare();
+        $('.title_info').html('<a href="'+HTTP+'apiusers/listare/clienti" class="clienti_{API_TYPE}">Clienti</a><a href="'+HTTP+'apiusers/listare/scanner" class="scanner_{API_TYPE}">Scanner</a><a href="'+HTTP+'apiusers/listare/android"  class="android_{API_TYPE}">Android</a>');
+    });
+
+    function check_api_user(value,label) {
+
+        var return_data = (function() {
+            var func_ret = [ true, "", "" ];
+
+            if (value == "") {
+                return [ false, "numele/utilizatorul este obligatoriu !", "" ];
+            }
+
+            $.ajax({
+                async : false,
+                url : HTTP + 'apiusers/verifica_utilizator/' + value,
+                dataType : 'json',
+                success : function(data) {
+                    if(data.id > 0){
+                        func_ret = [ false, "utilizator existent !", "" ];
+                    } else {
+                        func_ret = [ true, "", "" ];
+                    }
+                }
+            });
+            return func_ret;
+        })();
+
+        return return_data;
+
+    }
+
+    function ApiUsersListare() {
+
+        var $this = $("#apiusers_listare");
+        $this.jqGrid({
+            url : HTTP + 'apiusers/listare_json/' + api_type,
+            datatype : "json",
+            colModel : [ {
+                label: 'ID',
+                name : 'id',
+                index : 'a.id',
+                editable : false
+            },{
+                label : 'Nume',
+                name : 'name',
+                index : 'a.name',
+                editable : true,
+                editrules : {
+                    custom : true,
+                    custom_func : check_api_user,
+                    edithidden:true
+                }
+            }, {
+                label : 'Api key',
+                name : 'api_key',
+                index : 'a.api_key',
+                editable : true
+            }, {
+                label : 'Data',
+                name : 'created_at',
+                index : 'a.created_at',
+                editable : false,
+                editrules : {
+                    custom : true,
+                    custom_func : check_email
+                }
+            },
+                col_1
+            ,
+                col_2
+            , {
+                label: 'Scanner',
+                name : 'is_scanner',
+                index : 'a.is_scanner',
+                editable : true,
+                edittype : 'select',
+                editoptions : {
+                    value : "0:NU;1:DA"
+                },
+                stype : 'select',
+                searchoptions : {
+                    value : ":Toti;0:NU;1:DA",
+                    sopt : [ 'eq' ]
+                },
+                align: 'center'
+            }, {
+                label: 'Android',
+                name : 'is_android',
+                index : 'a.is_android',
+                editable : true,
+                edittype : 'select',
+                editoptions : {
+                    value : "0:NU;1:DA"
+                },
+                stype : 'select',
+                searchoptions : {
+                    value : ":Toti;0:NU;1:DA",
+                    sopt : [ 'eq' ]
+                },
+                align: 'center'
+            }, {
+                label: 'Master',
+                name : 'master',
+                index : 'a.master',
+                editable : true,
+                align: 'right'
+            }, {
+                name : 'activ',
+                index : 'a.status',
+                editable : true,
+                edittype : 'select',
+                editoptions : {
+                    value : "0:Inactiv;1:Activ"
+                },
+                stype : 'select',
+                searchoptions : {
+                    value : ":Toti;0:Inactivi;1:Activi",
+                    sopt : [ 'eq' ]
+                },
+                align: 'center'
+            } , {
+                name : 'parola',
+                editable : true,
+                edittype: 'password',
+                editrules : {
+                    edithidden:true
+                },
+                hidden: true
+            }],
+            height : 400,
+            width : 970,
+            scroll : 1,
+            rowNum : 50,
+            mtype : "GET",
+            rownumbers : true,
+            rownumWidth : 40,
+            gridview : true,
+            pager : '#apiusers_listare_pag',
+            sortname : 'a.name',
+            viewrecords : true,
+            sortorder : "asc",
+            caption : '',
+            editurl : HTTP + 'apiusers/editare?q=dummy'
+        });
+        $this.jqGrid('bindKeys');
+        $this.jqGrid('filterToolbar', {
+            stringResult : true,
+            searchOnEnter : false
+        });
+        $this.jqGrid('navGrid', '#apiusers_listare_pag', {
+            del : true,
+            add : true,
+            edit : true,
+            search : false
+        },
+		// options for the Edit Dialog
+		{
+			recreateForm: true,
+			reloadAfterSubmit:true,
+			closeAfterEdit: true,
+			closeOnEscape:true,
+			savekey: [true,13],
+			errorTextFormat: function (data) {
+				if (data.status == 500) 
+					return 'Error: ' + data.responseText
+			}
+		},
+		// options for the Add Dialog
+		{
+			closeAfterAdd: false,
+			recreateForm: true,
+			closeOnEscape:true,
+			savekey: [true,13],
+			errorTextFormat: function (data) {
+				if (data.status == 500) 
+					return 'Error: ' + data.responseText
+			}
+		},
+		// options for the Delete Dailog
+		{
+			errorTextFormat: function (data) {
+				if (data.status == 500) 
+					return 'Error: ' + data.responseText
+			}
+		});
+    }
+
+</script>
+<table id="apiusers_listare" class="table_jqgrid"></table>
+<div id="apiusers_listare_pag"></div>
+<div class="separator_empty h10"></div>

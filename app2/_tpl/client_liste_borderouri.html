@@ -1,0 +1,75 @@
+<script>
+$(document).ready(function() 
+{
+	Client_Grid_ListeBorderouri();
+	
+	   /* Get browser */
+    $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase());
+
+    /* Detect Chrome */
+    if($.browser.chrome){
+        /* Do something for Chrome at this point */
+        /* Finally, if it is Chrome then jQuery thinks it's 
+           Safari so we have to tell it isn't */
+        $.browser.safari = false;
+        $('#printare-multipla').show();
+        $('.printare_multipla').show();
+    }
+
+    /* Detect Safari */
+    if($.browser.safari){
+        /* Do something for Safari */
+       $('#printare-multipla').show();
+       $('.printare_multipla').show();
+    }
+		
+    
+});
+
+	$( window ).load(function() {
+	   /* Get browser */
+	    $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase());
+	
+	    /* Detect Chrome */
+	    if($.browser.chrome){
+	        /* Do something for Chrome at this point */
+	        /* Finally, if it is Chrome then jQuery thinks it's 
+	           Safari so we have to tell it isn't */
+	        $.browser.safari = false;
+	        $('#printare-multipla').show();
+	        $('.printare_multipla').show();
+	    }
+	
+	    /* Detect Safari */
+	    if($.browser.safari){
+	        /* Do something for Safari */
+	       $('#printare-multipla').show();
+	       $('.printare_multipla').show();
+	    }
+    });
+
+
+
+function ClientExportBorderou(sel){
+
+	if(sel==0) return;
+	//if(tip==1){
+	var url = HTTP + 'client/export_borderou/'+sel;
+	$("#detalii_expeditie").dialog("destroy");
+	window.open(url,'_blank');
+	return true;
+}
+
+</script>
+<div class="separator_empty h10">&nbsp;</div>
+<table id="liste_borderouri"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div style="display: none;">
+	<div id="detalii_expeditie">&nbsp;</div>
+</div>

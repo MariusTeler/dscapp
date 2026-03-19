@@ -1,0 +1,170 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Grid_ListaComenziDistribuire($('#user_dispecerat').val());
+		AgentiDistribuireComenzi();
+		IntroducereMesajDistribuire(160);
+		MakeDialog();
+		$("#collect_at").datepicker({
+				changeMonth : true,
+				changeYear : false,
+				showOn : "both",
+				buttonImage : HTTP + "assets/images/calendar.gif",
+				buttonImageOnly : true,
+				dateFormat : 'dd.mm.yy',
+				minDate: 0
+			});
+	});
+
+</script>
+<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+
+    <fieldset class="h40" style="min-width: 425px;">
+        <legend>
+            <label class="field_label" for="dispecerat">Dispecerat</label>
+        </legend>
+        <div class="field_name w110">
+            <input type="hidden" value="{USER_DISPECERAT_ID}" id="user_dispecerat"/>
+				<select name="dispecerate" id="dispecerate" class="combo_box w90" {DIS}><option value="">Toate</option>
+					{DISPECERATE}
+				</select>
+        </div>
+    </fieldset>
+    
+    <div class="field_name w410 class_btn" style="padding-top: 15px;">
+        <input type="button" name="search" class="button" value="Afiseaza" onclick="AfisareListaComenzi();" {DIS}/>
+    </div>
+    
+    <div class="field_name class_btn" style="width: 100px;" >
+		<input type="button" name="preluare" class="button" value="Preluare comenzi" onclick="document.location='{HTTP}comenzi/preluare'" />
+	</div>
+    <div class="separator_empty h5" ></div>
+</div>
+<div style="color:red">Dublu click pe linie pentru afisare detalii si transmitere comanda</div>
+
+<div style="float: left; width: 630px;">
+	<div class="separator_empty h15"></div>
+	<table id="lista_comenzi"></table>
+	<div id="paginatie_comenzi" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="dialog-form" title="Detalii comanda" style="display:none;width:560px">
+	<input type="hidden" name="comanda_id" id="comanda_id" value=""/>
+	<input type="hidden" name="localitate_id" id="localitate_id" value=""/>
+	<span class="ui-helper-hidden-accessible"><input type="text"/></span>
+  <table border="0" width="100%">
+  <tr>
+  <th width="15%" style="text-align:left">Client</th><td width="30%"><span id="client"></span></td>
+  <th width="15%" style="text-align:left">Localitate</th><td width="30%"><span id="localitate"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Adresa</th><td colspan="3"><span id="adresa"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Contact</th><td width="30%"><span id="contact"></span></td>
+  <th width="15%" style="text-align:left">Telefon</th><td width="30%"><span id="telefon"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Colete</th><td width="30%"><span id="nr_obj_colet"></span></td>
+  <th width="15%" style="text-align:left">Paleti</th><td width="30%"><span id="nr_obj_palet"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Greutate</th><td width="30%"><span id="kg_obj"></span></td>
+  <th width="15%" style="text-align:left">Volum</th><td width="30%"><span id="vol_obj"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Data colectarii</th>
+  	<td colspan="3">
+  		<input type="text" name="collect_at" id="collect_at" class="field_input auto-hint w160" required readonly="true"/>
+  	</td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Interval</th>
+  		<td colspan="3">
+  					<select name="h_start" id="h_start" class="field_combobox" style="width:60px" required>
+						<option value="7">07</option>
+						<option value="8">08</option>
+						<option value="9">09</option>
+						<option value="10" selected>10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+						<option value="13">13</option>
+						<option value="14">14</option>
+						<option value="15">15</option>
+						<option value="16">16</option>
+						<option value="17">17</option>
+						<option value="18">18</option>
+						<option value="19">19</option>
+						<option value="20">20</option>
+						<option value="21">21</option>
+					</select>
+					<select name="h_end" id="h_end" class="field_combobox" style="width:60px" >
+						<option value="7">07</option>
+						<option value="8">08</option>
+						<option value="9">09</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+						<option value="13">13</option>
+						<option value="14">14</option>
+						<option value="15">15</option>
+						<option value="16">16</option>
+						<option value="17">17</option>
+						<option value="18" selected>18</option>
+						<option value="19">19</option>
+						<option value="20">20</option>
+						<option value="21">21</option>
+					</select>
+		</td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Observatii</th><td colspan="3"><span id="observatii"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Status</th><td width="30%"><span id="status"></span></td>
+  <th width="15%" style="text-align:left">Data status</th><td width="30%"><span id="ch_created_at"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Motiv</th><td colspan="3"><span id="motiv"></span></td>
+  </tr>
+  </table>
+  <div class="separator_empty" style="height: 5px;"></div>
+  <form>
+	<fieldset style="width: 600px">
+		<legend>
+			<label class="field_label">Agent</label>
+		</legend>
+		<div class="field_name w60">
+			Curier
+		</div>
+		<div class="field_name w190">
+			<input type="hidden" name="agent_id" id="agent_id" value=""/>
+			<input type="text" name="agent" id="agent" class="field_input auto-hint w170" value=""/>
+		</div>
+		<div class="field_name w90" style="padding-left: 10px;">
+			Comunicare
+		</div>
+		<div class="field_name w100">
+			<select style="width: 80px;" id="comunicare" name="comunicare" class="field_combobox" >
+				<option value="1">Android</option>
+				<option value="2">Telefon</option>
+			</select>
+		</div>
+		<div class="separator_empty" style="height: 1px;"></div>
+		<div class="field_name w60">
+			Telefon
+		</div>
+		<div class="field_name w260">
+			<input type="text" name="telefon_agent" id="telefon_agent" class="field_input w170" value="" readonly/>
+		</div>
+	</fieldset>
+    <fieldset style="width: 600px">
+		<legend>
+			<label class="field_label">Mesaj <span id="mesaj_nr_caractere" style="color: red;">160</span></label>
+		</legend>
+		<div class="field_row">
+			<textarea name="mesaj" id="mesaj" class="field_textarea" style="width: 590px; height: 40px;"></textarea>
+		</div>
+	</fieldset>
+  </form>
+</div>

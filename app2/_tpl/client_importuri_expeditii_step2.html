@@ -1,0 +1,14 @@
+<div class="clearfix">{ERROR}</div>
+<form enctype="multipart/form-data" action="{HTTP}client/importuri/expeditii/step3" method="post" name="import" >
+	<input type="hidden" name="fisier" id="fisier" value="{FISIER}" />
+	<input type="hidden" name="separator" id="separator" value="{SEPARATOR}" />
+	
+	<div class="field_name w200" style="padding-top: 4px; margin-left: 420px;">
+		<input type="button" name="inapoi" id="inapoi" class="button" value="Back" title="Inapoi" onclick="window.location = '{HTTP}client/importuri/expeditii';"/>		
+		<input type="submit" name="import" id="import" class="button" value="Next" title="Next" />
+	</div>
+	<div id="import-expeditii">
+		{CONTINUT}
+	</div>
+</form>
+<div style="height: 20px; display: block;"></div>

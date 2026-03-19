@@ -1,0 +1,192 @@
+<style>
+	input.cod-valid {
+		color: green;
+		font-weight: bold;
+	}
+	input.cod-invalid {
+		color: red;
+	}
+	#plateste_buton:disabled,#plateste_buton:disabled:hover{
+		color: gray ;
+		background: transparent;
+		border: solid 1px grey;
+	}
+	#detalii_societate label{
+		display: inline-flex;
+		width: 50px;
+	}
+</style>
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		$("#platitor_pf").change(
+			function(e) {
+				var persoana_fizica = $('#platitor_pf:checkbox:checked').length > 0;
+				if(isValidCui($( "#platitor_afm" ).val()) && persoana_fizica) $('#platitor_pf').prop( "checked", false );
+				else $('#platitor_pf').prop( "checked", true );
+				$('#plateste_buton').prop('disabled', false);
+			}
+		);
+
+
+		$("#trndate").focusin(function(){
+			$("#trndate").select();
+		});
+
+		$( "#platitor_afm").focusout(function(){
+			var persoana_fizica = $('#platitor_pf:checkbox:checked').length > 0;
+			if(isValidCui($( "#platitor_afm" ).val()) && persoana_fizica) $('#platitor_pf').prop( "checked", false );
+		});
+
+		$("#invoice").change(
+			function(e) {
+				$('#receipt').val($(this).val());
+			}
+		);
+
+        $("#invoice").keydown(function(e) {
+            var field_id = $(this).attr('id');
+			var field_value = $(this).val();
+
+			if (e.key !== undefined) {
+				if (e.key != ',' && (e.key < '0' || e.key > '9') && e.key != 'Backspace' && e.key != 'Tab' && e.key != 'Escape' && e.key != 'Enter' && e.key != 'PrintScreen' ) {
+					return false;
+				}
+			} else if (e.keyCode !== undefined) {
+				if (e.keyCode != 0 && e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 27 && e.keyCode != 13 && e.keyCode != 44 && (e.keyCode < 48 || e.keyCode > 57)) {
+					return false;
+				}
+			}
+			else if (e.which !== undefined) {
+				if (e.which != 0 && e.which != 8 && e.which != 9 && e.which != 27 && e.which != 13 && e.which != 44 && (e.which < 48 || e.which > 57)) {
+					return false;
+				}
+			}
+        });
+		$("#trndate").change(
+			function(e) {
+				// console.log($(this).val());
+				var matches = $(this).val().match(/(\d+).(\d+).(\d+)/);
+				if(matches[1].length != 2 || matches[2].length != 2 || matches[3].length != 4){
+					$('.ui-datepicker-trigger').click();
+				} else {
+					console.log(matches);
+				}
+			}
+		);
+
+		$("#expeditie").keydown(function(e) {
+			if (e.key !== undefined) {
+				if (e.key != ',' && (e.key < '0' || e.key > '9') && e.key != 'Backspace' && e.key != 'Tab' && e.key != 'Escape' && e.key != 'Enter' && e.key != 'PrintScreen' ) {
+					return false;
+				}
+				if(e.key == 'Enter' || e.key == 'PrintScreen') {
+					return VerificareExpeditie();
+				}
+			} else if (e.keyCode !== undefined) {
+				if (e.keyCode != 0 && e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 27 && e.keyCode != 13 && e.keyCode != 44 && (e.keyCode < 48 || e.keyCode > 57)) {
+					return false;
+				}
+				if(e.keyCode == 13 || e.keyCode == 44) {
+					return VerificareExpeditie();
+				}
+			}
+			else if (e.which !== undefined) {
+				if (e.which != 0 && e.which != 8 && e.which != 9 && e.which != 27 && e.which != 13 && e.which != 44 && (e.which < 48 || e.which > 57)) {
+					return false;
+				}
+				if(e.which == 13 || e.which == 44) {
+					return VerificareExpeditie();
+				}
+			}
+		});
+
+		Grid_ExpeditiiFactura();
+		ComboClientiFacturare('platitor');
+		$("#trndate").val($.datepicker.formatDate('dd.mm.yy', new Date()));
+		$('#invoice').focus();
+		//$('#cb_factura_expeditii').focus();
+	});
+</script>
+<div class="facturare_expeditii" >
+	<fieldset style="min-width: 220px;">
+		<legend>
+			<label class="field_label" for="invoice">Factura</label>
+		</legend>
+		<div class="field_name"  style="width: 120px;">
+			<input type="text" name="invoice" id="invoice" class="field_input auto-hint"  style="width: 113px;" value="" placeholder="nr. factura" onkeydown="return numbersonly(this, event, false);"/>
+		</div>
+		<div class="field_name" style="width: 101px;">
+			<input type="text" name="trndate" id="trndate" class="field_input auto-hint w70" onblur="checkDate(this)"/>
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 120px;">
+		<legend>
+			<label class="field_label" for="receipt">Chitanta</label>
+		</legend>
+		<div class="field_name" style="width: 120px;">
+			<input type="text" name="receipt" id="receipt" class="field_input auto-hint" style="width: 113px;" value="" placeholder="nr. chitanta"/>
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 841px;">
+		<legend>
+			<label class="field_label" for="expeditie">Expeditii (folositi virgula ca separator)</label>
+		</legend>
+		<div class="field_name" style="width:833px">
+			<input type="text" name="expeditie" id="expeditie" class="field_input auto-hint" style="width:833px" value="" title="" />
+		</div>
+	</fieldset>
+	<div class="field_name w70 class_btn" style="margin-top: 10px; margin-left: 10px;">
+		<input type="button" name="search" class="button" value="Afiseaza"  onclick="return VerificareExpeditie();" />
+	</div>
+	<div class="separator_empty h5">&nbsp;</div>
+	<fieldset style="min-width: 955px;height: 60px;">
+		<legend>
+			<label class="field_label">A.N.A.F.</label>
+		</legend>
+		<span id="detalii_societate"></span>
+	</fieldset>
+	<div class="separator_empty h5">&nbsp;</div>
+	<fieldset style="min-width: 300px;">
+		<legend>
+			<label class="field_label" for="platitor_pf">Platitor : <span id="localitate_nume"></span></label>
+		</legend>
+		<div class="field_name" style="width: 160px;">
+			<input type="text" name="platitor_afm" id="platitor_afm" class="field_input auto-hint" style="width: 150px;" value="" placeholder="cod fiscal / ID pf"/>
+		</div>
+		<div class="field_name" style="width: 90px;">
+			<label class="field_label" for="platitor_pf"  id="label_platitor_pf" style="padding-right:2px; margin-left: 5px; margin-top:2px">Pers. fizica</label>
+			<input type="checkbox" value="1" name="platitor_pf" id="platitor_pf" class="field_checkbox" style="margin-top:5px"/>
+		</div>
+
+		<div class="field_name ">
+			<input type="hidden" name="platitor_id" id="platitor_id"/>
+			<input type="hidden" name="localitate_id" id="localitate_id"/>
+			<input type="text" name="platitor_nume" id="platitor_nume" class="field_input auto-hint w140" value="" placeholder="platitor"/>
+		</div>
+	</fieldset>
+
+	<fieldset style="min-width: 50px;">
+		<legend>
+			<label class="field_label" for="sumamnt">Suma + tva</label>
+		</legend>
+		<div class="field_name" style="width: 50px;">
+			<input type="text" name="sumamnt" id="sumamnt" class="field_input auto-hint"  style="width: 85px;"value="" placeholder="0.00" onkeydown="return numbersonly(this, event, true);"/>
+		</div>
+	</fieldset>
+	<div class="field_name w70 class_btn" style="margin-top: 10px; margin-left: 10px;">
+		<input id="plateste_buton" type="button" name="search" class="button" value="Plateste"  onclick="PlatesteFactura();" />
+	</div>
+</div>
+</form>
+
+<div class="separator_empty h10">&nbsp;</div>
+<table id="factura_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div id="detalii_expeditie" style="display: none;">&nbsp;</div>

@@ -1,0 +1,268 @@
+<script>
+	$(document).ready(function(){
+		$( ".button" ).button();
+	});
+</script>
+
+<p id="lista_drepturi">
+	<input type="hidden" id="acces_id" name="acces_id" value="0" />
+	<h3>Expeditii</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces1" name="cautare" {CAUTARE} />
+			<label for="acces1" id="label_acces1">Cautare</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces2" name="introducere" {INTRODUCERE} />
+			<label for="acces2" id="label_acces2">Introducere</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces20" name="editare" {EDITARE} />
+			<label for="acces20" id="label_acces20">Editare</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces28" name="preturi" {PRETURI} />
+			<label for="acces28" id="label_acces28">Preturi</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces29" name="stergere" {STERGERE} />
+			<label for="acces29" id="label_acces29">Stergere</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces3" name="confirmare" {CONFIRMARE} />
+			<label for="acces3" id="label_acces3">Confirmare</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces5" name="liste_expeditii" {LISTE_EXPEDITII} />
+			<label for="acces5" id="label_acces5">Liste expeditii</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces6" name="rapoarte_traseu" {RAPOARTE_TRASEU} />
+			<label for="acces6" id="label_acces6">Rapoarte traseu</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces7" name="facturare" {FACTURARE} />
+			<label for="acces7" id="label_acces7">Facturare</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces31" name="facturare_paleti" {FACTURARE_PALETI} />
+			<label for="acces31" id="label_acces31">Facturare Paleti</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces8" name="facturi_restante" {FACTURI_RESTANTE} />
+			<label for="acces8" id="label_acces8">Facturi restante</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces18" name="vizualizare_rambursuri" {VIZUALIZARE_RAMBURSURI} />
+			<label for="acces18" id="label_acces18">Vizualizare rambursuri</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces37" name="urmarire_rambursuri" {URMARIRE_RAMBURSURI} />
+			<label for="acces37" id="label_acces37">Urmarire rambursuri</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces38" name="creare_printare_note_rambursuri" {CREARE_PRINTARE_NOTE_RAMBURSURI} />
+			<label for="acces38" id="label_acces38">Creare / Printare note ramb.</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces33" name="confirmari_expeditii" {CONFIRMARI_EXPEDITII} />
+			<label for="acces33" id="label_acces33">Confirmari Expeditii</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces35" name="import_expeditii" {IMPORT_EXPEDITII} />
+			<label for="acces35" id="label_acces35">Import Expeditii</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces46" name="recantarire" {RECANTARIRE} />
+			<label for="acces46" id="label_acces46">Recantarire</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces55" name="vizualizare_recantarire" {VIZUALIZARE_RECANTARIRE} />
+			<label for="acces55" id="label_acces55">Vizualizare recantarire</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces47" name="istoric_scanare" {ISTORIC_SCANARE} />
+			<label for="acces47" id="label_acces46">Istoric livrari</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces48" name="expeditii_clienti" {EXPEDITII_CLIENTI} />
+			<label for="acces48" id="label_acces46">Expeditii clienti</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces99" name="pret_impus" {PRET_IMPUS} />
+			<label for="acces99" id="label_acces99">Pret Impus</label>
+		</li>
+	</ul>
+	<div style="clear: both;"></div>
+	<h3 style="margin-top:10px">Comenzi</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces13" name="comenzi_preluare" {COMENZI_PRELUARE} />
+			<label for="acces13" id="label_acces13">Comenzi preluare</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces14" name="comenzi_distribuire" {COMENZI_DISTRIBUIRE} />
+			<label for="acces14" id="label_acces14">Comenzi distribuire</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces34" name="comenzi_borderouri" {COMENZI_BORDEROURI} />
+			<label for="acces34" id="label_acces34">Comenzi borderouri</label>
+		</li>
+	</ul>
+	<div style="clear: both;"></div>
+	<h3 style="margin-top:10px">Editare</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces22" name="clienti" {CLIENTI} />
+			<label for="acces22" id="label_acces22">Clienti</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces23" name="localitati" {LOCALITATI} />
+			<label for="acces23" id="label_acces23">Localitati</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces24" name="centre" {CENTRE} />
+			<label for="acces24" id="label_acces24">Centre</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces25" name="agenti" {AGENTI} />
+			<label for="acces25" id="label_acces25">Agenti</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces26" name="operatori" {OPERATORI} />
+			<label for="acces26" id="label_acces26">Operatori</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces56" name="rute" {RUTE} />
+			<label for="acces56" id="label_acces56">Rute</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces88" name="geocoder_address" {GEOCODER_ADDRESS} />
+			<label for="acces88" id="label_acces88">Adrese geocoder</label>
+		</li>
+	</ul>
+	<div style="clear: both;"></div>
+	<h3 style="margin-top:10px">Centralizari</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces9" name="activitate_centre" {ACTIVITATE_CENTRE} />
+			<label for="acces9" id="label_acces9">Activitate centre</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces10" name="colectari" {COLECTARI} />
+			<label for="acces10" id="label_acces10">Colectari</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces32" name="livrari" {LIVRARI} />
+			<label for="acces32" id="label_acces32">Livrari</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces11" name="rulaj_clienti" {RULAJ_CLIENTI} />
+			<label for="acces11" id="label_acces11">Rulaj clienti</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces11" name="rapoarte_centre" {RAPOARTE_CENTRE} />
+			<label for="acces11" id="label_acces11">Rapoarte centre</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces62" name="rapoarte_export" {RAPOARTE_EXPORT} />
+			<label for="acces62" id="label_acces62">Rapoarte export</label>
+		</li>
+	</ul>
+	<div style="clear: both;"></div>
+	<h3 style="margin-top:10px">Incasari</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces15" name="incasari_incasari" {INCASARI_INCASARI} />
+			<label for="acces15" id="label_acces15">Verificari</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces16" name="incasari_restante" {INCASARI_RESTANTE} />
+			<label for="acces16" id="label_acces16">Restante</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces53" name="incasari_validari" {INCASARI_VALIDARI} />
+			<label for="acces53" id="label_acces53">Validari</label>
+		</li>
+	</ul>
+	<div style="clear: both;"></div>
+	<h3 style="margin-top:10px">Scanare</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces27" name="scanare" {SCANARE} />
+			<label for="acces27" id="label_acces27">scanare</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces44" name="afiseaza_scanarile_clientilor_blocati" {AFISEAZA_SCANARILE_CLIENTILOR_BLOCATI} />
+			<label for="acces44" id="label_acces44">Afiseaza scanarile clientilor blocati</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces51" name="scanare" {PONTAJ} />
+			<label for="acces51" id="acces51">Pontaj agenti</label>
+		</li>
+	</ul>
+	<div style="clear: both;"></div>
+	<h3 style="margin-top:10px">Printare facturi/chitante Android</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces36" name="print_ch_ramburs" {PRINT_CH_RAMBURS} />
+			<label for="acces36" id="label_acces36">Printare chitante RBS</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces52" name="print_facturi_android" {PRINT_FACTURI_ANDROID} />
+			<label for="acces52" id="acces52">Printare/Modificare facturi cash</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces54" name="print_ch_client_ctr" {PRINT_CH_CLIENT_CTR} />
+			<label for="acces54" id="acces54">Printare chitante client CTR</label>
+		</li>
+	</ul>
+	<h3 style="margin-top:10px">Dashboard</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces41" name="dashboard" {DASHBOARD} />
+			<label for="acces41" id="label_acces41">Afisare (centru utilizator)</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces42" name="dashboard_urmarire" {DASHBOARD_URMARIRE} />
+			<label for="acces42" id="label_acces42">Urmarire (selectare centru)</label>
+		</li>
+	</ul>
+	<h3 style="margin-top:10px">Decont</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces49" name="decont" {DECONT} />
+			<label for="acces49" id="acces49">Decont</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces99" name="new_decont" {NEW_DECONT} />
+			<label for="acces99" id="acces99">Decont CARD</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces101" name="decont_cheltuieli" {DECONT_CHELTUIELI} />
+			<label for="acces101" id="acces101">Cheltuieli</label>
+		</li>
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces100" name="financiar_centru" {FINANCIAR_CENTRU} />
+			<label for="acces100" id="acces100">Financiar</label>
+		</li>
+	</ul>
+	<h3 style="margin-top:10px">Contracte</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces45" name="contracte" {CONTRACTE} />
+			<label for="acces45">Contract nou - Print</label>
+		</li>
+	</ul>
+	<h3 style="margin-top:10px">Loguri</h3>
+	<ul class="lista_drepturi">
+		<li>
+			<input type="checkbox" class="drepturi_acces" value="1" id="acces60" name="loguri" {LOGURI} />
+			<label for="acces60">Loguri WME</label>
+		</li>
+	</ul>
+	<div class="separator_empty h10"></div>
+	<input type="button" name="editare" class="button w60" value="Editeaza" onclick="EditareDreptAcces();"/>
+	<div class="separator_empty h10"></div>
+	<div style="clear: both; height: 20px;"></div>
+</p>

@@ -1,0 +1,23 @@
+<script>
+$(document).ready(function() 
+{
+	Client_Grid_BorderouNou();    
+});
+</script>
+<div class="field_name class_btn" style="float: right; width: 350px;">
+	<input id="select100" type="button" name="sel100" class="button" value="Select 250"  onclick="jqGridSelectFirst99Rows('liste_expeditii', true);" />
+	<input type="button" name="search" class="button" value="Generare Borderou"  onclick="GenerareBorderou();" />
+	<input type="button" name="search" class="button" value="Printare multipla"  onclick="ClientBorderouPrintareMultipla(0, {PRINT_AWB});" />
+</div>
+<div class="separator_empty h10">&nbsp;</div>
+<table id="liste_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div style="display: none;">
+	<div id="detalii_expeditie">&nbsp;</div>
+</div>

@@ -1,0 +1,91 @@
+<form action="{HTTP}expeditii/vizualizare_rapoarte_expeditii/" id="export_lista" method="post" name="export_lista" target='_blank'>
+	
+<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+    
+    
+    
+   <fieldset>
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w70" value="{DATA_START}" title="Pana la" />
+			</div>
+		</fieldset>
+
+    <fieldset style="min-width: 100px;">
+        <legend>
+            <label class="field_label">Categorie</label>
+        </legend>
+        <div class="field_name w90">
+            <select style="width: 80px;" id="categorie" name="categorie" class="field_combobox">
+                <option selected="selected" value="1">Toate</option>
+                <option value="2">Plicuri</option>
+                <option value="3">Colete</option>
+                <option value="4">Paleti</option>
+                <option value="5">Colete+Paleti</option>
+            </select>
+        </div>  
+    </fieldset>
+    
+        
+    <div class="field_name w300 class_btn" style="margin-top: 25px; margin-left: 40px;">
+        <input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareRapoarteListeExpeditii();" />
+        <input type="button" name="search" class="button" value="Print" onclick="PrintRapoarteListeExpeditii();" />
+        <input type="button" name="search" class="button" value="Export" onclick="ExportRapoarteListeExpeditii();" />
+    </div>
+    <div class="separator_empty" style="height: 5px;"></div>
+    
+
+    <fieldset style="width: 955px">
+        <legend>
+            <label class="field_label">
+            	<span style="padding-right: 10px;">Agentii de expeditie:</span> 
+            	<span style=" color: #DA6666;" id="ascunde_centre_expeditie" onclick="$('#lista_centre_expeditie').hide();  $('#ascunde_centre_expeditie').hide(); $('#afiseaza_centre_expeditie').show();">ascunde</span>
+            	<span id="afiseaza_centre_expeditie" onclick="$('#lista_centre_expeditie').show(); $('#afiseaza_centre_expeditie').hide(); $('#ascunde_centre_expeditie').show();"  style="display: none; color: #DA6666;">afiseaza</span>
+        		<span style="padding-left: 10px;" onclick="$('.centre_expeditie').attr('checked', true);">Selecteaza tot</span>    	
+        		<span onclick="$('.centre_expeditie').attr('checked', false);">Deselecteaza tot</span>
+        	</label>
+        </legend>
+        {CENTRE_EXPEDITIE}
+    </fieldset>
+    <div class="separator_empty" style="height: 5px;"></div>
+    
+    <fieldset style="width: 955px">
+        <legend>
+            <label class="field_label">
+        	<span style="padding-right: 10px;">Agentii de destinatie:</span> 
+    		<span style=" color: #DA6666;" id="ascunde_centre_destinatie" onclick="$('#lista_centre_destinatie').hide();  $('#ascunde_centre_destinatie').hide(); $('#afiseaza_centre_destinatie').show();">ascunde</span>
+    		<span id="afiseaza_centre_destinatie" onclick="$('#lista_centre_destinatie').show(); $('#afiseaza_centre_destinatie').hide(); $('#ascunde_centre_destinatie').show();"  style="display: none; color: #DA6666;">afiseaza</span>
+    		<span style="padding-left: 10px;" onclick="$('.centre_destinatie').attr('checked', true);">Selecteaza tot</span>    	
+    		<span onclick="$('.centre_destinatie').attr('checked', false);">Deselecteaza tot</span>
+    		</label>
+        </legend>
+        {CENTRE_DESTINATIE}
+    </fieldset>
+    <div class="separator_empty" style="height: 5px;"></div>
+    
+    
+</div>
+</form>
+<div class="separator_empty" style="height: 10px;"></div>
+<table id="liste_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="detalii_expeditie" style="display: none;"></div> 
+
+<script type="text/javascript">
+	$(document).ready(function(){     
+        Grid_RapoarteListeExpeditii();
+    });
+</script>

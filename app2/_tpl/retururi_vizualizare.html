@@ -1,0 +1,90 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Retururi_Grid_Vizualizare();
+	});
+
+</script>
+<div style="padding:0px 0px 2px 0px;">
+	<form action="/" id="export_lista" method="post" name="export_lista"  target="_blank">
+		
+		<input type="hidden" id="form_gs_centru_livrare" name="form_gs_centru_livrare" value="" />
+		<input type="hidden" id="form_gs_centru_colectare" name="form_gs_centru_colectare" value="" />
+		<input type="hidden" id="form_gs_expeditor" name="form_gs_expeditor" value="" />
+		<input type="hidden" id="form_gs_destinatar" name="form_gs_destinatar" value="" />
+		<input type="hidden" id="form_gs_livrat" name="form_gs_livrat" value="" />
+		<input type="hidden" id="form_gs_status" name="form_gs_status" value="" />
+		
+	<fieldset>
+		<legend>
+			<label class="field_label" for="perioada">Perioada</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+			De la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" title="De la" readonly/>
+		</div>
+		<div class="field_name w60" style="line-height: 20px;">
+			Pana la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_START}" title="Pana la" readonly/>
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label" for="perioada">Filtru</label>
+		</legend>
+		<div class="field_name w110">
+            <select style="width: 100px;" id="status_ret" name="status_ret" class="field_combobox">
+                <option selected="selected" value="1">Toate</option>
+                <option value="2">NT - In Derulare</option>
+                <option value="3">NT - Cu Retur</option>
+                <option value="4">NT - Cu Retur Livrat</option>
+                <option value="5">NT - Fara Retur</option>
+                <option value="6">NT - Inchise</option>
+                <option value="12">NT - Returnate</option>
+                <option value="7">DOC - In Derulare</option>
+                <option value="8">DOC - Cu Retur</option>
+                <option value="9">DOC - Cu Retur Livrat</option>
+                <option value="10">DOC - Fara Retur</option>
+                <option value="11">DOC - Inchise</option>
+                <option value="13">DOC - Returnate</option>
+				<option value="15">AMB - Toate</option>
+                <option value="16">AMB - Cu Retur</option>
+                <option value="17">AMB - Cu Retur Livrat</option>
+                <option value="18">AMB - Fara Retur</option>
+                <option value="19">AMB - Returnate</option>
+            </select>
+        </div>
+    </fieldset>  
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label" for="perioada">Actiuni</label>
+		</legend>
+		<div class="field_name w230">
+			<input type="button" name="search" class="button" value="Afisare"  onclick="AfisareUrmarireRetururi();"/>
+			<input type="button" name="search" class="button" value="Export"  onclick='ExportUrmarireRetururi();'/>
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 100px; height: 43px; width: 243px;">
+		<legend>
+			<label class="field_label" id="detalii_exp"></label>
+		</legend>
+		<div id="detaliii_exp_ramburs"></div>
+	</fieldset>
+	<div class="separator_empty"></div>
+	
+	</form>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="urmarire_retururi"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="mesaj_confirmare" title="Confirmare" style="display: none;">
+	Sunteti sigur?
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<div id="detalii_expeditie"></div>
+

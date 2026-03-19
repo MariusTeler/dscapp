@@ -1,0 +1,96 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		SetareDate();
+		MakeDialog();
+		InitConfirmDialog();
+		ComboAgenti('curier_livrare');
+		Grid_DecontCautareCf();
+	});
+	function CautareCfs(evt){
+    	var theEvent = evt || window.event;
+    	var key = theEvent.key || theEvent.which || theEvent.keyCode;
+    	if(key == 'Enter' || key == 13) 
+			AfisareDecontCf();
+    }
+</script>
+<form action="{HTTP}facturi/decont/export_cf" id="export_lista" method="post" name="export_lista">
+	<div>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="operatie">Operatie</label>
+			</legend>
+			<div class="field_name w140">Chitanta fiscala</div>
+			<div class="field_name w130">
+				<input type="text" name="chitanta" id="chitanta" class="field_input auto-hint w120" placeholder="Chitanta fiscala" onkeypress="return CautareCfs(event);" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="perioada" onclick="CautareDecontCf(1);">Perioada</label>
+				<input type="checkbox" name="perioada" id="perioada" value="1" class="field_checkbox" onclick="CautareDecontCf(1);" />
+			</legend>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="" placeholder="De la" disabled="true" />
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="" placeholder="Pana la" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 130px;">
+			<legend>
+				<label class="field_label" for="curier" onclick="CautareDecontCf(2);">Curier</label>
+				<input type="checkbox" name="curier" id="curier" value="1" class="field_checkbox" onclick="CautareDecontCf(2);" />
+			</legend>
+			<div class="field_name w130">
+				<input type="hidden" name="curier_livrare" id="curier_livrare" value=""/>
+				<input type="text" name="curier_livrare_nume" id="curier_livrare_nume" class="field_input auto-hint w120" value="" placeholder="Curier livrare" disabled="true" />
+			</div>
+		</fieldset>
+
+		<div class="field_name w130 class_btn" style="margin-top: 10px; margin-left: 10px;">
+			<input type="button" name="search" class="button" value="Cauta"  onclick="AfisareDecontCf();" />
+			<input type="button" name="export" class="button" value="Export"  onclick="ExportDecontCf();" />
+		</div>
+	</div>
+</form>
+
+<div class="separator_empty h10">&nbsp;</div>
+<table id="jqGrid_decont_cautare_cf"></table>
+<div id="jqGrid_paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div id="dialog-form" title="Detalii chitanta fiscala" style="display:none;width:560px">
+	<input type="hidden" name="id" id="id" value=""/>
+	<input type="hidden" name="agent_id" id="agent_id" value=""/>
+	<div id="modal-error-message" style="color:red;display:none;width:100%;text-align:center">Chitanta fiscala invalida</div>
+	<table width="100%" cellspacing="15">
+		<tr>
+			<th width="15%" style="text-align:left">Chitanta</th><td width="30%"><span id="chitanta"></span></td>
+			<th width="15%" style="text-align:left">Client</th><td width="30%"><span id="client"></span></td>
+		</tr>
+		<tr>
+			<th width="15%" style="text-align:left">Suma</th><td width="30%"><span id="suma"></span> LEI</td>	
+			<th width="15%" style="text-align:left">Incasat</th><td width="30%"><span id="tipPlata"></span></td>
+		</tr>
+		<tr>
+			<th width="15%" style="text-align:left">Curier</th><td width="30%"><span id="agent"></span></td>
+			<th width="15%" style="text-align:left">Data</th><td width="30%"><span id="data"></span></td>
+		</tr>
+		<tr>
+			<th width="15%" style="text-align:left">Descriere</th><td colspan="3"><span id="descriere"></span></td>
+		</tr>
+	</table>
+	<form></form>
+	<div class="separator_empty" style="height: 5px;"></div>
+</div>
+<div id="dialog-confirm" title="Confirmare" style="display:none">
+	<div id="confirm-error-message" style="color:red;display:none;width:100%;text-align:center">Chitanta fiscala invalida</div>
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+		Confirma stergere chitanta fiscala<span id="ch"></span><br/>
+		Esti sigur?
+	</p>
+</div>

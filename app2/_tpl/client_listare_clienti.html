@@ -1,0 +1,68 @@
+<style>
+	.change-roles-wrapper {
+		display: flex;
+		margin: 5px;
+		margin-bottom: 20px;
+		position: absolute;
+		right: 4px;
+		top: -3px;
+		justify-content: end;
+	}
+	.change-roles-wrapper svg {
+		width: 25px;
+		cursor: pointer;
+	}
+	.dsc-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 5px 10px;
+		cursor: pointer;
+	}
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        Client_GridListareClienti();
+        ComboLocalitatiClient('{USER_ID}','destinatar_localitate',true);
+    });
+</script>
+<div class='change-roles-wrapper''>
+	<input type="button" class="dsc-btn" value="Adauga client" onclick="ClientAdaugareClient();"/>
+</div>
+<table id="listare_clienti" class="table_jqgrid"></table>
+<div id="listare_clienti_pag"></div>
+<div class="separator_empty h10"></div>
+
+
+
+<div style="display: none;">
+	<div id="detalii_expeditie">&nbsp;</div>
+	<div id="editare_client" title="Client">
+		<form id = "editare_client_form">
+			<div id="eroare" title="Eroare" style="color:red">&nbsp;</div>
+			<div style="clear:both; padding: 5px 0px;">Localitate:</div>
+			<div >
+				<input type="text" name="destinatar_localitate" id="destinatar_localitate" class="field_input" value="{DESTINATAR_LOCALITATE}" rel="{DESTINATAR_LOCALITATE}" title="" style=" width: 220px;"/>
+				<input type="hidden" name="destinatar_localitate_id" id="destinatar_localitate_id" class="field_input" value="{DESTINATAR_LOCALITATE}" />
+			</div>
+			<div style="padding: 5px 0px;">Nume:</div>
+			<div>
+				<input type="text" name="destinatar_nume" id="destinatar_nume" class="field_input" value="{DESTINATAR_NUME}" rel="{DESTINATAR_NUME}" title="" style=" width: 220px;"/>
+				<input type="hidden" name="destinatar_id" id="destinatar_id" value="{DESTINATAR_ID}" />
+			</div>	
+			<div style="clear:both; padding: 5px 0px;">Adresa:</div>
+			<div >
+				<input type="text" name="destinatar_adresa" id="destinatar_adresa" class="field_input" value="{DESTINATAR_ADRESA}" rel="{DESTINATAR_ADRESA}" title="" style=" width: 220px;"/>
+			</div>
+			<div style="clear:both; padding: 5px 0px;">Persoana Contact:</div>
+			<div >
+				<input type="text" name="destinatar_contact" id="destinatar_contact" class="field_input" value="{DESTINATAR_CONTACT}" rel="{DESTINATAR_CONTACT}" title="" style=" width: 220px;"/>
+			</div>
+			<div style="clear:both; padding: 5px 0px;">Telefon:</div>
+			<div >
+				<input type="text" name="destinatar_telefon" id="destinatar_telefon" class="field_input" value="{DESTINATAR_TELEFON}" rel="{DESTINATAR_TELEFON}" title="" style=" width: 220px;"/>
+			</div>
+		</form>
+	</div>
+</div>

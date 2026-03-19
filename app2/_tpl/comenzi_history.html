@@ -1,0 +1,179 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Grid_ListaComenziIstoric($('#user_dispecerat').val());
+		MakeDialog();
+		$('#data_start').datetimepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			timeFormat : 'HH:mm',
+			hour: 9,
+			controlType: 'select',
+			oneLine: true,
+			onSelect: function (selectedDateTime){
+				let start = $(this).datetimepicker('getDate');
+				$('#data_final').datetimepicker('option', 'minDate', start );
+			},
+			onClose: function(dateText, inst) {
+				let testStartDate = $(this).datetimepicker('getDate'); 
+            	let testEndDate = $('#data_final').datetimepicker('getDate');
+				if (testStartDate > testEndDate)
+					$("#data_final").datetimepicker('setDate', testStartDate);
+			}
+		});
+		$('#data_final').datetimepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			timeFormat : 'HH:mm',
+			hour: 17,
+			controlType: 'select',
+			oneLine: true,
+			onSelect: function (selectedDateTime){
+				let end = $(this).datetimepicker('getDate');
+				$('#data_start').datetimepicker('option', 'maxDate', end );
+			},
+			onClose: function(dateText, inst) {
+				let testStartDate = $('#data_start').datetimepicker('getDate');
+            	let testEndDate = $(this).datetimepicker('getDate');
+				if (testStartDate > testEndDate)
+					$("#data_start").datetimepicker('setDate', testEndDate);
+			}
+		});
+		let today = new Date();
+		let startDate = new Date(today);
+		startDate.setHours(9, 0, 0, 0);
+		let endDate = new Date(today);
+		endDate.setHours(17, 0, 0, 0);
+
+		$("#data_start").datetimepicker('setDate', startDate);
+		$("#data_final").datetimepicker('setDate', endDate);
+	});
+
+</script>
+<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+    <fieldset style="min-width: 300px; height: 43px;">
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name" style="width: 136px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w110" readonly="true"/>
+			</div>
+			<div class="field_name" style="width: 136px;margin-left:15px">
+				<input type="text" name="data_final" id="data_final" class="field_input  w110" readonly="true"/>
+			</div>
+	</fieldset>
+
+    <fieldset class="h40" style="min-width: 50px;">
+        <legend>
+            <label class="field_label" for="dispecerat">Dispecerat</label>
+        </legend>
+        <div class="field_name w110">
+            <input type="hidden" value="{USER_DISPECERAT_ID}" id="user_dispecerat"/>
+				<select name="dispecerate" id="dispecerate" class="combo_box w90"><option value="">Toate</option>
+					{DISPECERATE}
+				</select>
+        </div>
+    </fieldset>
+    
+    <div class="field_name w410 class_btn" style="padding-top: 15px;">
+        <input type="button" name="search" class="button" value="Afiseaza" onclick="AfisareListaComenziIstoric();" />
+        <input type="button" name="export" class="button" value="Export" onclick="ExportComenziIstoric();" />
+    </div>
+    
+    <div class="field_name class_btn" style="width: 100px;" >
+		<input type="button" name="preluare" class="button" value="Preluare comenzi" onclick="document.location='{HTTP}comenzi/preluare'" />
+	</div>
+    <div class="separator_empty h5" ></div>
+</div>
+<div style="color:red">Dublu click pe linie pentru afisare detalii</div>
+
+<div style="float: left; width: 630px;">
+	<div class="separator_empty h15"></div>
+	<table id="lista_comenzi"></table>
+	<div id="paginatie_comenzi" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="dialog-form" title="Detalii comanda" style="display:none;width:560px">
+	<input type="hidden" name="comanda_id" id="comanda_id" value=""/>
+	<input type="hidden" name="localitate_id" id="localitate_id" value=""/>
+  <table border="0" width="100%">
+  <tr>
+  <th width="15%" style="text-align:left">Client</th><td width="30%"><span id="client"></span></td>
+  <th width="15%" style="text-align:left">Localitate</th><td width="30%"><span id="localitate"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Adresa</th><td colspan="3"><span id="adresa"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Contact</th><td width="30%"><span id="contact"></span></td>
+  <th width="15%" style="text-align:left">Telefon</th><td width="30%"><span id="telefon"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Colete</th><td width="30%"><span id="nr_obj_colet"></span></td>
+  <th width="15%" style="text-align:left">Paleti</th><td width="30%"><span id="nr_obj_palet"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Greutate</th><td width="30%"><span id="kg_obj"></span></td>
+  <th width="15%" style="text-align:left">Volum</th><td width="30%"><span id="vol_obj"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Data colectarii</th><td colspan="3"><span id="collect_at"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">De la</th><td width="30%"><span id="h_start"></span>h</td>
+  <th width="15%" style="text-align:left">Pana la</th><td width="30%"><span id="h_end"></span>h</td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Observatii</th><td colspan="3"><span id="observatii"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Status</th><td width="30%"><span id="status"></span></td>
+  <th width="15%" style="text-align:left">Data status</th><td width="30%"><span id="ch_created_at"></span></td>
+  </tr>
+  <tr>
+  <th width="15%" style="text-align:left">Motiv</th><td colspan="3"><span id="motiv"></span></td>
+  </tr>
+  </table>
+  <div class="separator_empty" style="height: 5px;"></div>
+  <form>
+	<fieldset style="width: 600px">
+		<legend>
+			<label class="field_label">Agent</label>
+		</legend>
+		<div class="field_name w60">
+			Curier
+		</div>
+		<div class="field_name w190">
+			<input type="text" name="agent" id="agent" class="field_input auto-hint w170" value=""/>
+		</div>
+		<div class="field_name w90" style="padding-left: 10px;">
+			Comunicare
+		</div>
+		<div class="field_name w100">
+			<select style="width: 80px;" id="comunicare" name="comunicare" class="field_combobox" >
+				<option value="1">Android</option>
+				<option value="2">Telefon</option>
+			</select>
+		</div>
+		<div class="separator_empty" style="height: 1px;"></div>
+		<div class="field_name w60">
+			Telefon
+		</div>
+		<div class="field_name w260">
+			<input type="text" name="telefon_agent" id="telefon_agent" class="field_input w170" value="" readonly/>
+		</div>
+	</fieldset>
+    <fieldset style="width: 600px">
+		<legend>
+			<label class="field_label">Mesaj <span id="mesaj_nr_caractere" style="color: red;">160</span></label>
+		</legend>
+		<div class="field_row">
+			<textarea name="mesaj" id="mesaj" class="field_textarea" style="width: 590px; height: 40px;"></textarea>
+		</div>
+	</fieldset>
+  </form>
+</div>

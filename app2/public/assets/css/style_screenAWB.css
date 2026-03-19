@@ -1,0 +1,335 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	font-size: 11px;
+	font-style: normal;
+	font-family: "Trebuchet MS", "Verdana", "Arial";
+	line-height: normal;
+	width: 100%;
+	/*min-width: 800px;*/
+}
+.separator_empty {
+	clear: both;
+	background: none;
+	height: 0px;
+	font-size: 0px;
+	line-height: 0px;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	_margin-top: -2px;
+}
+
+.page-break {
+	page-break-before: always;
+}
+
+
+
+
+/*fonturi*/
+.font40{
+	font-size: 40%;
+	line-height: 100%;
+}
+.font50{
+	font-size: 50%;
+	line-height: 100%;
+}
+.font60{
+	font-size: 60%;
+	line-height: 100%;
+}
+.font70{
+	font-size: 70%;
+	line-height: 100%;
+}
+.font80{
+	font-size: 80%;
+	line-height: 100%;
+}
+.font90{
+	font-size: 90%;
+	line-height: 100%;
+}
+.font100{
+	font-size: 100%;
+	line-height: 100%;
+}
+.font110{
+	font-size: 110%;
+}
+.font120{
+	font-size: 120%;
+}
+.font130{
+	font-size: 130%;
+}
+
+
+
+
+
+
+
+
+.awb_left{
+	width: 23%;
+	float: left;
+}
+.awb_center{
+	width: 42%;
+	margin: 0 0.7%;
+	float: left;
+}
+.awb_right{
+	width: 30%;
+	float: left;
+}
+
+
+
+
+
+
+
+
+
+.awb_sep{
+	float: left;
+	width: 1px;
+	height: 100%;
+	display: block;
+}
+.awb_row{
+	height: 13px;
+	overflow: hidden;
+}
+.awb_label{
+	font-weight: normal;
+	border: 0px;
+}
+.fara_border{
+	border: 0px !important;
+	padding: 0px !important;
+}
+.awb_box1{
+	border: 2px solid #000;
+	padding: 2px;
+}
+.awb_box2{
+	border: 2px solid #000;
+	padding: 2px 2px 0px;
+}
+.awb_box3{
+	border: 2px solid #000;
+	padding: 2px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.awb_index{
+	border: 1px solid #000;
+	color: #000;
+	height: 12px !important;
+	font-weight: bold;
+	text-align: center;
+	width: 5%;
+	min-width: 14px;
+	display: block;
+	float: left;
+	padding: 0;
+}
+.awb_title{
+	border: 1px solid #000;
+	color: #000;
+	font-weight: bold;	
+	width: 90%;
+	height: 12px !important;
+	padding: 0; 
+	margin-left: 1%;
+	padding-left: 1%;
+	display: block;
+	float: left;
+}
+
+.awb_adresa{
+	vertical-align: top;
+	display: inline-table;
+	overflow: hidden;
+	font-weight: bold;
+	height: 4.3em !important;
+}
+.awb_contact{
+	vertical-align: top;
+	height:200%;
+	overflow: hidden;
+	line-height: 15px;
+}
+.awb_left .awb_col1{
+	width: 30%;
+	padding: 2px;
+	border-left: 1px solid #000;
+	border-bottom: 1px solid #000;
+}
+.awb_left .awb_col2{
+	width: 50%;
+	padding: 2px;
+	border-left: 1px solid #000;
+	border-bottom: 1px solid #000;
+}
+.awb_left .awb_col3{
+	width: 70%;
+	padding: 2px;
+	border-left: 1px solid #000;
+	border-bottom: 1px solid #000;
+}
+.awb_left .awb_col4{
+	width: 100%;
+	padding: 2px;
+	border-left: 1px solid #000;
+	border-bottom: 1px solid #000;
+}
+
+.awb_left table, .awb_right table, .awb_center table{
+	width: 100%;
+	display: inline-table;
+}
+
+.awb_left font10{
+	font-size: 10px;
+}
+
+
+
+
+
+
+/*center*/
+.awb_center .description_left {
+	width: 92px;
+	padding: 0px 2px;
+	font-size: 10px;
+	font-weight: bold;
+	float: left;
+}
+.awb_center .description_right {
+	width: 188px;
+	padding: 0px 2px;
+	font-size: 11px;
+	float: left;
+}
+
+
+
+
+
+
+
+.box_platitor{
+	min-width: 90px; 
+	width: 40%;
+	float: left; 
+	overflow: hidden; 
+	border-bottom: 0px; 
+	border-right: 0px;
+}
+
+.box_mod_plata{
+	min-width: 111px;
+	width: 50%; 
+	float: left; 
+	height: 70px;
+}
+.box_tert{
+	width: 96%; 
+	float: left; 
+	height: 18px; 
+	overflow: hidden; 
+	border-top: 0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.awb_title3_1{
+	border: 1px solid #000;
+	color: #000;
+	font-size: 11px;
+	font-weight: bold;	
+	margin-left: 5px; 
+	padding: 0px 0px 0px 5px;
+	display: block;
+	float: left;
+	
+}
+
+.awb_title3_2{
+	border: 1px solid #000;
+	color: #000;
+	font-size: 10px;
+	font-weight: bold;	
+	padding: 0px 0px 0px 5px;
+	margin-left: 5px; 
+	display: block;
+	float: left;
+}
+.awb_title3_3{
+	border: 1px solid #000;
+	color: #000;
+	font-size: 10px;
+	font-weight: bold;	
+	padding: 0px 0px 0px 5px;
+	display: block;
+	float: left;
+}
+
+
+.awb_pui_left{
+	float: left;
+	width: 45%;;
+	margin: 1px 0px;
+	font-size: 11px;
+	display: block;
+	margin-right: 5%;
+}
+.awb_pui_right{
+	float: left;
+	width: 45%;
+	margin: 1px 0px;
+	font-size: 11px;
+	display: block;
+}
+.awb_box_pui{
+	border: 2px solid #000;
+	padding: 2px;
+	width: 100%;
+	display: block;
+}
+.break { page-break-before: always; }

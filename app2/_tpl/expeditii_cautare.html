@@ -1,0 +1,152 @@
+<script>
+$(document).ready(function()
+{
+	Grid_CautareExpeditii();
+
+	ComboLocalitati('expeditor_localitate_nume');
+	ComboLocalitati('destinatar_localitate_nume');
+
+	ComboClienti('expeditor_nume','localitate','expeditor_localitate_nume');
+	ComboClienti('destinatar_nume','localitate','destinatar_localitate_nume');
+
+	ComboAgenti('curier_preluare');
+	ComboAgenti('curier_livrare');
+//
+	ComboOperatori('operator');
+
+});
+	function Cautare(evt){
+		var theEvent = evt || window.event;
+    	var key = theEvent.key || theEvent.which || theEvent.keyCode;
+    	if(key == 'Enter' || key == 13)
+			AfisareCautareExpeditii();
+    }
+</script>
+<form action="{HTTP}expeditii/cautare_export/" id="export_lista" method="post" name="export_lista">
+	<div class="cautare_expeditii" >
+	<input type="hidden" name="raport_alex" id="raport_alex" value="{RAPORT_ALEX}" />
+		<fieldset>
+			<legend>
+				<label class="field_label" for="operatie">Operatie</label>
+			</legend>
+			<div class="field_name w90">
+				<select style="width: 80px;" id="operatiune" name="operatiune" class="field_combobox" >
+					<option selected="selected" value="1">Nr. Exp.:</option>
+					<option value="3">Factura</option>
+				</select>
+			</div>
+			<div class="field_name w130">
+				<input type="text" name="search" id="search" class="field_input auto-hint w120" value="{SEARCH}" placeholder="Valoare Cautata" onkeydown="return Cautare(event);" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="perioada" onclick="CautareExpeditii(1);">Perioada</label>
+				<input type="checkbox" name="perioada" id="perioada" value="1" class="field_checkbox" onclick="CautareExpeditii(1);" {PERIOADA} />
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="" placeholder="De la" disabled="true" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="" placeholder="Pana la" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 140px;">
+			<legend>
+				<label class="field_label" for="user" onclick="CautareExpeditii(3);">Operator</label>
+				<input type="checkbox" name="user" id="user" value="1" class="field_checkbox" onclick="CautareExpeditii(3);" {PERIOADA} />
+			</legend>
+			<div class="field_name w140">
+				<input type="text" name="operator_nume" id="operator_nume" class="field_input auto-hint w130" value="" placeholder="Operator" disabled="true" />
+			</div>
+		</fieldset>
+
+		<fieldset style="min-width: 90px;">
+			<legend>
+				<label class="field_label" for="livrare" onclick="CautareExpeditii(11);">Livrare</label>
+				<input type="checkbox" name="livrare" id="livrare" value="1" class="field_checkbox" onclick="CautareExpeditii(11);" {LIVRARE} />
+			</legend>
+			<div class="field_name w90" style="height: 23px;">
+				<select style="width: 80px;" id="tip_livrare" name="tip_livrare" class="field_combobox"  disabled="true" >
+					<option selected="selected" value="1">Toate</option>
+					<option value="2">Sambata</option>
+					<option value="4">Sediu</option>
+				</select>
+			</div>
+		</fieldset>
+
+		<div class="field_name w130 class_btn" style="margin-top: 0; margin-left: 10px;">
+			<input type="button" name="search" class="button" value="Cauta"  onclick="AfisareCautareExpeditii();" />
+			<input type="button" name="exporta" class="button" value="Exporta" onclick="ExportCautareExpeditii();" />
+			<input type="button" name="printselected" class="button" value="Printare Multipla" onclick="PrintareMultipla{SELECTIE_MOD_PRINTARE}CautareExpeditii();" />
+		</div>
+		<div class="separator_empty h5">&nbsp;</div>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="expeditor" onclick="CautareExpeditii(4);">Expeditor</label>
+				<input type="checkbox" name="expeditor" id="expeditor" value="1" class="field_checkbox" onclick="CautareExpeditii(4);" {EXPEDITOR} />
+			</legend>
+			<div class="field_name w130">
+				<input type="text" name="expeditor_localitate_nume" id="expeditor_localitate_nume" class="field_input auto-hint w120" value="" placeholder="Localitate"  disabled="true"/>
+			</div>
+			<div class="field_name w130">
+				<input type="text" name="expeditor_nume" id="expeditor_nume" class="field_input auto-hint w120" value="" placeholder="Client" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="destinatar" onclick="CautareExpeditii(5);">Destinatar</label>
+				<input type="checkbox" name="destinatar" id="destinatar" value="1" class="field_checkbox" onclick="CautareExpeditii(5);" {DESTINATAR} />
+			</legend>
+			<div class="field_name w130">
+				<input type="text" name="destinatar_localitate_nume" id="destinatar_localitate_nume" class="field_input auto-hint w120" value="" placeholder="Localitate" disabled="true" />
+			</div>
+			<div class="field_name w130">
+				<input type="text" name="destinatar_nume" id="destinatar_nume" class="field_input auto-hint w120" value="" placeholder="Client" disabled="true" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="curier" onclick="CautareExpeditii(6);">Curier</label>
+				<input type="checkbox" name="curier" id="curier" value="1" class="field_checkbox" onclick="CautareExpeditii(6);" {CURIER} />
+			</legend>
+			<div class="field_name w130">
+				<input type="hidden" name="curier_preluare" id="curier_preluare" class="field_input auto-hint w120" value=""/>
+				<input type="text" name="curier_preluare_nume" id="curier_preluare_nume" class="field_input auto-hint w120" value="" placeholder="Preluare" disabled="true" />
+			</div>
+			<div class="field_name w130">
+				<input type="hidden" name="curier_livrare" id="curier_livrare" class="field_input auto-hint w120" value=""/>
+				<input type="text" name="curier_livrare_nume" id="curier_livrare_nume" class="field_input auto-hint w120" value="" placeholder="Livrare" disabled="true" />
+			</div>
+		</fieldset>
+		<div class="field_name w130 class_btn" style="margin-top: 15px; margin-left: 10px;" >
+			<input type="button" name="detalii" class="button" value="Detalii Expeditie" onclick="AfisareDetaliiExpeditie('cautare_expeditii');"/>
+		</div>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="expeditii_area">Expeditii : </label>
+				<span id = "nr_expeditii_area"></span>
+			</legend>
+			<div style="width:930px">
+				<textarea id="expeditii_area" name="expeditii_area" style="width:100%" rows="5" placeholder="Expeditii separate cu , sau Enter"></textarea>
+			</div>
+		</fieldset>
+	</div>
+</form>
+
+<div class="separator_empty h10">&nbsp;</div>
+<table id="cautare_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div id="detalii_expeditie" style="display: none;">&nbsp;</div>

@@ -1,0 +1,30 @@
+<script>
+$(document).ready(function() 
+{
+	Grid_BorderouriClienti();
+	
+	ComboAgenti3_Old_All('AG_PREL');
+	
+});
+</script>
+<div class="separator_empty h10">&nbsp;</div>
+<table id="liste_borderouri"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div style="display: none;">
+	<div id="detalii_expeditie">&nbsp;</div>
+	<div id="eroare" title="Eroare">&nbsp;</div>
+	<div id="receptie_borderou" title="Receptie Borderou">
+		<div style="padding: 5px 0px;">Agent Preluare:</div>
+		<div >
+			<input type="text" name="AG_PREL_NUME" id="AG_PREL_NUME" class="field_input" value="{AG_PREL_NUME}" rel="{AG_PREL_NUME}" title="" style=" width: 220px;"/>
+			<input type="hidden" name="AG_PREL" id="AG_PREL" class="field_input" value="{AG_PREL}" />
+		</div>	
+		
+		<div style="padding: 5px 0px;">Nr Comanda:</div>
+		<div >
+			<input type="text" name="id_comanda" id="id_comanda" class="field_input" value="" rel="" title="" style=" width: 220px;"/>
+		</div>
+	</div>
+</div>

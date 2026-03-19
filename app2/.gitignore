@@ -1,0 +1,11 @@
+_tmp/
+config/
+public_html/
+logs/
+config.php
+tcpdf.php
+.DS_Store
+/*.txt
+cron.lock
+*.log
+vendor/

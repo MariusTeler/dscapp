@@ -1,0 +1,133 @@
+<div class="geocoder_address_listare">
+    <script type="text/javascript">
+        $(document).ready(function(){
+           GeocoderAddressListare();
+        });
+
+        function GeocoderAddressListare() {
+
+            let zone = (function() {
+                let zone_list = null;
+                $.ajax({
+                    async : false,
+                    global : false,
+                    url : '/geocoder_address/zone_json',
+                    dataType : 'text',
+                    success : function(data) {
+                        zone_list = data;
+                    }
+                });
+                return zone_list;
+            })();
+        
+            $("#geocoder_address_listare").jqGrid({
+                url : HTTP + 'geocoder_address/listare_json',
+                datatype : "json",
+                colNames : [ 'Adresa', 'Localitate', 'Zona', 'Centru', 'Provider', 'Neatness', 'Formatted addr.', 'lat', 'lng' ],
+                colModel : [ {
+                    name : 'adresa',
+                    index : 'agd.adresa',
+                    editable : false,
+                    search : true,
+                    width : 300
+                },{
+                    name : 'localitate',
+                    index : 'lc.nume_lc',
+                    editable : false,
+                    search : true,
+                    width : 80
+                },{
+                    name : 'zona',
+                    index : 'zo.name',
+                    editable : true,
+                    edittype : "select",
+                    editoptions : {
+                        dataInit: function (domElem) {
+                            setTimeout(function() {
+                                $(domElem).focus();
+                                $(domElem).setCursorPosition(0);
+                            }, 100);
+                        },
+                        value : zone
+                    },
+                    search : true,
+                    width : 50
+                }, {
+                    name : 'centru',
+                    index : 'ce.nume',
+                    editable : false,
+                    search : true,
+                    width : 70
+                }, {
+                    name : 'provider',
+                    index : 'agd.provider',
+                    editable : false,
+                    search : true,
+                    width : 50
+                },{
+                    name : 'neatness',
+                    index : 'agd.neatness',
+                    search : true,
+                    editable : false,
+                    width : 50
+                },{
+                    name : 'formatted_adresa',
+                    index : 'agd.formatted_adresa',
+                    search : false,
+                    sortable : false,
+                    editable : false,
+                    width : 200
+                },{
+                    name : 'lat',
+                    index : 'agd.lat',
+                    editable : false,
+                    search : false,
+                    sortable : false,
+                    width : 80
+                },{
+                    name : 'lng',
+                    index : 'agd.lng',
+                    editable : false,
+                    search : false,
+                    sortable : false,
+                    width : 80
+                },],
+                height : 400,
+                width : 970,
+                scroll : 1,
+                rowNum : 100,
+                mtype : "GET",
+                rownumbers : false,
+                gridview : true,
+                pager : '#geocoder_address_listare_pag',
+                sortname : '1',
+                viewrecords : true,
+                sortorder : "asc",
+                caption : 'Listare Adrese Geocode',
+                cellEdit: true,
+                cellsubmit: 'remote',
+                cellurl: '/geocoder_address/editare',
+                afterSubmitCell : function(serverresponse, rowid, cellname, value, iRow, iCol) {
+                    var response = jQuery.parseJSON(serverresponse.responseText);
+                    if (response.success == 1){
+                        $(this).jqGrid('setCell', rowid, 'zona', 'ROOFTOP', {color:'red', weightfont:'bold'});
+                        $(this).jqGrid('setCell', rowid, 'provider', 'DSC', {color:'red', weightfont:'bold'});
+                        return [true,""];
+                    }
+                    else{
+                        return [false,response.error];
+                    }
+                },
+            });
+            
+            $("#geocoder_address_listare").jqGrid('bindKeys');
+            $("#geocoder_address_listare").jqGrid('filterToolbar', {
+                stringResult : true,
+                searchOnEnter : false
+            });
+        }
+    </script>
+    <table id="geocoder_address_listare" class="table_jqgrid"></table>
+    <div id="geocoder_address_listare_pag"></div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>

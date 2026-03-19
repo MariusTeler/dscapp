@@ -1,0 +1,432 @@
+<script type="application/javascript">
+    $( document ).ready(function() {
+        updateDashboard();
+        $('.tab').tabs();
+        loguriFacturiGrid();
+        loguriParteneriGrid();
+
+        $('#comunicare_wme').click(function(e) {
+            if(e.ctrlKey || e.altKey) {
+                PauzaComunicareWme(0);
+            } else {
+                PauzaComunicareWme(1);
+            }
+            return false;
+        });
+
+
+        $('#cron_lock').click(function(e) {
+            if(e.ctrlKey || e.altKey) {
+                PauzaCron(0);
+            } else {
+                PauzaCron(1);
+            }
+            return false;
+        });
+    });
+
+    function updateDashboard() {
+        $.ajax(HTTP + 'loguri/ajax', {
+            type: "POST",
+            data: {method:'getLog'},
+            dataType: "json",
+            statusCode: {
+                200: function (response) {
+                    $('#facturi_count').html(response.facturi_count);
+                    $('#clienti_count').html(response.clienti_count);
+                    $('#message').html(response.message);
+                }
+            }
+        });
+    }
+
+
+    function markAsTrimisa(id) {
+        $.ajax(HTTP + 'loguri/ajax', {
+            type: "POST",
+            data: {sel_ids:[id], method:'markAsTrimisa'},
+            dataType: "json",
+            statusCode: {
+                200: function (response) {
+                    $('#facturi_count').html(response.facturi_count);
+                    $('#message').html(response.message);
+                    reloadGrid('facturi_log');
+                }
+            }
+        });
+    }
+
+    function retrimiteFacturi() {
+        var grid = jQuery('#facturi_log');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o pozitie pentru resetare!"); return false; }
+
+        $.ajax(HTTP + 'loguri/ajax', {
+            type: "POST",
+            data: {sel_ids:sel_ids, method:'retrimiteFacturi'},
+            dataType: "json",
+            statusCode: {
+                200: function (response) {
+                    $('#facturi_count').html(response.facturi_count);
+                    $('#message').html(response.message);
+                    reloadGrid('facturi_log');
+                }
+            }
+        });
+
+    }
+    
+    function trimiteParteneri() {
+        var grid = jQuery('#parteneri_log');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o pozitie pentru resetare!"); return false; }
+
+
+        $.ajax(HTTP + 'loguri/ajax', {
+            type: "POST",
+            data: {sel_ids:sel_ids, method:'trimiteParteneri'},
+            dataType: "json",
+            statusCode: {
+                200: function (response) {
+                    $('#clienti_count').html(response.clienti_count);
+                    $('#message').html(response.message);
+                    reloadGrid('parteneri_log', false);
+                }
+            }
+        });
+    }
+    function reloadGrid(id, update) {
+        jQuery("#"+id).jqGrid('setGridParam').trigger("reloadGrid");
+        if(update)
+            updateDashboard();
+    }
+
+    function loguriFacturiGrid() {
+        var gridimgpath = 'css/smoothness/images';
+        var grid = jQuery('#facturi_log');
+
+        grid.jqGrid(
+            {
+                url : HTTP + 'loguri/json/facturi_log',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames : [ 'ID', 'Invoice', 'Suma', 'Data', 'Agent', 'Centru', 'Status', 'Mesaj'],
+                colModel : [ {
+                    name : 'id',
+                    search : false,
+			        sortable : false,
+                    width: 60
+                }, {
+                    name : 'invoice',
+                    index : 'ef.invoice',
+                    width: 120,
+                    align: 'left'
+                },{
+                    name : 'sumamnt',
+                    index : 'ef.sumamnt',
+                    width: 70,
+                    align: 'right'
+                },{	
+					name : 'trndate',
+					index : 'ef.trndate',
+					sorttype : 'date',
+					formatter : 'date',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd.m.Y'
+					},
+					align: 'center',
+					width : 70
+				}, {
+                    name : 'nume_ag',
+                    index : 'ag.nume_ag',
+                    width: 100,
+                    align: 'left'
+                }, {
+                    name : 'nume',
+                    index : 'ce.nume',
+                    width: 100,
+                    align: 'left'
+                }, {
+                    name : 'wme',
+                    index : 'wme',
+                    width: 70,
+                    stype : 'select',
+                    formatter: 'select',
+                    searchoptions : {
+                        value : ":Toate;-1:De trimis;3:Eroare",
+                        sopt : [ 'eq' ]
+                    },
+                    editoptions : {
+                        value : "-1:De trimis;2:Eroare;3:Eroare"
+                    },
+                    align: 'center'
+                }, {
+                    name : 'wme_message',
+                    index : 'wme_message',
+                    width: 495,
+                    align: 'left'
+                }],
+                rowNum : 250,
+                rowList : [ 250,500,1000,2500,5000,10000 ],
+                rownumbers : true,
+                width : 960,
+                height : 350,
+                viewrecords : true,
+                pager : '#facturi_log_pag',
+                shrinkToFit: false,
+                caption: 'Facturi',
+                forceFit: true,
+                multiselect: true,
+                beforeSelectRow: function (rowid, e) {
+                    var $myGrid = $(this),
+                        i = $.jgrid.getCellIndex($(e.target).closest('td')[0]),
+                        cm = $myGrid.jqGrid('getGridParam', 'colModel');
+                    return (cm[i].name === 'cb');
+                },
+                ondblClickRow : function(rowid, nr, col,  row) {
+                    var rowData = $(this).getRowData(rowid);                    
+
+                    $("#eroare").html("Sigur corespund datele in wme pentru factura: <strong>" + rowData.invoice + "</strong> ?");
+                    $("#eroare").attr('title', 'Confirmare');
+                    $("#eroare").dialog({
+                        modal : true,
+                        draggable : false,
+                        height : 170,
+                        width : 270,
+                        resizable : false,
+                        buttons : {
+                            'Da' : function() {
+                                markAsTrimisa(rowid);
+                                $(this).dialog("destroy");
+                            },
+                            'Nu' : function() {
+                                $(this).dialog("destroy");
+                            }
+                        }
+                    });
+
+                },
+                gridComplete: function()
+                {
+                    updateDashboard();
+                }
+
+            });
+        grid.jqGrid('bindKeys');
+
+
+        grid.jqGrid('navGrid', '#facturi_log_pag', {
+            del : false,
+            add : false,
+            edit : false,
+            search : false
+        },{},{},{},{multipleSearch:true});
+
+        grid.jqGrid('filterToolbar',{
+            stringResult : true,
+            searchOnEnter : false
+        });
+    }
+
+    function loguriParteneriGrid() {
+        var gridimgpath = 'css/smoothness/images';
+        var grid = jQuery('#parteneri_log');
+
+        grid.jqGrid(
+            {
+                url : HTTP + 'loguri/json/parteneri_log',
+                datatype: 'json',
+                mtype: 'POST',
+                colNames : [ 'ID', 'Nume', 'Data', 'Status', 'Mesaj'],
+                colModel : [ {
+                    name : 'id',
+                    index : 'cod_cl',
+                    search : false,
+			        sortable : false,
+                    width: 60
+                }, {
+                    name : 'nume',
+                    index : 'nume',
+                    width: 120,
+                    align: 'left'
+                },{	
+					name : 'data_op',
+					index : 'data_op',
+					sorttype : 'date',
+					formatter : 'date',
+					formatoptions : {
+						srcformat : 'Y-m-d',
+						newformat : 'd.m.Y'
+					},
+					align: 'center',
+					width : 70
+				}, {
+                    name : 'wme',
+                    index : 'wme',
+                    width: 70,
+                    stype : 'select',
+                    formatter: 'select',
+                    searchoptions : {
+                        value : ":Toate;-1:De trimis;3:Eroare",
+                        sopt : [ 'eq' ]
+                    },
+                    editoptions : {
+                        value : "-1:De trimis;2:Eroare;3:Eroare"
+                    },
+                    align: 'center'
+                }, {
+                    name : 'wme_message',
+                    index : 'wme_message',
+                    width: 495,
+                    align: 'left'
+                }],
+                rowNum : 250,
+                rowList : [ 250,500,1000,2500,5000,10000 ],
+                rownumbers : true,
+                width : 960,
+                height : 350,
+                viewrecords : true,
+                pager : '#parteneri_log_pag',
+                shrinkToFit: false,
+                caption: 'Parteneri',
+                forceFit: true,
+                multiselect: true,
+                beforeSelectRow: function (rowid, e) {
+                    var $myGrid = $(this),
+                        i = $.jgrid.getCellIndex($(e.target).closest('td')[0]),
+                        cm = $myGrid.jqGrid('getGridParam', 'colModel');
+                    return (cm[i].name === 'cb');
+                },
+                gridComplete: function()
+                {
+                    updateDashboard();
+                }
+
+            });
+        grid.jqGrid('bindKeys');
+
+
+        grid.jqGrid('navGrid', '#parteneri_log_pag', {
+            del : false,
+            add : false,
+            edit : false,
+            search : false
+        },{},{},{},{multipleSearch:true});
+
+        grid.jqGrid('filterToolbar',{
+            stringResult : true,
+            searchOnEnter : false
+        });
+    }
+
+
+    function PauzaCron(mentenanta) {
+
+        var meth = '';
+        if(mentenanta == 1) {
+            meth = 'AddCronLock';
+        } else if(mentenanta == 0) {
+            meth = 'RemoveCronLock';
+        }
+
+        $.ajax(HTTP + 'loguri/ajax', {
+            type: "POST",
+            data: {method:meth},
+            dataType: "json",
+            statusCode: {
+                200: function (response) {
+                    if(response.cron_time>0){
+                        $('#cron_lock input').addClass('cron_run');
+                        $('#cron_lock input').attr('value','Cron '+ response.cron_time +' min');
+                    } else {
+                        $('#cron_lock input').removeClass('cron_run');
+                        $('#cron_lock input').attr('value','Cron');
+                    }
+                }
+            }
+        });
+
+    }
+
+    function PauzaComunicareWme(mentenanta) {
+
+        var meth = '';
+        if(mentenanta == 1) {
+            meth = 'SetMentenanceMode';
+        } else if(mentenanta == 0) {
+            meth = 'RemoveMentenanceMode';
+        }
+
+        $.ajax(HTTP + 'loguri/ajax', {
+            type: "POST",
+            data: {method:meth},
+            dataType: "json",
+            statusCode: {
+                200: function (response) {
+
+                    if(response.mentenance>0){
+                        $('#comunicare_wme input').addClass('wme_mentenanta');
+                        $('#comunicare_wme input').attr('value','WME com '+ response.mentenance +' min');
+                    } else {
+                        $('#comunicare_wme input').removeClass('wme_mentenanta');
+                        $('#comunicare_wme input').attr('value','WME com');
+                    }
+
+                }
+            }
+        });
+
+    }
+
+</script>
+<style>
+    #taburi_wme_com ul li a span {
+        background: #eb8f00;
+        padding: 3px 7px;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    #taburi_wme_com .ui-tabs-panel{
+        padding: 0;
+    }
+    .buton-comunicare-wme, .buton-cron-lock{
+        float: right;
+    }
+
+    .title_page .cron_run{
+        background: #ff8c4e;
+        color: #4a4a4a;
+    }
+    .title_page.wme_mentenanta{
+        background: yellow !important;
+    }
+</style>
+<div id="message"></div>
+
+<div class="tab taburi_wme_com" id="taburi_wme_com">
+    <ul>
+        <li>
+            <a data-id="1" href="#tabs-10" onclick="reloadGrid('facturi_log');">Facturi <span id="facturi_count">0</span></a>
+        </li>
+        <li>
+            <a data-id="2" href="#tabs-20" onclick="reloadGrid('parteneri_log');">Parteneri <span id="clienti_count">0</span></a>
+        </li>
+    </ul>
+    <div id="tabs-10">
+        <div class="separator_empty h10"></div>
+        <input class="button ui-button ui-widget ui-state-default ui-corner-all" value="Retrimite in WME" onclick="retrimiteFacturi();" role="button" aria-disabled="false" type="button">
+        <div class="separator_empty h10"></div>
+        <table id="facturi_log"></table>
+        <div id="facturi_log_pag"></div>
+    </div>
+    <div id="tabs-20">
+        <div class="separator_empty h10"></div>
+        <input class="button ui-button ui-widget ui-state-default ui-corner-all" value="Trimite in WME" onclick="trimiteParteneri();" role="button" aria-disabled="false" type="button">
+        <div class="separator_empty h10"></div>
+        <table id="parteneri_log"></table>
+        <div id="parteneri_log_pag"></div>
+    </div>
+</div>
+<div id="eroare"></div>

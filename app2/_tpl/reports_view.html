@@ -1,0 +1,154 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		SetareDate();
+	});
+
+    function Export(tip){
+		var data_start = encodeURIComponent($('#data_start').val());
+		var data_final = encodeURIComponent($('#data_final').val());
+
+		var cond = '&tip=' +tip + '&data_start=' + data_start + '&data_final='+ data_final
+
+		var status_ramburs = parseInt($('#status_ramburs').val());
+		if(!isNaN(status_ramburs) && status_ramburs >= 0)
+			cond += '&status_ramburs=' + status_ramburs;
+
+		$.download('reports/export', cond, false);
+	}
+</script>
+<div style="min-height: 600px">
+	<div id="perioada">
+		<fieldset>
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="{DATA_START}" title="De la" readonly/>
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="{DATA_FINAL}" title="Pana la" readonly/>
+			</div>
+		</fieldset>
+	</div>
+	<div id="reports">
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export rambursuri</label>
+			</legend>
+			<fieldset>
+				<legend>
+					<label class="field_label" for="filtru">Status ramburs</label>
+				</legend>
+				<div class="field_name w110">
+					<select id="status_ramburs" name="status_ramburs" class="field_combobox w100">
+						<option selected="selected" value="-1">Toate</option>
+						<option value="0">In derulare</option>
+						<option value="1">Inchis</option>
+						<option value="2">Validat</option>
+						<option value="4">Spre client</option>
+						<option value="6">Litigiu</option>
+						<option value="7">Pierdut</option>
+						<option value="10">Nepreluat</option>
+						<option value="11">Spre compensare</option>
+						<option value="21">On Hold</option>
+						<option value="23">Decontat</option>
+						<option value="24">LaPlata</option>
+						<option value="25">Nesosit</option>
+						<option value="26">Abandonat</option>
+						<option value="27">Compensat</option>
+						<option value="30">Aprobat</option>
+						<option value="31">Returnat</option>
+					</select>
+				</div>
+			</fieldset>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_rbs" class="button" value="Exporta" onclick="Export(1);" /> 
+			</div>
+		</fieldset>
+		<br/>
+		<br/>
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export pret impus</label>
+			</legend>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_pret_impus" class="button" value="Exporta" onclick="Export(8);" /> 
+			</div>
+		</fieldset>
+		<br/>
+		<br/>
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export incasari CARD</label>
+			</legend>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_neliv" class="button" value="Exporta" onclick="Export(5);" /> 
+			</div>
+		</fieldset>
+		<br/>
+		<br/>
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export nelivrate</label>
+			</legend>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_neliv" class="button" value="Exporta" onclick="Export(2);" /> 
+			</div>
+		</fieldset>
+		<br/>
+		<br/>
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export first scan si anulate</label>
+			</legend>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_first_scan" class="button" value="Exporta" onclick="Export(6);" /> 
+			</div>
+		</fieldset>
+		<br/>
+		<br/>
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export livrate si nedecontate</label>
+			</legend>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_nedecontate" class="button" value="Exporta" onclick="Export(4);" /> 
+			</div>
+		</fieldset>
+		<br/>
+		<br/>
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export expeditii clienti</label>
+			</legend>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_expeditii_clienti" class="button" value="Exporta" onclick="Export(7);" /> 
+			</div>
+		</fieldset>
+		<br/>
+		<br/>
+		<fieldset style="width: 950px;">
+			<legend>
+				<label class="field_label">Export ANAF 395 RBS</label>
+			</legend>
+			
+			<div class="field_name w260 class_btn" style="margin-top: 10px; margin-left: 10px;">
+				<input type="button" name="export_anaf" class="button" value="Exporta" onclick="Export(3);" /> 
+			</div>
+		</fieldset>
+	</div>
+	<div id="eroare" title="Eroare" style="display: none;"></div>
+</div>

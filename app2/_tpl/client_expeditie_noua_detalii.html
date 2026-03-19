@@ -1,0 +1,517 @@
+<style>
+	.change-roles-wrapper {
+		display: flex;
+		margin: 5px;
+		margin-bottom: 20px;
+		position: absolute;
+		right: 445px;
+		top: -3px;
+		justify-content: end;
+	}
+	.change-roles-wrapper svg {
+		width: 25px;
+		cursor: pointer;
+	}
+	.dsc-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 5px 10px;
+		cursor: pointer;
+	}
+	.dsc-btn span {
+		margin-left: 5px;
+	}
+</style>
+
+	<div class='change-roles-wrapper' >
+		<button type="button" class='dsc-btn' id='changeRoles'>
+			<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+				<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+				<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+				<g id="SVGRepo_iconCarrier">
+					<path fill="#000000" d="M128 320v576h576V320H128zm-32-64h640a32 32 0 0 1 32 32v640a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V288a32 32 0 0 1 32-32zM960 96v704a32 32 0 0 1-32 32h-96v-64h64V128H384v64h-64V96a32 32 0 0 1 32-32h576a32 32 0 0 1 32 32zM256 672h320v64H256v-64zm0-192h320v64H256v-64z"></path>
+				</g>
+			</svg>
+			<span>Expediere inversa</span>
+		</button>
+	</div>
+	<input type="hidden" name="MASTER_ID" id="MASTER_ID" value="{MASTER_ID}" />
+
+	<input type="hidden" name="EXPEDITOR_ID" id="EXPEDITOR_ID"  value="{EXPEDITOR_ID}" />
+	<input type="hidden" name="EXPEDITOR_LOCALITATE_ID" id="EXPEDITOR_LOCALITATE_ID" value="{EXPEDITOR_LOCALITATE_ID}" />
+	<input type="hidden" name="EXPEDITOR_LOCALITATE_KM" id="EXPEDITOR_LOCALITATE_KM" value="{EXPEDITOR_LOCALITATE_KM}" />
+
+	<input type="hidden" name="DESTINATAR_ID" id="DESTINATAR_ID" value="{DESTINATAR_ID}">
+	<input type="hidden" name="DESTINATAR_LOCALITATE_ID" id="DESTINATAR_LOCALITATE_ID" value="{DESTINATAR_LOCALITATE_ID}">
+	<input type="hidden" name="DESTINATAR_LOCALITATE_KM" id="DESTINATAR_LOCALITATE_KM" value="{DESTINATAR_LOCALITATE_KM}">
+
+	<input type="hidden" name="SELECTED_ID" id="SELECTED_ID" value="{SELECTED_ID}" />
+	<input type="hidden" name="cc" id="cc" value="{CC}" />
+	<input type="hidden" name="EDIT_EXPEDITION" id="EDIT_EXPEDITION" value="{EDIT_EXPEDITION}" />
+	<input type="hidden" name="JSON_PCS" id="JSON_PCS" value='{JSON_PCS}' />
+	<input type="hidden" name="SWAPPED" id="SWAPPED" value="{SWAPPED}" />
+
+	<fieldset id='expeditorContainer'  style="min-width: 50px; width:955px;  min-height: 40px;">
+		
+	</fieldset>
+	<div class="separator_empty h5"></div>
+
+	<fieldset id='destinatarContainer'  style="min-width: 50px; width:955px;  height: 80px;">
+		
+	</fieldset>
+	<div class="separator_empty h5"></div>
+
+	<fieldset style="min-width: 50px; width:450px; min-height: 42px;" class="f_fieldset">
+		<legend class="legend">
+			Tip Expeditie
+		</legend>
+
+		<div class="left w50">
+			<label class="field_label" for="TIP_OBJ_1" id="label_TIP_OBJ_1">Plic</label>
+			<div class="content_checkbox" id="content_TIP_OBJ_1">
+				<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="8" type="checkbox" value="1" name="TIP_OBJ_1" id="TIP_OBJ_1" {TIP_OBJ_1} class="field_checkbox"  onchange="ValoareExpeditieClient(1);" style="margin-top: 7px;" />
+			</div>
+		</div>
+		<div class="left w90">
+			<label class="field_label" for="TIP_OBJ_2">Colete</label>
+			<input onblur="ValidareCampuriIntroducere(this.name);"  tabindex="9" type="text" name="TIP_OBJ_2" id="TIP_OBJ_2" class="field_input auto-hint right numeric" value="{TIP_OBJ_2}" rel="{TIP_OBJ_2}" placeholder="0" style="width: 25px; margin-right: 5px;" onkeyup="ValoareExpeditieClient(2);" onkeydown="return numbersonly(this, event);"/>
+		</div>
+		<div class="left w80 {CLASS_TIP_OBJ_3}">
+			<label class="field_label" for="TIP_OBJ_3" style="margin-left: 5px;" >Palet</label>
+			<div class="content_checkbox" id="content_TIP_OBJ_3">
+				<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="10" type="checkbox" value="1" name="TIP_OBJ_3" id="TIP_OBJ_3" {TIP_OBJ_3}  class="field_checkbox"  onchange="ValoareExpeditieClient(3);" style="margin-top: 6px;"/>
+			</div>
+		</div>
+		<div class="left " style='display:flex; flex-flow: column wrap; position: relative;'>
+			<span class="field_label legend" style='position: absolute; top: -19px; background: #eeee; padding: 0px 5px; line-height: 15px; height: 15px;'>Greutate:</span>
+			<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="11" type="text" name="GREUTATE" id="GREUTATE" class="field_input w50 align_right auto-hint" value="{GREUTATE}" rel="{GREUTATE}" placeholder="0.000"  onchange="ValoareExpeditieClient(10);" onkeydown="return numbersonly(this, event, true);"/>
+		</div>
+		<div class="left  " style="margin-left: 40px; display:flex; flex-flow: column wrap; position: relative;">
+			<span class="field_label legend " style='position: absolute; top: -19px; background: #eeee; padding: 0px 5px; line-height: 15px; height: 15px;'>Dimensiuni(cm):</span>
+			<div  style='border: #B6BBCB solid 1px; height: 20px; display: flex; background-image: url(/assets/images/form-bg.jpg);'>
+				<input onblur="ValidareCampuriIntroducere(this.name);"  type="text" name="VOLUM1" id="VOLUM1" class="field_input align_right auto-hint input_vol" value="{VOLUM1}" rel="{VOLUM1}"  placeholder="___" onChange="ValoareExpeditieClient(10);" onkeydown="return numbersonly(this, event);" maxlength="3"/>
+				<span class="sep_vol">x</span>
+				<hr style='margin: 0 2px;' />
+				<input onblur="ValidareCampuriIntroducere(this.name);"  type="text" name="VOLUM2" id="VOLUM2" class="field_input align_right auto-hint input_vol" value="{VOLUM2}" rel="{VOLUM2}"  placeholder="___" onChange="ValoareExpeditieClient(10);" onkeydown="return numbersonly(this, event);" maxlength="3"/>
+				<span class="sep_vol">x</span>
+				<hr style='margin: 0 2px;' />
+				<input onblur="ValidareCampuriIntroducere(this.name);"  type="text" name="VOLUM3" id="VOLUM3" class="field_input align_right auto-hint input_vol" value="{VOLUM3}"  rel="{VOLUM3}" placeholder="___" onChange="ValoareExpeditieClient(10);" onkeydown="return numbersonly(this, event);" maxlength="3"/>
+			</div>
+		</div>
+	</fieldset>
+
+	<fieldset style="min-width: 50px; width:200px;min-height: 42px;"  class="f_fieldset">
+		<legend class="legend">
+			Asigurare
+		</legend>
+		<span class="field_span1" style="width: 50px;">Valoare:</span>
+		<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="14" type="text" name="asigurare" id="asigurare" class="field_input w80 align_right auto-hint" value="{ASIGURARE}" rel="{ASIGURARE}" placeholder="0.00"  onchange="ValoareExpeditieClient(4);"  onkeydown="return numbersonly(this, event, true);"/>
+		<div class="separator_empty"></div>
+	</fieldset>
+
+	<fieldset style="min-width: 50px; width:270px;min-height: 42px;"  class="f_fieldset">
+		<legend class="legend">
+			Ramburs
+		</legend>
+		<span class="field_span1" style="width: 50px;">Valoare:</span>
+		<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="18" type="text" name="ramburs" id="ramburs" class="field_input w60 align_right auto-hint" value="{RAMBURS}" rel="{RAMBURS}" placeholder="0.00"  onchange="ValoareExpeditieClient(5);"  onkeydown="return numbersonly(this, event, true);"/>
+		<span class="field_span1" style="width: 55px; padding-left:10px">Tip plata:</span>
+		<select onblur="ValidareCampuriIntroducere(this.name);" tabindex="19" name="tip_plata" id="tip_plata" onchange="ValoareExpeditieClient(5);"  style="margin-top:3px">
+			<option value="0" {CASH}>cash</option>
+			<option value="3" {CONT}>cont</option>
+			<option value="1" {BO}>bo</option>
+			<option value="2" {CEC}>cec</option>
+		</select>
+	</fieldset>
+
+	<div class="separator_empty h5"></div>
+
+	<fieldset style="min-width: 50px; width:948px;"  class="f_fieldset">
+		<legend class="legend">
+			Servicii aditionale
+		</legend>
+
+		<span class="field_span1" style="width: 52px;"><label class="field_label" for="RET_NT" style="padding-right: 0;">Retur NT</label></span>
+		<span style="padding-top: 5px; float: left;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="22" type="checkbox" value="1" name="RET_NT" id="RET_NT"  {RET_NT} class="field_checkbox" onchange="ValoareExpeditieClient(12);"/>
+		</span>
+
+		<span class="field_span1" style="width: 65px; margin-left: 10px;"><label class="field_label" for="RET_DOC" style="padding-right: 0;">Retur Doc.</label></span>
+		<span style="padding-top: 5px; float: left;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="23" type="checkbox" value="1" name="RET_DOC" id="RET_DOC"  {RET_DOC} class="field_checkbox" onchange="ValoareExpeditieClient(12);"/>
+		</span>
+
+		<span class="field_span1 {RET_AMB_SHOW}" style="width: 80px;  margin-left: 10px;"><label class="field_label" for="RET_AMB"  style=" padding-right: 0px;">Retur ambalaj</label></span>
+		<span style="padding-top: 5px; float: left; padding-right: 2px;" class="{RET_AMB_SHOW}">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="24" type="checkbox" value="1" name="RET_AMB" id="RET_AMB" {RET_AMB}  class="field_checkbox"  onchange="ValoareExpeditieClient(12);"/>
+		</span>
+		<span class="field_span1" style="width: 96px; margin-left: 10px;"><label class="field_label" for="COPEN" style=" padding-right: 0px;">Deschidere colet</label></span>
+		<span style="padding-top: 5px; float: left; padding-right: 2px;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="28" type="checkbox" value="1" name="COPEN" id="COPEN" {COPEN}  class="field_checkbox"  onchange="ValoareExpeditieClient(12);"/>
+		</span>
+
+		<span class="field_span1" style="width: 72px; margin-left: 10px;"><label class="field_label" for="LIV_S" style=" padding-right: 0px;">Liv. sambata</label></span>
+		<span style="padding-top: 5px; float: left; padding-right: 2px;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="29" type="checkbox" value="1" name="LIV_S" id="LIV_S" {LIV_SAMBATA}  class="field_checkbox"  onchange="ValoareExpeditieClient(12);"/>
+		</span>
+
+		<span class="field_span1" style="width:55px; margin-left: 10px"><label class="field_label" for="LIV_SEDIU"  style=" padding-right: 0px;">Liv. sediu</label></span>
+		<span style="padding-top: 5px; float: left;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="30" type="checkbox" value="1" name="LIV_SEDIU" id="LIV_SEDIU" {LIV_SEDIU}  class="field_checkbox"  onchange="ValoareExpeditieClient(14);"/>
+		</span>
+
+		<span class="field_span1" style="width: 64px; margin-left: 10px;"><label class="field_label" for="SMS" style=" padding-right: 0px;">SMS livrare</label></span>
+		<span style="padding-top: 5px; float: left; padding-right: 2px;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="31" type="checkbox" value="1" name="SMS" id="SMS" {SMS}  class="field_checkbox"  onchange="ValoareExpeditieClient(12);"/>
+		</span>
+
+		<span class="field_span1 {RET_NC_SHOW}" style="width: 96px; margin-left: 5px;"><label class="field_label" for="RET_NC" style="padding-right: 0">Retur nota com.</label></span>
+		<span style="padding-top: 5px; float: left;" class = "{RET_NC_SHOW}">
+			<input type="checkbox" value="1" name="RET_NC" id="RET_NC" {RET_NC} class="field_checkbox"/>
+		</span>
+
+		<span class="field_span1" style="width:70px; margin-left: 10px"><label class="field_label" for="RET_COLET"  style=" padding-right: 0px;">Retur colet</label></span>
+		<span style="padding-top: 5px; float: left;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="30" type="checkbox" value="1" name="RET_COLET" id="RET_COLET" {RET_COLET}  class="field_checkbox"/>
+		</span>
+
+	</fieldset>
+
+	<div class="separator_empty h5"></div>
+
+	<fieldset style="min-width: 50px; width:948px;"  class="f_fieldset">
+		<legend class="legend">
+			Observatii
+		</legend>
+		<textarea tabindex="29" rows="1" name="observatii" id="observatii" class="field_textarea" style="width:938px;height:14px" rel="{OBSERVATII}" placeholder="Observatii">{OBSERVATII}</textarea>
+	</fieldset>
+
+	<div class="separator_empty h5"></div>
+
+	<fieldset style="min-width: 50px; width:180px; min-height: 80px;">
+		<legend class="legend">
+			Platitor
+		</legend>
+
+		<span class="field_span1" style="width: 60px;"><label class="field_label" for="platitor1">Expeditor</label></span>
+		<span style="padding-top: 5px; float: left;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="32" type="radio" name="platitor" id="platitor1" value="1" {PLATITOR_1} class="field_radio"  onchange="ValoareExpeditieClient(6);"/>
+		</span>
+
+		<span class="field_span1" style="width: 60px; padding-left: 10px"><label class="field_label" for="platitor2">Destinatar</label></span>
+		<span style="padding-top: 5px; float: left;">
+			<input onblur="ValidareCampuriIntroducere(this.name); BlurInput(this.name);" onfocus="FocusInput(this.name);" tabindex="33" type="radio" name="platitor" id="platitor2" value="2" {PLATITOR_2} class="field_radio"  onchange="ValoareExpeditieClient(6);"/>
+		</span>
+		<div class="{CLASS_TAXE_RETUR}">
+			<span class="field_span1" style="width:170px;font-size:0.9em">Taxele de retur/ramburs sunt incluse la NT initiala</span>
+		</div>
+		{REFERINTA_FACTURARE}
+	</fieldset>
+
+	<fieldset style="min-width: 50px; width:268px; min-height: 80px;">
+		<legend class="legend">
+			Detalii documente
+		</legend>
+		<textarea tabindex="34" rows="4" name="detalii_doc" id="detalii_doc" class="field_textarea" style="width:258px;height:50px" rel="{DETALII_DOC}" placeholder="Detalii documente">{DETALII_DOC}</textarea>
+	</fieldset>
+	<fieldset id="afisare_preturi" style="min-width:50px; width: 295px; min-height: 80px;">
+		<legend class="legend">
+			Preturi
+		</legend>
+
+		<div class="left" style="width: 93px;">
+			<span class="field_span" style="width: 35px; text-align: left; color: #000000;">Baza:</span>
+			<span class="field_span" style="width: 50px; text-align: left; color: #FF1500;" id="valoare_expeditie">{VALOARE_EXP}</span>
+
+			<div class="separator_empty"></div>
+			<span class="field_span" style="width: 35px; text-align: left; color: #000000;">Greut.</span>
+			<span class="field_span" style="width: 50px; text-align: left; color: #FF1500;" id="valoare_greutate">{VALOARE_G}</span>
+		</div>
+
+		<div class="left" style="width: 103px;">
+			<span class="field_span" style="width: 45px; text-align: left; color: #000000;">Km Ext:</span>
+			<span class="field_span" style="width: 50px; text-align: left; color: #FF1500;" id="valoare_km">{VALOARE_KM}</span>
+
+			<div class="separator_empty"></div>
+			<span class="field_span" style="width: 45px; text-align: left; color: #000000;">Asig:</span>
+			<span class="field_span" style="width: 50px; text-align: left; color: #FF1500;" id="valoare_asigurare">{VALOARE_ASIG}</span>
+		</div>
+
+		<div class="left" style="width: 98px;">
+			<span class="field_span" style="width: 40px; text-align: left; color: #000000;">TOTAL:</span>
+			<span class="field_span" style="width: 50px; text-align: left; color: #FF1500;" id="valoare_totala">{VALOARE_TOTALA}</span>
+
+			<div class="separator_empty"></div>
+			<span class="field_span" style="width: 40px; text-align: left; color: #000000;">TVA:</span>
+			<span class="field_span" style="width: 50px; text-align: left; color: #FF1500;" id="valoare_tva">{VALOARE_TVA}</span>
+		</div>
+
+	</fieldset>
+	<fieldset style="min-width: 50px; width: 162px; min-height: 80px;">
+		<legend class="legend">
+			Actiuni
+		</legend>
+		<div class="separator_empty" style="height: 2px;"></div>
+		<input tabindex="35" type="button" name="adauga" id="adauga" class="button w70" value="Adauga" onclick="AdaugaExpeditieClient({USER_ADD},{USER_ID});" style="margin-left: 3px;"/>
+		<input tabindex="36" type="button" name="editeaza" id="editeaza" class="button w80" value="Editeaza" onclick="EditareExpeditieClient({ID});" style="margin-left: 5px;">
+		<div class="separator_empty" style="height: 2px;"></div>
+		<input tabindex="40" type="button" name="print" id="print" class="button w70" value="{PRINT}"  onclick="ClientPrintExpeditie({EXPEDITIE},{USER_ID});"  style="margin-left: 3px;"/>
+		<input tabindex="41" type="button" name="anuleaza" id="anuleaza" class="button w80" value="Sterge" onclick="AnuleazaExpeditieClient({ID});" style="margin-left: 5px;"/>
+	</fieldset>
+	<div class="separator_empty h5"></div>
+
+
+	<script type="text/javascript">
+
+		function updateTips(t) {
+			tips.text(t).addClass("ui-state-highlight");
+			setTimeout(function() {
+				tips.removeClass("ui-state-highlight", 1500);
+			}, 500);
+		}
+
+		function checkLength(o, n, min, max) {
+			if (o.val().length > max || o.val().length < min) {
+				o.addClass("ui-state-error");
+				updateTips("Va rugam completati " + n + "!");
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		function checkRegexp(o, regexp, n) {
+			if (!(regexp.test(o.val()))) {
+				o.addClass("ui-state-error");
+				updateTips(n);
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		function invertHiddens(jsonId) {
+			var temp_id = $('#EXPEDITOR_ID').val();
+			var temp_localitate_id = $('#EXPEDITOR_LOCALITATE_ID').val();
+			var temp_localitate_km = $('#EXPEDITOR_LOCALITATE_KM').val();
+			var temp_nume = $('#EXPEDITOR_NUME') ? $('#EXPEDITOR_NUME').val() : "";
+			var temp_localitate = $('#EXPEDITOR_LOCALITATE') ? $('#EXPEDITOR_LOCALITATE').val() : "";
+			var temp_contact = $('#EXPEDITOR_CONTACT') ? $('#EXPEDITOR_CONTACT').val() : "";
+			var temp_telefon = $('#EXPEDITOR_TELEFON') ? $('#EXPEDITOR_TELEFON').val() : "";
+			var temp_adresa = $('#EXPEDITOR_ADRESA') ? $('#EXPEDITOR_ADRESA').val() : "";
+
+			$('#EXPEDITOR_ID').val($('#DESTINATAR_ID').val());
+			$('#EXPEDITOR_LOCALITATE_ID').val($('#DESTINATAR_LOCALITATE_ID').val());
+			$('#EXPEDITOR_LOCALITATE_KM').val($('#DESTINATAR_LOCALITATE_KM').val());
+			$('#EXPEDITOR_NUME').val($('#DESTINATAR_NUME').val());
+			$('#EXPEDITOR_LOCALITATE').val($('#DESTINATAR_LOCALITATE').val());
+			$('#EXPEDITOR_CONTACT').val($('#DESTINATAR_CONTACT').val());
+			$('#EXPEDITOR_TELEFON').val($('#DESTINATAR_TELEFON').val());
+			$('#EXPEDITOR_ADRESA').val($('#DESTINATAR_ADRESA').val());
+		
+			$('#DESTINATAR_ID').val(temp_id);
+			$('#DESTINATAR_LOCALITATE_ID').val(temp_localitate_id);
+			$('#DESTINATAR_LOCALITATE_KM').val(temp_localitate_km);
+			$('#DESTINATAR_NUME').val(temp_nume);
+			$('#DESTINATAR_LOCALITATE').val(temp_localitate);
+			$('#DESTINATAR_CONTACT').val(temp_contact);
+			$('#DESTINATAR_TELEFON').val(temp_telefon);
+			$('#DESTINATAR_ADRESA').val(temp_adresa);
+
+			if(objPcs[jsonId])
+				$("#clientDetalii").html( '<strong>' + objPcs[jsonId].nume + '</strong>, ' + objPcs[jsonId].judet + ', ' + objPcs[jsonId].localitate + ', ' 
+					+ objPcs[jsonId].adresa + ', ' 
+					+ $("#" + (!swapped ? "EXPEDITOR_" : "DESTINATAR_") + "CONTACT").val() + ', '
+					+ $("#" + (!swapped ? "EXPEDITOR_" : "DESTINATAR_") + "TELEFON").val()
+				);
+		}
+
+		function handleDetails(jsonId) {
+			const fromClient = !swapped ? 'EXPEDITOR_' : 'DESTINATAR_';
+			const toClient = !swapped ? 'DESTINATAR_' : 'EXPEDITOR_';
+			
+			var from_object_legend = !swapped ? 'Expeditor' : 'Destinatar';
+			var from_object_name = fromClient + 'NUME';
+			var from_object_loc_name = fromClient + 'LOCALITATE';
+			var from_object_contact = fromClient + 'CONTACT';
+			var from_object_phone = fromClient + 'TELEFON';
+			var from_object_address = fromClient + 'ADRESA';
+
+			var to_object_legend = !swapped ? 'Destinatar' : 'Expeditor';
+			var to_object_name = toClient + 'NUME';
+			var to_object_loc_name = toClient + 'LOCALITATE';
+			var to_object_contact = toClient + 'CONTACT';
+			var to_object_phone = toClient + 'TELEFON';
+			var to_object_address = toClient + 'ADRESA';
+
+			//backup exp
+			var exp_nume = $('#EXPEDITOR_NUME') ? $('#EXPEDITOR_NUME').val() : "";
+			var exp_localitate = $('#EXPEDITOR_LOCALITATE') ? $('#EXPEDITOR_LOCALITATE').val() : "";
+			var exp_contact = $('#EXPEDITOR_CONTACT') ? $('#EXPEDITOR_CONTACT').val() : "";
+			var exp_telefon = $('#EXPEDITOR_TELEFON') ? $('#EXPEDITOR_TELEFON').val() : "";
+			var exp_adresa = $('#EXPEDITOR_ADRESA') ? $('#EXPEDITOR_ADRESA').val() : "";
+			//backup dest
+			var dest_nume = $('#DESTINATAR_NUME') ? $('#DESTINATAR_NUME').val() : "";
+			var dest_localitate = $('#DESTINATAR_LOCALITATE') ? $('#DESTINATAR_LOCALITATE').val() : "";
+			var dest_contact = $('#DESTINATAR_CONTACT') ? $('#DESTINATAR_CONTACT').val() : "";
+			var dest_telefon = $('#DESTINATAR_TELEFON') ? $('#DESTINATAR_TELEFON').val() : "";
+			var dest_adresa = $('#DESTINATAR_ADRESA') ? $('#DESTINATAR_ADRESA').val() : "";
+
+			if($('#' + toClient + 'NUME') && $('#' + toClient + 'NUME').hasClass('ui-autocomplete-input')){
+				$('#' + toClient + 'NUME').autocomplete("destroy");
+				$('#' + toClient + 'LOCALITATE').autocomplete("destroy");
+			}
+			if($('#' + fromClient + 'NUME') && $('#' + fromClient + 'NUME').hasClass('ui-autocomplete-input')){
+				$('#' + fromClient + 'NUME').autocomplete("destroy");
+				$('#' + fromClient + 'LOCALITATE').autocomplete("destroy");
+			}
+			if($('#clientSelect'))
+				$('#clientSelect').off('change', clientSelectChange);
+			$('#expeditorContainer').empty();
+			$('#destinatarContainer').empty();
+
+			client_from_fields = `
+			<legend class="legend">
+				`+from_object_legend+`
+			</legend>
+			<div class="left w300">
+				<select id="clientSelect" style="width:300px"></select>
+				<input type="hidden" name="`+from_object_name+`" id="`+from_object_name+`" value="">
+				<input type="hidden" name="`+from_object_loc_name+`" id="`+from_object_loc_name+`" value="">
+				<input type="hidden" name="`+from_object_contact+`" id="`+from_object_contact+`" value="">
+				<input type="hidden" name="`+from_object_phone+`" id="`+from_object_phone+`" value="">
+				<input type="hidden" name="`+from_object_address+`" id="`+from_object_address+`" value="">
+			</div>
+			<div id="clientDetalii" class="right "></div>`;
+
+			client_to_fields = `
+			<legend class="legend">
+				`+to_object_legend+`
+			</legend>
+
+			<div class="capitalize"  style="font-weight:bold; display:inline-block; margin-left: 10px; min-width: 225px">Client</div>
+			<div class="capitalize"  style="font-weight:bold; display:inline-block; margin-left: 10px; min-width: 225px">Localitate</div>
+			<div class="capitalize" style="font-weight:bold; display:inline-block; margin-left: 10px; min-width: 225px">Persoana</div>
+			<div class="capitalize" style="font-weight:bold; display:inline-block; margin-left: 10px; min-width: 225px">Telefon</div>
+			<br/>
+			<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="3" type="text" name="`+to_object_name+`" id="`+to_object_name+`" class="field_input auto-hint capitalize"  style="width: 225px" value="" rel="" placeholder="`+to_object_legend+`"/>
+			<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="4" type="text" name="`+to_object_loc_name+`" id="`+to_object_loc_name+`" class="field_input auto-hint capitalize"  style="margin-left: 10px; width: 225px" value="" rel="" placeholder="Localitate"/>
+			<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="5" type="text" name="`+to_object_contact+`" id="`+to_object_contact+`" class="field_input auto-hint capitalize" style="margin-left: 10px; width: 225px"  value="" rel="" placeholder="Primitor"/>
+			<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="6" type="text" name="`+to_object_phone+`" id="`+to_object_phone+`" class="field_input auto-hint capitalize" style="margin-left: 10px; width: 225px" value="" rel="" placeholder="Telefon"/>
+			<input onblur="ValidareCampuriIntroducere(this.name);" tabindex="7" type="text" name="`+to_object_address+`" id="`+to_object_address+`" class="field_input auto-hint capitalize" style="width: 948px" value="" rel="" placeholder="Adresa" />
+			`;
+
+			$('#expeditorContainer').html(swapped ? client_to_fields : client_from_fields);
+			$('#destinatarContainer').html(swapped ? client_from_fields : client_to_fields);
+			$('#expeditorContainer').css('minHeight', swapped ? "80px" : "40px");
+			$('#destinatarContainer').css('minHeight', swapped ? "40px" : "80px");
+			$('#destinatarContainer').css('height', swapped ? "40px" : "80px");
+
+			//restore exp
+			$('#EXPEDITOR_NUME').val(exp_nume);
+			$('#EXPEDITOR_LOCALITATE').val(exp_localitate);
+			$('#EXPEDITOR_CONTACT').val(exp_contact);
+			$('#EXPEDITOR_TELEFON').val(exp_telefon);
+			$('#EXPEDITOR_ADRESA').val(exp_adresa);
+			//restore dest
+			$('#DESTINATAR_NUME').val(dest_nume);
+			$('#DESTINATAR_LOCALITATE').val(dest_localitate);
+			$('#DESTINATAR_CONTACT').val(dest_contact);
+			$('#DESTINATAR_TELEFON').val(dest_telefon);
+			$('#DESTINATAR_ADRESA').val(dest_adresa);
+
+			ClientHydrateSelect('clientSelect', objPcs, jsonId);
+			$('#clientSelect').on('change', clientSelectChange);
+			ClientComboClientiLocalitati(toClient);
+		}
+
+		function swap_clients() {
+			const jsonId = $("#SELECTED_ID").val();
+			swapped = !swapped;
+			$('#SWAPPED').val(swapped ? 1 : 0);
+			handleDetails(jsonId);
+			invertHiddens(jsonId);
+			
+			//change platitor
+			if(swapped) {
+				$('#platitor1').prop('checked', false);
+				$('#platitor2').prop('checked', true);
+			} else {
+				$('#platitor2').prop('checked', false);
+				$('#platitor1').prop('checked', true);
+			}
+			ValoareExpeditieClient(6);
+		}
+
+		function clientSelectChange(){
+			const label = !swapped ? 'EXPEDITOR_' : 'DESTINATAR_';
+			var jsonId = $("#clientSelect").find('option:selected').val();
+			$("#SELECTED_ID").val(jsonId);
+			if(objPcs[jsonId]){
+				$("#clientDetalii").html( '<strong>' + objPcs[jsonId].nume + '</strong>, ' + objPcs[jsonId].judet + ', ' + objPcs[jsonId].localitate + ', ' + objPcs[jsonId].adresa + ', ' + $("#" + label + "CONTACT").val() + ', ' + $("#" + label + "TELEFON").val() );
+
+				$("#" + label + "ID").val(jsonId);
+				$("#" + label + "NUME").val(objPcs[jsonId].nume);
+				$("#" + label + "LOCALITATE_ID").val(objPcs[jsonId].localitate_id);
+				$("#" + label + "LOCALITATE").val(objPcs[jsonId].localitate);
+				$("#" + label + "LOCALITATE_KM").val(objPcs[jsonId].localitate_km);
+				$("#" + label + "ADRESA").val(objPcs[jsonId].adresa);
+			}
+			ValoareExpeditieClient(6);
+		}
+		var swapped = false;
+		var objPcs = {};
+		$(document).ready(
+			function() {
+				swapped = ($('#SWAPPED').val() == 1);
+				try {
+					objPcs = JSON.parse($('#JSON_PCS').val());
+					selectedId = Number.parseInt($('#SELECTED_ID').val());
+					if(Number.isNaN(selectedId) || selectedId == 0 || jQuery.isEmptyObject(objPcs) || !objPcs.hasOwnProperty(selectedId)){
+						selectedId = Number.parseInt($('#MASTER_ID').val());
+						$('#SELECTED_ID').val($('#MASTER_ID').val());
+					}
+				} catch (e) {
+					selectedId = Number.parseInt($('#MASTER_ID').val());
+					$('#SELECTED_ID').val($('#MASTER_ID').val());
+				}
+
+				if($('#EDIT_EXPEDITION').val() == 1) {
+					$('#changeRoles').css('display', 'none');
+				}
+				$("#dialog:ui-dialog").dialog("destroy");
+				if($('#cc').val() != '1')
+					$("#tip_plata option[value='3']").remove();
+				else
+					$("#tip_plata option[value='0']").remove();
+				if({AFISARE_PRETURI} == 1)
+					$('#afisare_preturi').css('display', 'none');
+				
+				document.getElementById('changeRoles').addEventListener('click', event => {
+					event.preventDefault();
+					swap_clients();
+				});
+
+				handleDetails(selectedId);
+				//init values
+				$('#EXPEDITOR_NUME').val("{EXPEDITOR_NUME}");
+				$('#EXPEDITOR_LOCALITATE').val("{EXPEDITOR_LOCALITATE}");
+				$('#EXPEDITOR_CONTACT').val("{EXPEDITOR_CONTACT}");
+				$('#EXPEDITOR_TELEFON').val("{EXPEDITOR_TELEFON}");
+				$('#EXPEDITOR_ADRESA').val("{EXPEDITOR_ADRESA}");
+
+				$('#DESTINATAR_NUME').val("{DESTINATAR_NUME}");
+				$('#DESTINATAR_LOCALITATE').val("{DESTINATAR_LOCALITATE}");
+				$('#DESTINATAR_CONTACT').val("{DESTINATAR_CONTACT}");
+				$('#DESTINATAR_TELEFON').val("{DESTINATAR_TELEFON}");
+				$('#DESTINATAR_ADRESA').val("{DESTINATAR_ADRESA}");
+
+				if(objPcs[selectedId])
+					$("#clientDetalii").html( '<strong>' + objPcs[selectedId].nume + '</strong>, ' + objPcs[selectedId].judet + ', ' + objPcs[selectedId].localitate + ', ' 
+						+ objPcs[selectedId].adresa+ ', ' 
+						+ $("#" + (!swapped ? "EXPEDITOR_" : "DESTINATAR_") + "CONTACT").val() + ', '
+						+ $("#" + (!swapped ? "EXPEDITOR_" : "DESTINATAR_") + "TELEFON").val()
+					);
+		});
+	</script>

@@ -1,0 +1,84 @@
+<script type="text/javascript" src="/assets/js/financiar.js?v={ONLOAD_JS_VERSION}"></script>
+<form action="/financiar/centre/export" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Data decont</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w70" value="{DATA_FINAL}" title="Pana la" />
+			</div>
+		</fieldset>
+		<div class="field_name w300 class_btn" style="margin-top: 12px; margin-left: 40px;">
+        	<input type="button" name="search" class="button" value="Afiseaza"  onclick="DashboardFinanciarCentre();" />
+	        <input type="submit" name="export" class="button" value="Export" />
+	    </div>
+	</div>
+</form>
+
+<div class="separator_empty" style="height: 5px;"></div>
+<h2 class="field_name w600">Totaluri incasate</h2>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Incasate facturi: <span id="nr_facturi_incasate">{NR_FACTURI_INCASATE}</span> in valoare totala de <span id="valoare_facturi_incasate">{TOTAL_FACTURI_INCASATE}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Incasate chitante client CTR: <span id="nr_chitante_incasate">{NR_CHITANTE_INCASATE}</span> in valoare totala de <span id="valoare_chitante_incasate">{TOTAL_CHITANTE_INCASATE}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Incasate RBS cash/cont: <span id="nr_rbs_cash_cont_incasate">{NR_RBS_CASH_CONT_INCASATE}</span> in valoare totala de <span id="valoare_rbs_cash_cont_incasate">{TOTAL_RBS_CASH_CONT_INCASATE}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<h2 class="field_name w600">Totaluri decontate</h2>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Decontate facturi: <span id="valoare_facturi_decontate">{TOTAL_FACTURI_DECONTATE}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Decontate chitante client CTR: <span id="valoare_facturi_decontate">{TOTAL_CHITANTE_DECONTATE}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Decontate RBS cash/cont: <span id="valoare_rbs_cash_cont_decontate">{TOTAL_RBS_CASH_CONT_DECONTATE}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Cheltuieli RBS: <span id="valoare_cheltuieli_rbs">{TOTAL_CHELTUIELI_RBS}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Cheltuieli Fa/Ch: <span id="valoare_cheltuieli_fa_ch">{TOTAL_CHELTUIELI_FA_CH}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<h2 class="field_name w600">Totaluri aprobate</h2>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Aprobate/Generate RBS cash: 
+    <span id="nr_rbs_cash_aprobate">{NR_RBS_CASH_APROBATE}</span>/<span id="nr_rbs_cash_aprobate">{NR_RBS_CASH_GENERATE}</span>
+    in valoare totala de 
+    <span id="valoare_rbs_cash_aprobate">{TOTAL_RBS_CASH_APROBATE}</span>/<span id="valoare_rbs_cash_generate">{TOTAL_RBS_CASH_GENERATE}</span>
+    RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">&nbsp;&nbsp;&nbsp;&nbsp;Aprobate/Confirmate salarii <span id="valoare_salarii">{TOTAL_SALARII_APROBATE}/{TOTAL_SALARII_CONFIRMATE}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+<h3 class="field_name w600">Casa RBS (Depunere la banca) <span id="valoare_rbs_cash_cont_banca">{CASA_RBS_CASH_CONT}</span> RON</h3>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="financiar_centre_centre"></table>
+<div id="paginatie_financiar_centre_centre" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="financiar_centre_transfer"></table>
+<div id="paginatie_financiar_centre_transfer" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="detalii_expeditie" style="display: none;"></div> 
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioada();
+		Grid_FinanciarCentre_Centre();
+		Grid_FinanciarCentre_Transfer();
+	});
+
+</script>

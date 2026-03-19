@@ -1,0 +1,27 @@
+<script>
+	$(document).ready(function() {
+		$(".button").button();
+	});
+</script>
+<form id="form" action="" method="post" autocomplete="off">
+	<input type="hidden" name="step" value="2" />
+	<input type="hidden" name="cod" value="{COD}" />
+	<h3>Informatii Client</h3>
+		
+	<div class="field_row">
+		<div class="field_name">Persoana Contact</div>
+		<input type="text" id="caontact" name="contact" value="{NUME}" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Telefon Contact</div>
+		<input type="text" id="telefon" name="telefon" value="{TELEFON}" class="field_input w200">
+	</div>
+	<div class="field_row">
+		<div class="field_name">Observatii</div>
+		<textarea class="field_textarea" name="observatii">{OBSERVATII}</textarea>
+	</div>
+	<div class="field_row">
+		<input type="submit" name="but_submit" class="button w70" value="Trimite" style="margin-left: 285px;"/>
+	</div>	
+	<div class="separator_empty" style="height: 20px;"></div>
+</form>

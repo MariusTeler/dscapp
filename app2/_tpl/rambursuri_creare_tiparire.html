@@ -1,0 +1,395 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+        $( "body" ).click(function() {
+            $('.progress_area_mess').slideUp();
+        });
+
+        $("#data_op").datepicker({
+            showOn : "button",
+            buttonImage : HTTP + "assets/images/calendar.gif",
+            buttonImageOnly : true,
+            buttonText: "Select date",
+            dateFormat : 'dd.mm.yy',
+            timeFormat : 'hh:mm:ss',
+            changeMonth: true,
+            changeYear: true,
+            oneLine: true
+        }).datepicker("setDate", new Date());
+
+        $("#data_extras_banca").datepicker({
+            showOn : "button",
+            buttonImage : HTTP + "assets/images/calendar.gif",
+            buttonImageOnly : true,
+            buttonText: "Select date",
+            dateFormat : 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            oneLine: true
+        }).datepicker("setDate", new Date());
+
+		$('.ui-datepicker-trigger').show();
+	});
+
+	function AfisareExpeditieRambursAction() {
+		AfisareExpeditieRamburs();
+		var lines = $("#expeditii").val().split("\n").length;
+		$("#text_lines").text(lines);
+		var expeditii = $('#expeditii').val().replace(/(?:\r\n|\r|\n)/g, ',');
+		jQuery("#creare_note_rambursuri").jqGrid('setGridParam', { 
+			url : HTTP + 'rambursuri/json/afisare_note/',
+			postData : { expeditii: expeditii }}
+		).trigger("reloadGrid");
+	}
+
+	function CreareExpeditieRambursAction() {
+		var data_op = $('#data_op').val();
+		if(data_op == 'Data OP' || data_op.length == 0){
+			AfiseazaEroare("Alege data!");
+			return ;
+		}
+
+		var grid = jQuery('#creare_note_rambursuri');
+		var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+		if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum un awb pentru generare!"); return false; }
+		else if(sel_ids.length>300) { AfiseazaEroare("Nu se pot selectiona mai mult de 300 awb-uri pentru generare !"); return false; }
+		var postData = {};
+
+		for(var $i=0, $l=sel_ids.length; $i<$l; $i++) postData[$i] = sel_ids[$i];
+		var postData = JSON.stringify(postData);
+		var expeditii = $('#expeditii').val().replace(/(?:\r\n|\r|\n)/g, ',');
+		jQuery("#creare_note_rambursuri").jqGrid('setGridParam',  {
+			url : HTTP + 'rambursuri/json/creare_note',
+			postData : { expeditii : expeditii, data_op : data_op , expeditii_selectate : postData }
+
+		}).trigger("reloadGrid");
+	}
+
+	function AfisareExpeditieRamburs()
+	{
+	    var expeditii = $('#expeditii').val().replace(/(?:\r\n|\r|\n)/g, ',');
+		SetareDate();
+		var gridimgpath = 'css/smoothness/images';
+		var grid = jQuery('#creare_note_rambursuri');
+		var gridData;
+		var gridData_expeditor;
+		getColumnIndexByName = function(mygrid,columnName) {
+			var cm = mygrid.jqGrid('getGridParam','colModel');
+			for (var i=0,l=cm.length; i<l; i++) {
+				if (cm[i].name===columnName) {
+					return i; // return the index
+				}
+			}
+			return -1;
+		};
+
+		grid.jqGrid(
+				{
+					url : HTTP + 'rambursuri/json/afisare_note/',
+					postData: { expeditii: expeditii },
+					datatype: 'json',
+					mtype: 'POST',
+					colNames : [ 'Centru Livrare', 'Centru Colectare', 'Nr. Exp', 'Col. Exp', 'Nr. Rmb','Col. Rmb','Tip ret.','Valoare','Tip plata', 'Status','Expeditor','Destinatar','Tip','Data DCL', 'Data COK', 'Data COK RET'],
+					colModel : [ {
+						name : 'destinatar_centru',
+						index : 'ced.nume',
+						width: 75
+					}, {
+						name : 'expeditor_centru',
+						index : 'cee.nume',
+						width: 75
+					}, {
+						name : 'expeditie',
+						index : 'e.expeditie',
+						sorttype : 'int',
+						width: 70,
+						align: 'right'
+					}, {
+						name : 'data_expeditie',
+						index : 'e.data_expeditie',
+						sorttype : 'date',
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d',
+							newformat : 'd.m.Y'
+						},
+						width: 60,
+						align: 'center'
+					}, {
+						name : 'referire',
+						index : 'e.referire',
+						sorttype : 'int',
+						width: 70,
+						align: 'right',
+						classes: ['exp_referire_class']
+					}, {
+						name : 'data_ramburs',
+						sorttype : 'date',
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d',
+							newformat : 'd.m.Y'
+						},
+						width: 60,
+						align: 'center',
+						classes: ['exp_data_referire_class'],
+						search :false
+					}, {
+                        name : 'rbs_tip_exp',
+                        stype : 'select',
+                        formatter: 'select',
+                        editoptions : {
+                            value : "0:Initiala;1:Retur NT;2:Retur doc.;3:Ramburs;4:Interna;5:Returnare;6:Retur ambalaj"
+                        },
+                        searchoptions : {
+                            value : "",
+                            sopt : [ 'eq' ]
+                        },
+                        align: 'center',
+                        width: 70,
+                        classes: ['rbs_tip_exp_referire_class']
+                    }, {
+						name : 'ramburs',
+						index : 'e.ramburs',
+						sorttype : 'int',
+						align: 'right',
+						width: 50
+					},{
+						name : 'tip_plata',
+						index : 'e.tip_plata',
+						stype : 'select',
+						formatter: 'select',
+						editoptions : {
+							value : ":Toate;0:cash;3:cont;1:bo;2:cec;4:cash/cont"
+						},
+						searchoptions : {
+							value : ":Toate;0:cash;3:cont;1:bo;2:cec;4:cash/cont",
+							sopt : [ 'eq' ]
+						},
+						align: 'center',
+						width: 70
+					}, {
+						name : 'status',
+						index : 'e.status_ramburs',
+						stype : 'select',
+						searchoptions : {
+							value : ":Toate{OPTIONS_STATUS_RAMBURS_JS}",
+							sopt : [ 'eq' ]
+						},
+						align: 'center',
+						width: 70
+					}, {
+						name : 'expeditor',
+						index : 'cle.nume',
+						width: 145
+					}, {
+                        name : 'destinatar',
+                        index : 'cld.nume',
+                        width: 145
+                    }, {
+						name : 'tip',
+						hidden:true
+					}, {
+                        name : 'data_decontare',
+                        index : 'scckp.last_dcl_data',
+                        sorttype : 'date',
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d H:i:s',
+							newformat : 'd.m.Y H:i'
+						},
+                        width: 90
+                    },{
+                        name : 'data',
+                        index : 'i.data',
+						sorttype : 'date',
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d',
+							newformat : 'd.m.Y'
+						},
+                        width: 70
+                    },{
+						name : 'data_ret',
+						index : 'data_ret',
+						sorttype : 'date',
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d',
+							newformat : 'd.m.Y'
+						},
+                        width: 70
+                    }],
+					rowNum : 100,
+					rowList : [ 100,250,500,1000 ],
+					rownumbers : true,
+					width : 970,
+					height : 'auto',
+					sortname : 'ced.nume,e.data_expeditie,cld.nume',
+					sortorder : "asc",
+					viewrecords : true,
+					pager : '#paginatie',
+					shrinkToFit: false,
+					caption:'Lista Expeditii',
+					forceFit: true,
+					multiselect: true,
+					beforeSelectRow: function (rowid, e) {
+						var $myGrid = $(this),
+								i = $.jgrid.getCellIndex($(e.target).closest('td')[0]),
+								cm = $myGrid.jqGrid('getGridParam', 'colModel'),
+								cellcontent = $myGrid.getCell(rowid,i);
+						if((i == 4 || i == 6) && cellcontent !='' && cellcontent != "&nbsp;")
+							AfisareDetaliiExpeditieCuID(cellcontent);
+						return (cm[i].name === 'cb');
+					},
+					loadComplete: function(rezult) {
+						if(!rezult)
+							return;
+
+						if(rezult.userdata){
+							var totalExpeditii = rezult.userdata.exps;
+							var fara_date = "";
+							$("#expeditii").val().split("\n").forEach(function(entry) {
+								if(totalExpeditii.indexOf(parseInt(entry)) == -1 && entry.length > 0){
+									fara_date += entry + "<br>";
+								}
+							});
+							//if(fara_date.length > 0)
+								//AfiseazaEroare("Expeditii fara date!<br>"+fara_date);
+						}
+
+                        UrmarireVizualizareRambursuriCulori(this);
+
+					},
+					loadError : function(xhr,st,err) {
+						AfiseazaEroare(xhr.responseText);
+					},
+					footerrow: true,
+					userDataOnFooter: true
+				});
+		grid.jqGrid('bindKeys');
+		grid.jqGrid('filterToolbar',{
+			stringResult : true,
+			searchOnEnter : false
+		});
+	}
+    
+    
+    function PrintareExpeditieRambursAction() {
+        var grid = jQuery('#creare_note_rambursuri');
+        var sel_ids = grid.jqGrid('getGridParam', 'selarrrow');
+        if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum un awb pentru printare!"); return false; }
+        else if(sel_ids.length>300) { AfiseazaEroare("Nu se pot selectiona mai mult de 300 awb-uri pentru printare !"); return false; }
+        var postData = {};
+
+        for(var $i=0, $l=sel_ids.length; $i<$l; $i++) postData[$i] = sel_ids[$i];
+		var pData = JSON.stringify(postData);
+
+        $("#detalii_expeditie").dialog("destroy");
+
+		$.download('rambursuri/tiparire_referire', pData, true);
+        return true;
+    }
+
+
+	function ModificareMultiplaExpeditieRambursNew(){
+		var status = $('#status_rmb_set').find(":selected").val();
+		if(status == 999) { AfiseazaEroare("Selectioneaza noul status !"); return false; }
+
+		var ramb_grid = jQuery('#creare_note_rambursuri');
+		var sel_ids = ramb_grid.jqGrid('getGridParam', 'selarrrow');
+		if(sel_ids.length==0) { AfiseazaEroare("Selectioneaza minimum o expeditie !"); return false; }
+		else if(sel_ids.length>300) { AfiseazaEroare("Nu se pot selectiona mai mult de 300 de expeditii !"); return false; }
+		var postData = {};
+
+		for(var $i=0, $l=sel_ids.length; $i<$l; $i++) postData[$i] = sel_ids[$i];
+		var postData = JSON.stringify(postData);
+		//alert("JSON serialized jqGrid data:\n" + postData);
+
+		$.ajax({
+			type: "POST",
+			url: HTTP + 'rambursuri/modificare_status_multiple',
+			data: { status: status, expeditii: postData },
+			dataType: "json",
+			success: function(response) {
+				if(response.errorCode > 0) {
+					AfiseazaEroare(response.errorMsg + (response.records.length > 0 ? ("\n" + response.records) : ""));
+				}
+				AfisareExpeditieRambursAction();
+			},
+			error: function() {
+				AfiseazaEroare("Server is down");
+			}
+		});
+	}
+
+	function ExportCreareTiparireRambursuri() {
+		var cond = '';
+		var filters =  $('#creare_note_rambursuri').jqGrid('getGridParam','postData').filters;
+		if(filters) cond+='&filters='+filters;
+		sidx = $('#creare_note_rambursuri').jqGrid('getGridParam','sortname');
+		if(sidx) cond+='&sidx='+sidx;
+		sord = $('#creare_note_rambursuri').jqGrid('getGridParam','sortorder');
+		if(sord) cond+='&sord='+sord;
+		var expeditii = $('#expeditii').val().replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]+/g, ',');
+		cond += '&expeditii='+expeditii;
+		
+		$.download('rambursuri/creare_tiparire_export', cond, false);
+	}
+
+
+</script>
+<div style="padding:0px 0px 2px 0px;">
+	<form action="" id="export_lista" method="post" name="export_lista"  target="_blank">
+
+		<input type="hidden" id="form_gs_centru_livrare" name="form_gs_centru_livrare" value="" />
+		<input type="hidden" id="form_gs_centru_colectare" name="form_gs_centru_colectare" value="" />
+		<input type="hidden" id="form_gs_expeditor" name="form_gs_expeditor" value="" />
+		<input type="hidden" id="form_gs_destinatar" name="form_gs_destinatar" value="" />
+		<input type="hidden" id="form_gs_livrat" name="form_gs_livrat" value="" />
+		<input type="hidden" id="form_gs_status" name="form_gs_status" value="" />
+
+		<fieldset style="min-width: 120px;">
+			<legend>
+				<label class="field_label">Actiuni (<span id="text_lines">0</span> exp.)</label>
+			</legend>
+			<div class="field_name w320">
+				<input type="button" name="afisare_note" class="button" value="Afisare" onclick="AfisareExpeditieRambursAction();"/>
+				<input type="button" name="tiparire_note" class="button" value="Print" onclick="PrintareExpeditieRambursAction();"/>
+				<input type="button" name="search" class="button" value="Export"  onclick='ExportCreareTiparireRambursuri();'/>
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 100px;{HIDE_WME}">
+			<legend>
+				<label class="field_label">Creare rambursuri</label>
+			</legend>
+			<div class="field_name w280">
+				<input type="button" name="creare_note" class="button" value="Creaza NT RBS" onclick="CreareExpeditieRambursAction();"/>
+				<input type="text" name="data_op" id="data_op" class="field_input auto-hint w120" value="" title="Data OP" />
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 100px; height: 43px; width: 243px;{HIDE_WME}">
+			<legend>
+				<label class="field_label" id="detalii_exp">Modifica status</label>
+			</legend>
+			<div class="field_name w110">
+				<select style="width: 100px;" id="status_rmb_set" name="status_rmb_set" class="field_combobox">
+					{OPTIONS_STATUS_RAMBURS}
+					<option value="999" selected="selected">Alege</option>
+				</select>
+			</div>
+			<input type="button" name="search" class="button" value="Modifica" onclick="ModificareMultiplaExpeditieRambursNew();"/>
+		</fieldset>
+		<div class="separator_empty"></div>
+		<textarea id="expeditii" name="expeditii" style="width:100%" rows="5" placeholder="Note ramburs separate cu , sau Enter"></textarea>
+	</form>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="creare_note_rambursuri"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="mesaj_confirmare" title="Confirmare" style="display: none;">
+	Sunteti sigur?
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<div id="detalii_expeditie"></div>

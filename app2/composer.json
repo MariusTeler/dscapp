@@ -1,0 +1,27 @@
+{
+    "name": "dsc/app2",
+    "description": "DSC Courier Backend Application",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "phpoffice/phpspreadsheet": "^3.0",
+        "openspout/openspout": "^4.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "kreait/firebase-php": "^7.0",
+        "geocoder-php/chain-provider": "^4.6",
+        "geocoder-php/google-maps-provider": "^4.8",
+        "geocoder-php/graphhopper-provider": "^0.6.0",
+        "mjaschen/phpgeo": "^6.0",
+        "tecnickcom/tcpdf": "^6.11"
+    },
+    "autoload": {
+        "psr-4": {}
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

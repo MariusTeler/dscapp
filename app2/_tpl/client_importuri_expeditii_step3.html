@@ -1,0 +1,38 @@
+<div class="clearfix">
+	{ERROR}
+</div>
+
+<div id="progressbar"><div class="progress-label">Loading...</div></div>
+
+<div class="field_row"></div>
+
+<input type="hidden" name="nr_expeditii" id="nr_expeditii" value="{NR_EXPEDITII}" />
+
+<div class="field_name w200" style="padding-top: 8px; padding-left: 5px;">
+	Total Expeditii: <span style="color:green;font-weight:bold;">{NR_EXPEDITII}</span>
+</div>
+<div class="field_name w200" style="padding-top: 4px;">
+	<input type="button" name="importa" id="importa" class="button" value="Importa" title="Importa" onclick="ClientImporturiExpeditii(1);"/>
+	<input type="button" name="renunta" id="renunta" class="button" value="Renunta" title="Renunta" onclick="window.location = '{HTTP}client/importuri/expeditii';"/>
+</div>
+
+<div id="import-expeditii">
+		{CONTINUT}
+</div>
+<div id="expeditii" style="display:none">{EXPEDITII}</div>
+<div id="not_import" style="display:none">{NOT_IMPORT}</div>
+
+<script>
+	$(function() {
+		var progressbar = $("#progressbar"), progressLabel = $(".progress-label");
+		progressbar.progressbar({
+			value : false,
+			change : function() {
+				progressLabel.text(progressbar.progressbar("value") + "%");
+			},
+			complete : function() {
+				progressLabel.text("Complete!");
+			}
+		});
+	}); 
+</script>

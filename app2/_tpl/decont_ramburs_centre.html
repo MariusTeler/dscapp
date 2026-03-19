@@ -1,0 +1,178 @@
+
+<style type="text/css">
+    .decont-ramburs-area .ui-widget-header {
+        background: none;
+        border: 0px solid #e78f08;
+        color: #000;
+        font-weight: bold;
+    }
+    .decont-ramburs-area .tab{
+        height: 500px;
+    }
+
+    .tab_detalii {
+        display: none;
+    }
+    #close_tab_but{
+        color: red;
+        cursor: pointer;
+        cursor: hand;
+        z-index: 9999;
+    }
+    .decont-ramburs-area .ui-tabs .ui-tabs-panel{
+        padding: 1em 0;
+    }
+    .tab-sub-menu a {
+        padding: 10px;
+        text-decoration: none;
+    }
+    .tab-sub-menu a.active{
+        color: #eb8f00;
+        text-decoration: underline;
+    }
+    .tab-sub-menu a:hover{
+        color: #eb8f00;
+        text-decoration: underline;
+    }
+    .tab-sub-menu span{
+        background: #eb8f00;
+        padding: 3px 7px;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+
+    .tab-sub-menu{
+        display: inline-block;
+    }
+
+    .tab-actions{
+        float: right;
+    }
+    .tab-actions a{
+        padding: 10px;
+        text-decoration: none;
+    }
+
+    .ascunde{
+        display:none !important;
+    }
+
+    .tab-actions input:disabled {
+        background: transparent;
+        color: #ccc;
+        border: 1px solid #cccccc;
+    }
+
+
+
+    #decont-ramburs-tabs .ui-state-active{
+        background: #fdf5ce ;
+        border: 1px solid #fbcb09;
+        color: #c77405;
+        font-weight: bold;
+    }
+
+    #decont-ramburs-tabs > .ui-widget-content{
+        background: #fdf5ce ;
+    }
+
+    .valign-but{
+        margin: 12px 0;
+    }
+    
+</style>
+<script type="text/javascript" src="/assets/js/decontRamburs.js?v={ONLOAD_JS_VERSION}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioada();
+		$('#decont-ramburs-tabs').tabs();
+		$('#data_start').datepicker({ dateFormat:"dd.mm.yy" });
+        $('#data_final').datepicker({ dateFormat:"dd.mm.yy" });
+		$('.ui-datepicker-trigger').hide();
+		Grid_DecontRambursCentre();
+		Grid_DecontRambursCentru(0);
+	});
+
+</script>
+<div class="decont-ramburs-area">
+    <div id="decont-ramburs-tabs">
+        <ul>
+            <li id="tab_1">
+                <a href="#tab-centre" >Centre</a>
+			</li>
+			<li id="tab_2" class="tab_detalii">
+				<a href="#tab-detalii-centru">Detalii centru</a>
+			</li>
+		</ul>
+		<div id="tab-centre">
+            <fieldset style = "height : 45px">
+                <legend>
+                    <label class="field_label" for="perioada">Perioada</label>
+                </legend>
+                <div class="field_name w50" style="line-height: 20px;">
+                    De la:
+                </div>
+                <div class="field_name" style="width: 101px;">
+                    <input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="{DATA_START}" readonly/>
+                </div>
+                <div class="field_name w60" style="line-height: 20px;">
+                    Pana la:
+                </div>
+                <div class="field_name" style="width: 101px;">
+                    <input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="{DATA_FINAL}" readonly/>
+                </div>
+            </fieldset>
+            <fieldset style = "height : 45px">
+                <legend>
+					<label class="field_label">Centre</label>
+				</legend>
+				<div class="field_name">
+					{CENTRE}
+				</div>
+            </fieldset>
+            <fieldset style = "height : 45px; width: 350px;">
+				<legend>
+					<label class="field_label">-</label>
+				</legend>
+                <div class="field_name" class="field_name"  style="width: 250px;">
+					<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareDecontRamburs();" />
+				</div>
+			</fieldset>
+			<div class="separator_empty h10"></div>
+            <fieldset style="display: inline-flex">
+                <legend>
+                    <label class="field_label" >Totaluri</label>
+                </legend>
+				<div class="field_name" style="width: 295px;">
+					5000000
+                </div>
+            </fieldset>
+            <fieldset style="display: inline-flex">
+                <legend>
+                    <label class="field_label">???</label>
+                </legend>
+				<div class="field_name" style="width: 295px;">
+					1000
+                </div>
+            </fieldset>
+            <div class="separator_empty h10"></div>
+            <table id="lista_centre"></table>
+			<div id="paginatie_lista_centre" class="pagination_jqgrid"></div>
+		</div>
+		<div id="tab-detalii-centru">
+			<div id="gridWrapperDetalii">
+				<table id="detalii_centru"></table>
+				<div id="paginatie_detalii_centru" class="pagination_jqgrid"></div>
+			</div>
+		</div>
+		
+    </div>
+    <div class="separator_empty h10"></div>
+
+<!-- <div class="separator_empty h10"></div>
+<table id="lista_expeditori"></table>
+<div id="paginatie_lista_expeditori" class="pagination_jqgrid"></div>
+-->
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="detalii_expeditie" style="display: none;"></div>  

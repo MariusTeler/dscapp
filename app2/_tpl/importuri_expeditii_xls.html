@@ -1,0 +1,30 @@
+<script>
+$(document).ready(function() 
+{
+	ComboClientiContract('client');
+});
+</script>
+<div class="clearfix">{ERROR}</div>
+<div class="import-fisier">
+	<form enctype="multipart/form-data" action="{HTTP}importuri-xls/expeditii/step2" method="post" name="foxls">
+		<input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
+		<div class="field_name w50" style="padding-top: 12px; padding-left: 5px;">
+			Client
+		</div>	
+		<div class="field_name" style="padding-top: 8px; width:125px">
+			<input type="hidden" name="cod_cl" id="client" value=""/>
+			<input type="text" name="client_nume" id="client_nume" class="field_input w120" value="" title="Client"/>
+		</div>
+		<div class="field_name" style="padding-top: 12px; padding-left: 20px; width:70px">
+			Fisier XLS
+		</div>
+		<div class="field_name" style="padding-top: 5px; width:220px">
+			<input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="fxls" class="field_input"/>
+		</div>
+		<div class="field_name w80" style="padding-top: 5px; margin-left:20px">
+			<input type="submit" name="sxls" class="button" value="Next" title="Next"/>
+		</div>
+	</form>
+</div>
+<div id="import-expeditii">
+</div>

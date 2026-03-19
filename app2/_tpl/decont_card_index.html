@@ -1,0 +1,183 @@
+<input type="hidden" name="test" value="test">
+<link type="text/css" rel="stylesheet" href="/assets/css/scanport/bootstrap.min.css" >
+<link type="text/css" rel="stylesheet" href="/assets/css/scanport/bootstrap-select.min.css" >
+<link type="text/css" rel="stylesheet" href="/assets/css/bootstrap-datepicker.min.css" >
+<link type="text/css" rel="stylesheet" href="/assets/css/decont.css" >
+
+<script type="text/javascript">
+    var listaTipCheltuieli = '{TIP_CHELTUIALA_JS}';
+    var data_set = '{DATA_SET}';
+    var custom_data_set = '{CUSTOM_DATA_SET}';
+</script>
+
+<div class="app-decont-area">
+    <form name="decond_add" id="decond_add" method="post" action="">
+        <div class="input-group agent-decont-select" style="width: 230px;">
+            <input type="text" id="agent_decont_selectat" class="form-control" disabled = "disabled">
+            <select tabindex="1" id="agent_decont" name="agent_id" class="selectpicker" data-live-search="true">
+               <option value="0">ALEGE AGENT</option>
+               {AGENTI_DECONT}
+            </select>
+        </div>
+        <div class="dashboard-acction">
+            <div style="clear: both;display: block;height: 5px;"></div>
+            {EXPORTA_TOATE_CENTRELE}
+            <input id="data_export" class="datepicker" data-date-format="dd.mm.yyyy" value="{DATA_START}">
+            <button class="btn btn-success export-decont" type="button" onclick="exportDecont();">Export decont</button>
+        </div>
+        <div class="info-dash">
+            <h4>{DATA_SET_TITLE}</h4>
+            <ul class="valori">
+                <li>Agenti decontati / de decontat<span class="agenti"></span></li>
+                <li><hr style="border-top: 1px solid red; margin-top:2px; margin-bottom:2px"/></li>
+                <li>Transporturi decontate (Facturi fiscale) / de decontat<span class="transporturi"></span></li>
+                <li>Rambursuri decontate (Chitante ramburs) / de decontat<span class="rambursuri"></span></li>
+                <li>Chitante client CTR decontate / de decontat<span class="chitante"></span></li>
+                <li><hr style="border-top: 1px solid red; margin-top:2px; margin-bottom:2px"/></li>
+                <li>Decontat / de decontat <span class="total"></span></li>
+                <li>Cheltuieli<span class="cheltuieli"></span></li>
+                <li><hr style="border-top: 1px solid red; margin-top:2px; margin-bottom:2px"/></li>
+                <li>Total decontat<span class="total_casa"></span></li>
+            </ul>
+            <ul class="detaliere">
+                <li><span class="agenti_det">&nbsp;</span></li>
+                <li><hr style="border-top: 1px solid red; margin-top:2px; margin-bottom:2px"/></li>
+                <li><span class="transporturi_det">&nbsp;</span></li>
+                <li><span class="rambursuri_det">&nbsp;</span></li>
+                <li><span class="chitante_det">&nbsp;</span></li>
+                <li><hr style="border-top: 1px solid red; margin-top:2px; margin-bottom:2px"/></li>
+                <li><span class="total_det">&nbsp;</span></li>
+                <li><span class="cheltuieli_det">&nbsp;</span></li>
+            </ul>
+            <div style="clear: both;"></div>
+            <hr style="border-bottom: dashed 1px">
+            <label>Agenti de decontat <a href="#" onclick="reincarcaAgentiDeDecontat();return false;" style="color: red">reincarca</a></label>
+            <table id="agenti_de_decontat"></table>
+            <div class="separator_empty h10">&nbsp;</div>
+        </div>
+
+        <div class="decont-inpus step_2">
+            <div class="input-group tip-decont-cheltuiala-select" style="width: 110px;">
+                <label>Tip</label>
+                <select tabindex="4" id="tip_cheltuiala" name="tip_cheltuiala" class="selectpicker" data-live-search="true">
+                    <option value="0">ALEGE TIP</option>
+                    {TIP_CHELTUIALA_CASA_FA_CH}
+                    {TIP_CHELTUIALA_CASA_RBS}
+                </select>
+            </div>
+            <div class="input-group" style="width: 110px;">
+                <label>Suma + tva</label>
+                <input tabindex="5" type="text" id="suma" name="suma" class="form-control" placeholder="suma" value="" autocomplete="off" onkeydown="validateCheltuiala(event)">
+            </div>
+            <div class="input-group" style="width: 110px;">
+                <label>Descriere</label>
+                <input tabindex="6" type="text" id="descriere" name="descriere" class="form-control" placeholder="descriere" value="" autocomplete="off">
+            </div>
+            <div class="input-group" style="width: 80px;">
+                <label>&nbsp;</label>
+                <button tabindex="7" class="btn btn-default" type="button" onclick="AdaugaCheltuiala();">Adauga</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<!-- <div class="separator_empty h20"></div> -->
+<div style="clear: both"></div>
+
+<div class="step_1">
+    <label id="label_tabel_incasate_cash">Incasate CASH (transport / ramburs / facturi client CTR)&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-default" type="button" onclick="scanConfirm();" id="btn_scanare_validate">Scanare validare</button></label>
+    <table id="tabel_incasate_cash"></table>
+    <div class="separator_empty h20"></div>
+    <label id="label_tabel_neincasate">Neincasate (client cu CTR)</label>
+    <table id="tabel_neincasate"></table>
+    <div class="separator_empty h20"></div>
+    <label id="label_tabel_incasate_card">Incasate CARD (transport / ramburs / facturi client CTR)</label>
+    <table id="tabel_incasate_card"></table>
+    <div class="separator_empty h20"></div>
+    <label id="label_tabel_nelivrate">Nelivrate (cu checkpoint exceptie la livrare)</label>
+    <table id="tabel_nelivrate"></table>
+    <div class="separator_empty h20"></div>
+</div>
+
+<div class="step_2">
+    <label>Cheltuieli diverse</label>
+    <table id="tabel_cheltuieli"></table>
+    <div class="separator_empty h20"></div>
+</div>
+
+<div class="step_3">
+    <div id="agent_totaluri"></div>
+    <input type="hidden" id="decont_id" name="decont_id" value="0">
+</div>
+
+
+<div style="padding: 0 auto;text-align: center">
+    <button id="back_btn" tabindex="9" class="btn btn-warning" style="margin: 0 auto; width: 100px;" type="button"><span class="glyphicon glyphicon-chevron-left"></span>Inapoi</button>
+    <button id="next_btn" tabindex="10" class="btn btn-success" style="margin: 0 auto; width: 100px;" type="button">Continua<span class="glyphicon glyphicon-chevron-right"></span></button>
+    <button id="pv_btn" tabindex="11" class="btn btn-success" style="margin: 0 auto; width: 100px;" type="button">Print PV<span class="glyphicon glyphicon-chevron-right"></span></button>
+    <button id="first_page_btn" tabindex="12" class="btn btn-success" style="margin: 0 auto; width: 120px;" type="button">Prima pagina<span class="glyphicon glyphicon-chevron-right"></span></button>
+</div>
+
+
+<div class="separator_empty h20"></div>
+<div style="clear: both"></div>
+
+<script type="text/javascript" src="/assets/js/scanport/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/assets/js/scanport/tether.min.js"></script>
+<script type="text/javascript" src="/assets/js/scanport/bootstrap.min.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-select.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-migrate-1.0.0.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-jqgrid/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-jqgrid/i18n/grid.locale-ro.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/assets/js/decont_card.js?v={ONLOAD_JS_VERSION}"></script>
+<script type="text/javascript" src="/assets/js/common1.js?v={ONLOAD_JS_VERSION}"></script>
+
+<div class="modal fade" id="detalii-expeditie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detalii-exp-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <!--<div class="modal-footer"></div>-->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="scan_confirm_popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Scanare validare incasari</h4>
+            </div>
+            <div class="modal-body">
+                <textarea id="scan_coduri_area" name="scan_coduri_area" style="width:100%; height:400px" placeholder="Codurile trebuie separate prin apasarea tastei ENTER"></textarea>
+                <div class="separator_empty h20"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Anulare</button>
+                <a class="btn btn-success btn-ok" onclick="scanConfirmPost()">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div id="error" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Error</h4>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

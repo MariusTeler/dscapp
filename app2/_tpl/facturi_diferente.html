@@ -1,0 +1,329 @@
+<script type="text/javascript">
+
+	function Grid_ExpeditiiDiferentaFactura()
+	{
+		var grid = jQuery('#diferenta_factura_expeditii');
+
+		grid.jqGrid(
+				{
+					url : HTTP + 'facturi/json/diferenta_expeditii',
+					datatype: 'json',
+					mtype: 'POST',
+					postData: { exps: 0 },
+					colNames : [ 'Factura', 'Data facturare', 'Chitanta', 'Expeditor', 'Platitor','Data','Nr Exp', 'Centru Expeditor' ,'Centru Platitor','Curier Preluare','Curier Livrare','Val Exp','Val Exp + TVA','Facturat','Diferenta','Utilizator','Expeditii'],
+					colModel : [ {
+						name : 'invoice',
+						sortable: false,
+						filtrable:true,
+						width: 60
+					},{
+						name : 'trndate',
+						sortable: true,
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d',
+							newformat : 'd.m.Y'
+						},
+						width: 60,
+						align: 'center'
+					},{
+						name : 'receipt',
+						sortable: false,
+						filtrable:true,
+						width: 60
+					},{
+						name : 'expeditor',
+						sortable: true,
+						width: 130
+					}, {
+						name : 'platitor',
+						sortable: true,
+						width: 130
+					},{
+						name : 'data_expeditie',
+						sortable: true,
+						formatter : 'date',
+						formatoptions : {
+							srcformat : 'Y-m-d',
+							newformat : 'd.m.Y'
+						},
+						width: 60,
+						align: 'center'
+					}, {
+						name : 'nr_expeditii',
+						formatter: 'text',
+						align: 'right',
+						sortable: true,
+						width: 40
+					},{
+                        name : 'expeditor_centru',
+                        formatter: 'text',
+                        align: 'right',
+                        sortable: true,
+                        width: 130
+                    },{
+                        name : 'platitor_centru',
+                        formatter: 'text',
+                        align: 'right',
+                        sortable: true,
+                        width: 130
+                    },{
+						name : 'curier_preluare',
+						formatter: 'text',
+						align: 'right',
+						sortable: true,
+						width: 130
+					},{ //curier_preluare
+						name : 'curier_livrare',
+						formatter: 'text',
+						align: 'right',
+						sortable: true,
+						width: 130
+					},{
+						name : 'valoare_totala_expeditie',
+						formatter: 'number',
+						align: 'right',
+						sortable: true,
+						width: 80
+					},{
+						name : 'val_exp',
+						formatter: 'number',
+						align: 'right',
+						sortable: true,
+						width: 80
+					}, {
+						name : 'sumamnt',
+						formatter: 'number',
+						align: 'right',
+						sortable: true,
+						width: 80,
+					}, {
+						name : 'diferenta',
+						formatter: 'number',
+						align: 'right',
+						sortable: true,
+						width: 80
+					}, {
+						name : 'user',
+						formatter: 'text',
+						align: 'right',
+						sortable: true,
+						width: 80
+					},{
+						name : 'expeditii',
+						formatter: 'text',
+						align: 'left',
+						sortable: true,
+						filtrable:false,
+						width: 550
+					}],
+
+                    beforeSelectRow: function (rowid, e) {
+                        var $myGrid = $(this),
+                                i = $.jgrid.getCellIndex($(e.target).closest('td')[0]),
+                                cm = $myGrid.jqGrid('getGridParam', 'colModel');
+                        return (cm[i].name === 'cb');
+                    },
+                    ondblClickRow : function(id) {
+                        AfisareDetaliiFactura(id)
+                    },
+                    gridComplete: function()
+                    {
+                        var rows = grid.getDataIDs();
+                        for (var i = 0; i < rows.length; i++)
+                        {
+                            var status = grid.getCell(rows[i],"opt");
+                            if(status == "LS")
+                            {
+                                grid.jqGrid('setRowData',rows[i],false, {  color:'black',weightfont:'bold',background:'#ece1b6'});
+                            }
+                        }
+                    },
+                    autowidth : true,
+					rownumbers : true,
+					rownumWidth : 40,
+					width : 1300,
+					height : 400,
+					rowNum : 100,
+					scroll : 1,
+					mtype : "GET",
+					shrinkToFit: false,
+					forceFit: true,
+					gridview : true,
+					sortname : 'ep.data_expeditie',
+					sortorder : "asc",
+					viewrecords : true,
+					pager : "#pager",
+					caption : false,
+					//multiselect : false,
+					subGrid : false,
+					grouping: false,
+					footerrow: true,
+					userDataOnFooter: true,
+					editurl : HTTP + 'operatori/editare?q=dummy'
+
+				});
+
+		$('#diferenta_factura_expeditii').jqGrid('navGrid', '#pager', {
+					search: true,
+					edit: false,
+					add: false,
+					del: false,
+					refresh: true
+				},
+				{}, // default settings for edit
+				{}, // default settings for add
+				{}, // delete
+				{}
+		)
+				.navButtonAdd('#pager', {
+					caption: "Export",
+					buttonicon: "ui-icon-disk",
+					onClickButton: function () {
+						var cond = '';
+
+						var data_start = $('#data_start').val();
+						var data_final = $('#data_final').val();
+
+						cond = '?data_start=' + escape(data_start) + '&data_final='+ escape(data_final)+'&centru=' + $('#centru').val() +'&diferente_zero=' + $('#diferente_zero').is(':checked');
+						window.open(HTTP+"facturi/export_diferenta_expeditii"+cond, '_blank');
+					},
+					position: "last"
+				});
+		jQuery("#diferenta_factura_expeditii").jqGrid('bindKeys');
+
+		$("#diferenta_factura_expeditii").jqGrid('filterToolbar', {
+			stringResult : true,
+			searchOnEnter : false
+		});
+		/*
+		grid.jqGrid('bindKeys');
+		grid.jqGrid('filterToolbar',{
+			stringResult : true,
+			searchOnEnter : false
+		}); */
+	}
+
+	function AfisareDiferenteFacturi(){
+		var cond = '';
+
+		var data_start = $('#data_start').val();
+		var data_final = $('#data_final').val();
+
+		cond = '?data_start=' + escape(data_start) + '&data_final='+ escape(data_final)+'&centru=' + $('#centru').val()+'&diferente_zero=' + $('#diferente_zero').is(':checked');
+
+		jQuery("#diferenta_factura_expeditii").jqGrid('setGridParam', {
+			url : HTTP + 'facturi/json/diferenta_expeditii'+cond
+		}).trigger("reloadGrid");
+	}
+
+    function AfisareDetaliiFactura(sel) {
+        $.post(HTTP + 'facturi/diferente_factura_detalii/', {factura : sel}, function(response) {
+            $("#detalii_expeditie").html(response);
+            $("#detalii_expeditie:ui-dialog").dialog("destroy");
+            $("#detalii_expeditie").dialog({
+                width : 624,
+                height : 650,
+                modal : true,
+                draggable : false,
+                resizable : false,
+                title : 'Factura: '+sel
+            });
+        });
+    }
+    
+	$(document).ready(function() 
+	{
+		AfisarePerioada();
+		$("#expeditie").keypress(function(e) {
+        	// Allow: backspace, delete, tab, escape, enter and .
+        	if (e.which != 0 && e.which != 8 && e.which != 9 && e.which != 27 && e.which != 13 && e.which != 44 && (e.which < 48 || e.which > 57)) {
+               return false;
+    		}
+    		if(e.which == 13 || e.which == 44) {
+               return VerificareExpeditie();
+       	 	}
+    	});
+    	$("#invoice").keypress(function(e) {
+        	// Allow: backspace, delete, tab, escape
+        	if (e.which != 0 && e.which != 8 && e.which != 9 && e.which != 27 && (e.which < 48 || e.which > 57)) {
+               return false;
+    		}
+    	});
+    	$("#sumamnt").keypress(function(e) {
+        	// Allow: backspace, delete, tab, escape
+        	if (e.which != 0 && e.which != 8 && e.which != 9 && e.which != 27 && e.which != 46 && (e.which < 48 || e.which > 57)) {
+               return false;
+    		}
+    	});
+		Grid_ExpeditiiDiferentaFactura();
+		ComboClientiFacturare('platitor');
+		$("#trndate").datepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			buttonText: "Select date",
+			dateFormat : 'dd.mm.yy',
+			changeMonth: true,
+      		changeYear: true,
+			oneLine: true
+		}).datepicker("setDate", new Date());
+
+		ComboCentre('centru');
+	});
+</script>
+
+<form action="" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<fieldset style="height: 43px;">
+			<legend>
+				<label class="field_label">Perioada facturare</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w70" value="{DATA_START}" title="Pana la" />
+			</div>
+
+		</fieldset>
+		<fieldset style="min-width: 70px; height: 43px;">
+            <legend>
+                <label class="field_label">Filtre</label>
+            </legend>
+            <div class="field_name w210" id="lista_centre">
+                <input type="hidden" name="centru" id="centru" class="field_input  w200" value="{CENTRU}" />
+                <input type="text" name="centru_NUME" id="centru_NUME" class="field_input  w200" placeholder="Centru platitor" value="{CENTRU_NUME}" title="Centru" />
+            </div>
+            <div class="field_name ">
+			    <label class="field_label" for="diferente_zero" >Diferente 0</label>
+			    <input type="checkbox" name="diferente_zero" id="diferente_zero" value="1" class="field_checkbox" />
+		    </div>
+        </fieldset>
+		<fieldset style="min-width: 70px; height: 43px;">
+			<legend>
+				<label class="field_label">Optiuni</label>
+			</legend>
+			<div class="field_name class_btn" >
+				<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareDiferenteFacturi();" />
+			</div>
+		</fieldset>
+		<div class="separator_empty" style="height: 5px;"></div>
+	</div>
+</form>
+<div class="separator_empty h10">&nbsp;</div>
+<table id="diferenta_factura_expeditii"></table>
+<div id="pager" class="pagination_jqgrid"></div>
+<div class="separator_empty h10">&nbsp;</div>
+
+<div id="eroare" title="Eroare" style="display: none;">
+	&nbsp;
+</div>
+
+<div id="detalii_expeditie" style="display: none;">&nbsp;</div>

@@ -1,0 +1,105 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioada_Comenzi();
+		Grid_ListaComenziPreluate();
+		ClientiComboLocalitatiOnly('LOC');
+	});
+
+</script>
+<div class="content_left w550">
+	<fieldset>
+		<legend>
+			<label class="field_label" for="client">Perioada</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+			De la:
+		</div>
+		<div class="field_name" style="width: 101px;">
+			<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" onchange="AfiseazaComenzi();" />
+		</div>
+		<div class="field_name w60" style="line-height: 20px;">
+			Pana la:
+		</div>
+		<div class="field_name" style="width: 101px;">
+			<input type="text" name="data_final" id="data_final" class="field_input  w70" value="{DATA_START}" title="Pana la"  onchange="AfiseazaComenzi();" />
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 200px;">
+		<legend>
+			<label class="field_label" for="client">Localitate</label>
+		</legend>
+		<div class="field_name w200">
+			<input type="hidden" name="LOC" id="LOC" class="field_input auto-hint" value="{LOC}" />
+			<input type="text" name="LOC_NUME" id="LOC_NUME" class="field_input combo_client w190" value="{LOC_NUME}" title="Localitate"  onkeyup="AfiseazaComenzi();"/>
+		</div>
+	</fieldset>
+</div>
+<div class="content_right w420" >
+	<div class="separator_empty" style="height: 20px;"></div>
+	<input type="button" name="preluare" class="button" value="Preluare Comanda" style="margin-left: 0px;" onclick="document.location='{HTTP}comenzi/preluare'" />
+	<input type="button" name="preluare" class="button" value="Comenzi Preluate" onclick="document.location='{HTTP}comenzi/comenzi_preluate'"/>
+	<input type="button" name="preluare" class="button" value="Comenzi Distribuite" onclick="document.location='{HTTP}comenzi/comenzi_distribuite'"/>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div class="content_left w550" style=" width: 590px;">
+	<h3>Lista Comenzi:</h3>
+	<table id="comenzi_listare"></table>
+	<div id="comenzi_paginatie" class="pagination_jqgrid"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="content_right w400" style="width: 360px;">
+	<fieldset id="detalii_comanda">
+		<legend>
+			<label class="field_label">Detalii Comanda <span id="nr_comanda"></span></label>
+		</legend>
+		<div class="field_row">
+			<div class="field_name w100">
+				Nume Client
+			</div>
+			<div class="field_name w220">
+				<strong>{CLIENT_NUME}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Localitate
+			</div>
+			<div class="field_name w220">
+				<strong>{LOCALITATE}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Adresa
+			</div>
+			<div class="field_name w220">
+				<strong>{ADRESA}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Contact
+			</div>
+			<div class="field_name w220">
+				<strong>{CONTACT}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Telefon
+			</div>
+			<div class="field_name w220">
+				<strong>{TELEFON}</strong>
+			</div>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Observatii
+			</div>
+			<div class="field_name w220">
+				<strong>{OBSERVATII}</strong>
+			</div>
+		</div>
+	</fieldset>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>

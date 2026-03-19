@@ -1,0 +1,730 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.tab').tabs();
+		$(".button").button();
+		// ClientiListareContacte();		
+    	ClientiListareContacte();
+        ClientiComboLocalitati('LOCALITATE');
+		ClientiComboLocalitati('LOCALITATE_SEDIU_SOCIAL');
+        ClientiComboAgentiVanzari('AG_VANZARI');
+        ComboClientiContract('MASTER');
+        ComboClienti_Old('alocare_client', 'LOCALITATE');
+		ClientiListareConturi();
+
+		$("#DATA_CONTRACT").datepicker({
+				changeMonth : true,
+				changeYear : false,
+				showOn : "both",
+				buttonImage : HTTP + "assets/images/calendar.gif",
+				buttonImageOnly : true,
+				dateFormat : 'dd.mm.yy',
+				minDate: 0
+			});
+
+		$("input:checkbox[name='rbs_days']").click(function(){
+			if($(this).val() == 'sediu') {
+				$("input:checkbox[name='rbs_days']").filter(":checked").map(function() {
+					if($(this).val() != 'sediu')
+						$(this).prop("checked", false);
+	  			});
+			}
+        	else
+				$("input:checkbox[name='rbs_days']").filter(":checked").map(function() {
+					if($(this).val() == 'sediu')
+						$(this).prop("checked", false);
+	  			});
+    	});
+
+        {ACTIVE_TAB}
+
+        $("#COD_FISCAL")
+            .focusout(function() {
+                $('#COD_FISCAL').removeClass('cod-valid');
+                $('#COD_FISCAL').removeClass('cod-invalid');
+				$('#info_anaf').removeClass('cod-invalid');
+				if(!isValidCui($("#COD_FISCAL").val())){
+					$('#COD_FISCAL').addClass('cod-invalid');
+					$('#info_anaf').html( 'A.N.A.F.:<br>CUI invalid<br>');
+					$('#info_anaf').addClass('cod-invalid');
+					return;
+            	}
+
+                $.ajax( {type: "POST", url : HTTP + 'facturi/verificare_cui', dataType: 'json', data : {cui:$(this).val()}} )
+                    .done(function(res) {
+                        if(res.eroare == 0){
+                            $('#COD_FISCAL').val($('#COD_FISCAL').val().toUpperCase());
+							$('#COD_FISCAL').addClass('cod-valid');
+							$('#NUME_SOCIETATE').val(res.denumire);
+							$('#ADRESA_SEDIU_SOCIAL').val(res.adresaOnly);
+							$('#REG_COM').val(res.regCom);
+
+                            $('#info_anaf').html( 'A.N.A.F.:<br>Nume: '+ res.denumire + '<br>Adresa: ' +res.adresa + '<br>Mesaj: ' + res.mesaj);
+                            if(res.tva){
+                                $('#COD_FISCAL').val('RO'+res.cui);
+                            } else {
+                                $('#COD_FISCAL').val(res.cui);
+                            }
+                        } 
+						else {
+                            $('#COD_FISCAL').addClass('cod-invalid');
+							$('#info_anaf').html( 'A.N.A.F.:<br>' + res.mesaj + '<br>');
+							$('#info_anaf').addClass('cod-invalid');
+                        }
+                    })
+                    .fail(function(res) {
+
+                    })
+                    .always(function() {
+
+                    });
+            });
+    });
+
+
+
+
+	function ClientiDetaliiCont(sel) {
+
+		$('.raspuns_detalii1').text('');
+
+		$('#adaugare_cont').hide();
+		$('#editare_cont').show();
+		$.post(HTTP + 'clienti/cont_client/' + sel, {master: $('#codul_clientului').val()}, function(response) {
+			var json = response,
+					obj = JSON.parse(json);
+
+			$('#USER_ID').val(obj.id);
+			$('#CONT_ACTIV').val(obj.activ);
+			$('#CONT_NUME').val(obj.nume);
+			$('#CONT_TELEFON').val(obj.telefon);
+			$('#CONT_EMAIL').val(obj.user);
+			$('#PAROLA').val(obj.parola);
+
+			if(obj.activ == 1){
+				$("#CONT_ACTIV").prop("checked", true);
+			} else {
+				$("#CONT_ACTIV").prop("checked", false);
+			}
+
+			$("#AFISARE_PRETURI1").prop("checked", false);
+			$("#AFISARE_PRETURI2").prop("checked", false);
+			$("#IMPORT_CSV1").prop("checked", false);
+			$("#IMPORT_CSV2").prop("checked", false);
+			$("#RECANTARITE0").prop("checked", false);
+			$("#RECANTARITE1").prop("checked", false);
+            $("#SELECTIE_PUNCTE_DE_LUCRU1").prop("checked", false);
+			$("#SELECTIE_PUNCTE_DE_LUCRU2").prop("checked", false);
+			$("#SHOW_MASTER_CLIENTI1").prop("checked", false);
+			$("#SHOW_MASTER_CLIENTI2").prop("checked", false);
+
+			$("#AFISARE_PRETURI" + obj.preturi ).prop("checked", true);
+			$("#IMPORT_CSV" + obj.importcsv ).prop("checked", true);
+			$("#RECANTARITE" + obj.recantarite ).prop("checked", true);
+
+			$("#SELECTIE_PUNCTE_DE_LUCRU" + obj.selectie_puncte_de_lucru).prop("checked", true);
+			$("#SHOW_MASTER_CLIENTI" + obj.show_master_clienti).prop("checked", true);
+		});
+	}
+
+	function ClientiListareConturi() {
+		$("#conturi_clienti_listare").jqGrid({
+			url : HTTP + 'clienti/conturi_json',
+			postData: {master: $('#codul_clientului').val()},
+			datatype : "json",
+			colNames : [ 'Nume', 'Utilizator', 'Status' ],
+			colModel : [ {
+				name : 'nume',
+				index : 'nume',
+				width: 90
+			}, {
+				name : 'user',
+				index : 'user',
+				width: 60
+			}, {
+				name : 'status',
+				index : 'activ',
+				formatter: 'select',
+				stype : 'select',
+				searchoptions : {
+					value : ":Toti;0:Inactiv;1:Activ",
+					sopt : [ 'eq' ]
+				},
+				editoptions : {
+					value : "0:Inactiv;1:Activ"
+				},
+				width: 35
+			}],
+			height : 120,
+			width : 350,
+			scroll : 1,
+			rowNum : 50,
+			mtype : "GET",
+			rownumbers : false,
+			rownumWidth : 30,
+			gridview : true,
+			pager : '#contacte_clienti_listare_pag',
+			sortname : 'nume',
+			viewrecords : false,
+			sortorder : "asc",
+			caption : false,
+			onSelectRow : function(id) {
+				ClientiDetaliiCont(id);
+			}
+		});
+		$("#conturi_clienti_listare").jqGrid('bindKeys');
+		$("#conturi_clienti_listare").jqGrid('navGrid', '#agenti_listare_pag', {
+			del : false,
+			add : false,
+			edit : false,
+			search : false
+		});
+	}
+
+	function ExportDestinatari() {
+		document.location.href= HTTP + '/clienti/export/destinatari/' + $('#COD_CL').val();
+		// export/destinatari
+
+	}
+</script>
+<style type="text/css">
+	.taburi_clienti.ui-tabs .ui-tabs-nav li{
+		margin: 0 0.1em 1px 0;
+	}
+	.cod-valid{
+		color: green;
+		font-weight: bold;
+	}
+	.cod-invalid{
+		color: red;
+		font-weight: bold;
+	}
+</style>
+<div class="field_row">
+	<div style="float: left; width: 350px;">
+		<input type="button" name="adauga" class="button" value="Adauga client" style="font-size: 12px; height: 28px;" onclick="ClientiEditare('add');"/>
+		<input type="button" name="editeaza" class="button" value="Editeaza client" style="font-size: 12px; height: 28px;" onclick="ClientiEditare('edit');"/>
+		<input type="button" id="export_dest" name="export" class="button" value="Export Destinatari" style="width: 120px; font-size: 12px; height: 28px;" onclick="ExportDestinatari();"/>
+	</div>
+	<div class="raspuns_detalii" style="float: left;"></div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div class="tab taburi_clienti" id="taburi_clienti">
+	<ul>
+		<li>
+			<a data-id="1" href="#tabs-1">Detalii</a>
+		</li>
+		<li>
+			<a data-id="2" href="#tabs-2">Contact</a>
+		</li>
+		<li>
+			<a data-id="3" href="#tabs-3">Cont</a>
+		</li>
+		<li>
+			<a data-id="5" href="#tabs-4">Factura</a>
+		</li>
+	</ul>
+	<div id="tabs-1">
+		<input type="hidden" name="COD_CL" id="COD_CL" value="{COD_CL}"/>
+		<div class="clienti_left">
+			<div class="field_row">
+				<input type="checkbox" value="1" id="persoana_fizica" name="persoana_fizica" {PERSOANA_FIZICA}>
+				&nbsp;<label for="persoana_fizica">Persoana Fizica</label>
+				<input type="checkbox" value="1" id="ACTIV" name="ACTIV" {ACTIV}>
+				&nbsp;<label for="ACTIV">Activ</label>
+			</div>
+			<div class="field_row">
+				<div class="field_name w140">
+					Client principal
+				</div>
+				<input type="hidden" name="MASTER" id="MASTER" value="{MASTER}" placeholder="Client principal"/>
+				<input type="text" name="MASTER_nume" id="MASTER_nume" class="field_input w190" value="{MASTER_NUME}" placeholder="Sediu"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Nr. CTR
+				</div>
+				<input type="text" name="CONTRACT" id="CONTRACT" class="field_input combo_localitate w230" value="{CONTRACT}" placeholder="Nr. CTR"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w140">
+					Data incepere CTR
+				</div>
+				<input type="text" name="DATA_CONTRACT" id="DATA_CONTRACT" class="field_input w170" value="{DATA_CONTRACT}" placeholder="Data incepere CTR" readonly/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Agent vanzari
+				</div>
+				<input type="text" name="AG_VANZARI_NUME" id="AG_VANZARI_NUME" class="field_input combo_localitate w230" value="{AG_VANZARI_NUME}" placeholder="Agent vanzari"/>
+				<input type="hidden" name="AG_VANZARI" id="AG_VANZARI" class="field_input" value="{AG_VANZARI}"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Nume
+				</div>
+				<input type="text" name="NUME" id="NUME" class="field_input w230" value="{NUME}" placeholder="Nume"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Localitate
+				</div>
+				<input type="text" name="LOCALITATE_NUME" id="LOCALITATE_NUME" class="field_input combo_localitate w230" value="{LOCALITATE_NUME}" placeholder="Localitate"/>
+				<input type="hidden" name="LOCALITATE" id="LOCALITATE" class="field_input" value="{LOCALITATE}"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Adresa
+				</div>
+				<textarea name="ADRESA" id="ADRESA" class="field_textarea auto-hint w230" placeholder="Adresa">{ADRESA}</textarea>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Km Ext
+				</div>
+				<input type="text" name="KM_EXT" id="KM_EXT" class="field_input combo_localitate w230 numeric" value="{KM_EXT}" placeholder="Km Exteriori" />
+			</div>
+		</div>
+		<div class="clienti_right">
+			<div class="separator_empty" style="height: 10px;"></div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Contract
+				</div>
+				<select id="TARIF" name="TARIF" class="field_combobox w100" >
+					<option {TARIF_0} value="0">Nu</option>
+					<option {TARIF_1} value="1">Tarif negociat</option>
+					<option {TARIF_2} value="2">Tarif lista</option>
+				</select>
+				<input type="button" name="contract" class="button" value="Tarif" style="width: 100px; margin-left:20px; font-size: 12px; height: 24px; margin-bottom:5px" onclick="ClientiEditareContract();"/>
+			</div>
+			<div class="separator_empty" style="height: 5px;margin-top:5px;margin-bottom:5px"><hr/></div>
+			<div class="field_row">
+				<input type="checkbox" value="1" id="CC" name="CC" {CC}>
+				<label for="CC" style="font-weight:bold">&nbsp;Cont colector</label>
+			</div>
+			<div class="field_row">
+				<input type="checkbox" value="1" id="ICC" name="ICC" {ICC}>
+				<label for="ICC" style="font-weight:bold">&nbsp;RBS individual</label>
+			</div>
+			<div class="field_row">
+				<input type="checkbox" value="1" id="RET_RBS" name="RET_RBS" {RET_RBS}>
+				<label for="RET_RBS" style="font-weight:bold">&nbsp;Ramburs CC la platitor</label>
+			</div>
+			<div class="field_row">
+				<div class="field_name w140">
+					Cont RBS
+				</div>
+				<input type="text" name="CONT_RBS" id="CONT_RBS" class="field_input combo_localitate w190" value="{CONT_RBS}" placeholder="Nr. Cont RBS"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w140">
+					Banca RBS
+				</div>
+				{BANCA_RBS}
+			</div>
+			<div class="field_row">
+				<fieldset style="width:100%">
+					<legend>Zile RBS</legend>
+					<input type="checkbox" value="1" id="lu" name="rbs_days" value="lu" {RBS_DAY_LU}>
+					<label for="lu">&nbsp;Lu</label>
+					<input type="checkbox" value="1" id="ma" name="rbs_days" value="ma" style="margin-left:15px" {RBS_DAY_MA}>
+					<label for="ma">&nbsp;Ma</label>
+					<input type="checkbox" value="1" id="mi" name="rbs_days" value="mi" style="margin-left:15px" {RBS_DAY_MI}>
+					<label for="mi">&nbsp;Mi</label>
+					<input type="checkbox" value="1" id="jo" name="rbs_days" value="jo" style="margin-left:15px" {RBS_DAY_JO}>
+					<label for="jo">&nbsp;Jo</label>
+					<input type="checkbox" value="1" id="vi" name="rbs_days" value="vi" style="margin-left:15px" {RBS_DAY_VI}>
+					<label for="vi">&nbsp;Vi</label>
+					<input type="checkbox" value="1" id="se" name="rbs_days" value="sediu" style="margin-left:15px" {RBS_DAY_SE}>
+					<label for="se">&nbsp;Sediu</label>
+				</fieldset>
+			</div>
+			<div class="separator_empty" style="height: 15px;margin-top:5px;"><hr/></div>
+			<div class="field_row">
+				<input type="checkbox" value="1" id="OBS_RP" name="OBS_RP" {OBS_RP}>
+				<label for="OBS_RP">&nbsp;Rau Platnic</label>
+				<input type="checkbox" value="1" id="OBS_OC" name="OBS_OC" {OBS_OC}>
+				<label for="OBS_OC">&nbsp;Lucreaza cu alta firma</label>
+			</div>
+			<div class="field_row">
+				<input type="checkbox" value="1" id="OBS_SC" name="OBS_SC" {OBS_SC}>
+				<label for="OBS_SC" style="color: #e8886d">&nbsp;Stop credit</label>
+				<input type="checkbox" value="1" id="OBS_BL" name="OBS_BL" {OBS_BL}>
+				<label for="OBS_BL" style="color: red">&nbsp;Blocat</label>
+			</div>
+			<div class="separator_empty" style="height: 10px;"></div>
+			<div class="field_row">
+				<input type="checkbox" value="1" id="actualziare_expeditii" name="actualziare_expeditii" {ACTUALZIARE_EXPEDITII}>
+				<label for="actualziare_expeditii">&nbsp;Actualizare Expeditii Vechi</label>
+			</div>
+			<div class="separator_empty" style="height: 10px;"></div>
+
+			<div class="field_row" style="display:none">
+				<div class="field_name w100">
+					Alocare Client
+				</div>
+				<input type="hidden" name="alocare_client" id="client" value=""/>
+				<input type="text" name="alocare_client_NUME" id="alocare_client_NUME" class="field_input auto-hint w170" value="" placeholder="Client"/>
+			</div>
+
+			<div class="separator_empty" style="height: 10px;"></div>
+		</div>
+		<div class="separator_empty"></div>
+	</div>
+	<div id="tabs-2">
+		<div style="width: 440px; float: left;">
+			<table id="contacte_clienti_listare" class="table_jqgrid"></table>
+			<div id="contacte_clienti_listare_pag"></div>
+		</div>
+		<div style="width: 440px; float: left;" id="contacte_client">
+			<div class="separator_empty" style="height: 10px;"></div>
+			<div class="field_row">
+				<input type="checkbox" value="1" id="ACTIV1" {ACTIV1}>&nbsp;<label for="ACTIV1">Activ</label>
+			</div>
+			<div class="separator_empty" style="height: 10px;"></div>
+			<input type="hidden" name="COD_CONT_CL" id="COD_CONT_CL" value="{COD_CONT_CL}"/>
+			<div class="field_row">
+				<div class="field_name w100">
+					Nume
+				</div>
+				<input type="text" name="NUME_PERS" id="NUME_PERS" class="field_input w230" value="{NUME_PERS}" placeholder="Nume"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Functie
+				</div>
+				<input type="text" name="FUNCTIE" id="FUNCTIE" class="field_input w230" value="{FUNCTIE}" placeholder="Functie"/>
+			</div>
+			<div class="field_row">
+				&nbsp;
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Telefon
+				</div>
+				<input type="text" name="CONTACT_PERS" id="CONTACT_PERS" class="field_input combo_localitate w230" value="{CONTACT_PERS}" placeholder="Contact"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Email
+				</div>
+				<input type="text" name="ROL" id="ROL" class="field_input w230" value="{ROL}" placeholder="Email"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Email2
+				</div>
+				<input type="text" name="ROL2" id="ROL2" class="field_input w230" value="{ROL2}" placeholder="Email2"/>
+			</div>
+			<div class="field_row">
+				<div class="field_name w100">
+					Observatii
+				</div>
+				<textarea name="OBS" id="OBS" class="field_textarea auto-hint w230" style="height: 50px;" placeholder="Observatii">{OBS}</textarea>
+			</div>
+			<div class="separator_empty" style="height: 10px;"></div>
+			<div class="field_row">
+				<div style="float: left; width: 140px;">
+					<input type="button" name="adauga" class="button" value="Adauga" style="width: 60px; font-size: 12px; height: 28px;" onclick="ClientiEditareContacte('add');"/>
+					<input type="button" name="editeaza" class="button" value="Editeaza" style="width: 70px; font-size: 12px; height: 28px;" onclick="ClientiEditareContacte('edit');"/>
+				</div>
+				<div class="raspuns_detalii1" style="float: left; width: 220px;"></div>
+			</div>
+		</div>
+		<div class="separator_empty" style="height: 10px;"></div>
+	</div>
+	<div id="tabs-3">
+		<div style="width: 440px; float: left;">
+			<table id="conturi_clienti_listare" class="table_jqgrid"></table>
+			<div id="conturi_clienti_listare_pag"></div>
+		</div>
+		<input type="hidden" name="USER_ID" id="USER_ID" value="{USER_ID}"/>
+		<div class="field_row">
+			<input type="checkbox" value="1" id="CONT_ACTIV" name="CONT_ACTIV" >&nbsp;<label for="CONT_ACTIV">Activ</label>
+		</div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Nume
+			</div>
+			<input type="text" name="CONT_NUME" id="CONT_NUME" class="field_input w220" value="" placeholder="Nume"/>
+		</div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Telefon
+			</div>
+			<input type="text" name="CONT_TELEFON" id="CONT_TELEFON" class="field_input w220" value="" placeholder="telefon"/>
+		</div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Username
+			</div>
+			<input type="text" name="CONT_EMAIL" id="CONT_EMAIL" class="field_input w220" value="" placeholder="userName"/>
+		</div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Parola
+			</div>
+			<input type="text" name="PAROLA" id="PAROLA" class="field_input w220" value="" placeholder="Parola"/>
+		</div>
+
+		<div class="field_row">
+			<div class="field_name w120">
+				Afisare Preturi
+			</div>
+			<input type="radio" id="AFISARE_PRETURI1" name="AFISARE_PRETURI" value="1">
+			&nbsp;<label for="AFISARE_PRETURI1">DA</label>
+			<input type="radio" id="AFISARE_PRETURI2" name="AFISARE_PRETURI" value="2" checked = "checked">
+			&nbsp;<label for="AFISARE_PRETURI2">NU</label>
+		</div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Import CSV/XLS
+			</div>
+			<input type="radio" id="IMPORT_CSV1" name="IMPORT_CSV" value="1">
+			&nbsp;<label for="IMPORT_CSV1">DA</label>
+			<input type="radio" id="IMPORT_CSV2" name="IMPORT_CSV" value="2" checked = "checked">
+			&nbsp;<label for="IMPORT_CSV2">NU</label>
+		</div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Afisare expeditii recantarite
+			</div>
+			<input type="radio" id="RECANTARITE1" name="RECANTARITE" value="1">
+			&nbsp;<label for="RECANTARITE1">DA</label>
+			<input type="radio" id="RECANTARITE0" name="RECANTARITE" value="0" checked = "checked">
+			&nbsp;<label for="RECANTARITE0">NU</label>
+		</div>
+		<div class="separator_empty" style="height: 10px;"></div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Selectie <br>puncte de lucru
+			</div>
+			<input type="radio" id="SELECTIE_PUNCTE_DE_LUCRU1" name="SELECTIE_PUNCTE_DE_LUCRU" value="1">
+			&nbsp;<label for="SELECTIE_PUNCTE_DE_LUCRU1">DA</label>
+			<input type="radio" id="SELECTIE_PUNCTE_DE_LUCRU2" name="SELECTIE_PUNCTE_DE_LUCRU" value="2" checked = "checked">
+			&nbsp;<label for="SELECTIE_PUNCTE_DE_LUCRU2">NU</label>
+		</div>
+		<div class="field_row">
+			<div class="field_name w120">
+				Vede <br>clientii masterului
+			</div>
+			<input type="radio" id="SHOW_MASTER_CLIENTI1" name="SHOW_MASTER_CLIENTI" value="1">
+			&nbsp;<label for="SHOW_MASTER_CLIENTI1">DA</label>
+			<input type="radio" id="SHOW_MASTER_CLIENTI2" name="SHOW_MASTER_CLIENTI" value="2" checked = "checked">
+			&nbsp;<label for="SHOW_MASTER_CLIENTI2">NU</label>
+		</div>
+		<div class="separator_empty" style="height: 10px;"></div>
+		<div class="field_row">
+			<input type="button" id="adaugare_cont" name="adaugare" class="button" value="Creaza Cont" style="width: 90px; font-size: 12px; height: 28px;" onclick="ClientiEditare('cont-add');"/>
+			<input type="button" id="editare_cont" name="editare" class="button" value="Editare" style="width: 100px; font-size: 12px; height: 28px; display: none;" onclick="ClientiEditare('cont-edit');"/>
+			<!-- <input type="button" name="dezactivare" class="button" value="Dezactivare Cont" style="width: 110px; font-size: 12px; height: 28px; {BTN_DEZ}" onclick="ClientiEditare('cont-dez');"/>
+			<input type="button" name="dezactivare" class="button" value="Activare Cont" style="width: 110px; font-size: 12px; height: 28px; {BTN_ACT}" onclick="ClientiEditare('cont-act');"/> -->
+		</div>
+		<div class="raspuns_detalii1" style="float: left; width: 220px;"></div>
+		<div class="separator_empty"></div>
+	</div>
+
+	<div id="tabs-4">
+		<div class="field_row">
+			<div class="field_name w100">
+				Nume Societate
+			</div>
+			<input type="text" name="NUME_SOCIETATE" id="NUME_SOCIETATE" class="field_input w230" value="{NUME_SOCIETATE}" placeholder="Nume societate"/>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Localitate sediu social
+			</div>
+			<input type="text" name="LOCALITATE_SEDIU_SOCIAL_NUME" id="LOCALITATE_SEDIU_SOCIAL_NUME" class="field_input combo_localitate w230" value="{LOCALITATE_SEDIU_SOCIAL_NUME}" placeholder="Localitate sediu"/>
+			<input type="hidden" name="LOCALITATE_SEDIU_SOCIAL" id="LOCALITATE_SEDIU_SOCIAL" class="field_input" value="{LOCALITATE_SEDIU_SOCIAL}"/>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Adresa sediu social
+			</div>
+			<textarea name="ADRESA_SEDIU_SOCIAL" id="ADRESA_SEDIU_SOCIAL" class="field_textarea auto-hint w230" placeholder="Adresa">{ADRESA_SEDIU_SOCIAL}</textarea>
+		</div>
+
+
+
+		<div class="field_row">
+			<div class="field_name w100">
+				Reg. Com
+			</div>
+			<input type="text" name="REG_COM" id="REG_COM" class="field_input combo_localitate w230" value="{REG_COM}" placeholder="Reg. Com"/>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				CUI/ID pf
+			</div>
+			<input type="text" name="COD_FISCAL" id="COD_FISCAL" class="field_input combo_localitate w230" style="margin-left: 4px;" value="{COD_FISCAL}" placeholder="CUI" />
+		</div>
+
+		<div class="field_row">
+			<div class="field_name w100">
+				Nr. Cont
+			</div>
+			<input type="text" name="CONT" id="CONT" class="field_input combo_localitate w230" value="{CONT}" placeholder="Nr. Cont"/>
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Banca
+			</div>
+			{BANCA}
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Email factura
+			</div>
+			<input type="text" name="EMAIL_FACTURA" id="EMAIL_FACTURA" class="field_input w230" value="{EMAIL_FACTURA}" placeholder="Email factura"/>
+		</div>
+		<div class="separator_empty h10"></div>
+		<hr>
+		<div class="separator_empty h10"></div>
+
+		<div id="info_anaf"></div>
+
+
+		<div class="separator_empty h10"></div>
+		<hr>
+		<div class="separator_empty h10"></div>
+
+
+
+		<div class="field_row">
+			<input type="checkbox" value="1" id="BORDEROU_PDF" name="BORDEROU_PDF" {BORDEROU_PDF}>
+			<label for="BORDEROU_PDF">&nbsp;Borderou exp. in PDF</label>
+		</div>
+		<div class="field_row">
+			<input type="checkbox" value="1" id="FF_ULTIMA_ZI" name="FF_ULTIMA_ZI" {FF_ULTIMA_ZI}>
+			<label for="FF_ULTIMA_ZI">&nbsp;Data FF ultima zi din luna</label>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<div class="field_row">
+			<input type="checkbox" value="1" id="TARIF_MANUAL" name="TARIF_MANUAL" {TARIF_MANUAL}>
+			<label for="TARIF_MANUAL">&nbsp;Tarif manual</label>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<div class="field_row">
+			<input type="checkbox" value="1" id="TARIF_INDIVIDUAL" name="TARIF_INDIVIDUAL" {TARIF_INDIVIDUAL}>
+			<label for="TARIF_INDIVIDUAL">&nbsp;Tarif individual</label>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<div class="field_row">
+			<input type="checkbox" value="1" id="FACTURARE_SEPARATA" name="FACTURARE_SEPARATA" {FACTURARE_SEPARATA}>
+			<label for="FACTURARE_SEPARATA">&nbsp;Facturare individuala</label>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<div class="field_row">
+			<input type="checkbox" value="1" id="FARA_FACTURA" name="FARA_FACTURA" {FARA_FACTURA}>
+			<label for="FARA_FACTURA">&nbsp;Fara factura</label>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<div class="field_row" style="display: none">
+			<input type="checkbox" value="1" id="FACTURARE_FARA_TVA" value="1" name="FACTURARE_FARA_TVA" {FACTURARE_FARA_TVA}>
+			<label for="FACTURARE_FARA_TVA">&nbsp;TVA cu taxare inversa</label>
+		</div>
+
+		<div class="field_row">
+			<div class="field_name w100">
+				Tip T.V.A.
+			</div>
+			<select id="TIP_TVA" name="TIP_TVA" class="field_combobox"  style="width:140px">
+				<option {TIP_TVA_0} value="0">Taxare normala</option>
+				<option {TIP_TVA_2} value="2">Taxare inversa</option>
+				<option {TIP_TVA_3} value="3">Taxare triunghiulara</option>
+				<option {TIP_TVA_4} value="4">Locul livrarii / prestarii in afara Romaniei</option>
+				<option {TIP_TVA_5} value="5">Intracom, scutit, cu drept de ded (lit a/d)</option>
+				<option {TIP_TVA_6} value="6">Intracom, scutit, cu drept de ded (lit b/c)</option>
+			</select>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Tip Tranzactie
+			</div>
+			<select id="FACTURARE_TIP_TRANZACTIE" name="FACTURARE_TIP_TRANZACTIE" class="field_combobox"  style="width:140px">
+				<option {FACTURARE_TIP_TRANZACTIE_0} value="0">Tranzactie interna</option>
+				<option {FACTURARE_TIP_TRANZACTIE_2} value="2">Livrare intracomunitara</option>
+				<option {FACTURARE_TIP_TRANZACTIE_3} value="3">Export</option>
+			</select>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div>
+		<div class="field_row">
+			<div class="field_name w100">
+				TVA Incasare
+			</div>
+			<select id="TVA_INCASARE" name="TVA_INCASARE" class="field_combobox"  style="width:140px">
+				<option {TVA_INCASARE_0} value="0">Facturi emise fara TVA la incasare (N)</option>
+				<option {TVA_INCASARE_1} value="1">Facturi emise cu TVA la incasare (D)</option>
+			</select>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div><div class="field_row">
+			<div class="field_name w100">
+				Mod de Plata
+			</div>
+			<select id="MOD_PLATA" name="MOD_PLATA" class="field_combobox w120" >
+				<option {MOD_PLATA_0} value="0">Per NT</option>
+				<option {MOD_PLATA_1} value="1">Factura periodica</option>
+			</select>
+			<div class="field_name w50" style="padding-left:5px">
+				Termen
+			</div>
+			<select id="TERMEN_PLATA" name="TERMEN_PLATA" class="field_combobox"  style="width:40px">
+				<option {TERMEN_PLATA_0} value="0"></option>
+				<option {TERMEN_PLATA_5} value="5">5</option>
+				<option {TERMEN_PLATA_10} value="10">10</option>
+				<option {TERMEN_PLATA_15} value="15">15</option>
+				<option {TERMEN_PLATA_20} value="20">20</option>
+				<option {TERMEN_PLATA_25} value="25">25</option>
+				<option {TERMEN_PLATA_30} value="30">30</option>
+				<option {TERMEN_PLATA_45} value="45">45</option>
+				<option {TERMEN_PLATA_60} value="60">60</option>
+				<option {TERMEN_PLATA_90} value="90">90</option>
+				<option {TERMEN_PLATA_120} value="120">120</option>
+			</select>
+		</div>
+		<div class="separator_empty" style="height: 5px;"></div><div class="field_row">
+			<div class="field_name w100">
+				Tip de plata
+			</div>
+			<select id="TIP_PLATA" name="TIP_PLATA" class="field_combobox w120" >
+				<option {TIP_PLATA_0} value="0">Cash</option>
+				<option {TIP_PLATA_1} value="1">Virament</option>
+			</select>
+		</div>
+		<div class="field_row" style="margin-top:25px">
+			<div class="field_name w100">
+				Tip facturare
+			</div>
+			<select id="TIP_FACTURARE" name="TIP_FACTURARE" class="field_combobox w120" >
+				<option {TIP_FACTURARE_0} value="0"></option>
+				<option {TIP_FACTURARE_1} value="1">Lunar</option>
+				<option {TIP_FACTURARE_2} value="2">Bilunar</option>
+				<option {TIP_FACTURARE_3} value="3">Saptamanal</option>
+				<option {TIP_FACTURARE_4} value="4">Manual</option>
+			</select>
+
+			<div class="field_name w60" style="padding-left:5px">Data FF</div>
+			<input name="DATA_FACTURARE" id="DATA_FACTURARE" value="{DATA_FACTURARE}" style="width:20px">
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Proc. majorare
+			</div>
+			<input name="PROC_MAJ" id="PROC_MAJ" value="{PROC_MAJ}" style="width:40px">&nbsp;%
+		</div>
+		<div class="field_row">
+			<div class="field_name w100">
+				Val. max. fac.
+			</div>
+			<input type="text" name="VALOARE_MAXIMA_FACTURA" id="VALOARE_MAXIMA_FACTURA" class="field_input w190" value="{VALOARE_MAXIMA_FACTURA}" placeholder="Valoare maxima facturata"/>
+		</div>
+		<div class="separator_empty h10"></div>
+		<hr>
+		<div class="separator_empty h10"></div>
+
+
+	</div>
+
+</div>

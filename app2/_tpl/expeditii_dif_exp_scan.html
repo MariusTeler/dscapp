@@ -1,0 +1,40 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisareDataOnly();
+		Grid_DifExpScan();
+	});
+
+</script>
+<form action="{HTTP}expeditii/print_dif_exp_scan/" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="dif_exp_scan" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Selectie</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				Data:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w70" value="{DATA_START}" title="De la" />
+			</div>
+			<div class="field_name w80" style="line-height: 20px;">
+				Centru:
+			</div>
+			<div class="field_name w200">
+				{CENTRU}
+			</div>
+		</fieldset>
+		<div class="field_name w300 class_btn" style="margin-top: 15px; margin-left: 40px;">
+        	<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareDifExpScan();" />
+	        <input type="submit" name="view" class="button ascuns" value="Export" />
+	    </div>
+	</div>
+</form>
+<div class="separator_empty" style="height: 5px;"></div>
+<h3>Diferente expeditii scan: </h3>
+<div class="separator_empty" style="height: 5px;"></div>
+<table id="dif_exp_scan"></table>
+<div id="paginatie_dif_exp_scan" class="pagination_jqgrid"></div>
+<div class="separator_empty" style="height: 10px;"></div>
+
+<div id="eroare" title="Eroare"></div>

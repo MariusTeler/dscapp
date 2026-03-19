@@ -1,0 +1,99 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Grid_FaraKey();
+		ComboCentre1('centru');
+		$('#data_start').datetimepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			timeFormat : 'HH:mm',
+			hour: 10,
+			controlType: 'select',
+			oneLine: true,
+			onSelect: function (selectedDateTime){
+				var start = $(this).datetimepicker('getDate');
+				$('#data_final').datetimepicker('option', 'minDate', new Date(start.getTime()) );
+			},
+			onClose: function(dateText, inst) {
+				var endDateTextBox = $('#data_final');
+				if (endDateTextBox.val() != '') {
+					var testStartDate = new Date(dateText);
+					var testEndDate = new Date(endDateTextBox.val());
+					if (testStartDate > testEndDate)
+						endDateTextBox.val(dateText);
+				}
+				else {
+					endDateTextBox.val(dateText);
+				}
+			}
+		});
+		$('#data_final').datetimepicker({
+			showOn : "button",
+			buttonImage : HTTP + "assets/images/calendar.gif",
+			buttonImageOnly : true,
+			dateFormat : 'dd.mm.yy',
+			timeFormat : 'HH:mm',
+			hour: 23,
+			controlType: 'select',
+			oneLine: true,
+			onSelect: function (selectedDateTime){
+				var end = $(this).datetimepicker('getDate');
+				$('#data_start').datetimepicker('option', 'maxDate', new Date(end.getTime()) );
+			},
+			onClose: function(dateText, inst) {
+				var startDateTextBox = $('#data_start');
+				if (startDateTextBox.val() != '') {
+					var testStartDate = new Date(startDateTextBox.val());
+					var testEndDate = new Date(dateText);
+					if (testStartDate > testEndDate)
+						startDateTextBox.val(dateText);
+				}
+				else {
+					startDateTextBox.val(dateText);
+				}
+			}
+		});
+	});
+
+</script>
+<form action="" id="export_lista" method="post" name="export_lista">
+	<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+		<fieldset style="height: 43px;">
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 136px;">
+				<input type="text" name="data_start" id="data_start" class="field_input  w110" value="{DATA_START}" title="De la" readonly/>
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 136px;">
+				<input type="text" name="data_final" id="data_final" class="field_input  w110" value="{DATA_FINAL}" title="Pana la" readonly/>
+			</div>
+		</fieldset>
+		<fieldset style="min-width: 70px; height: 43px;">
+			<legend>
+				<label class="field_label">Optiuni</label>
+			</legend>
+			<div class="field_name w70 class_btn" >
+				<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareExpeditiiFaraKey();" />
+			</div>
+		</fieldset>		
+		<div class="separator_empty" style="height: 5px;"></div>
+	</div>
+</form>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 5px; border-bottom: 1px solid #000; margin-bottom: 10px;"></div>
+<fieldset style="width: 960px;">
+	<legend >
+		Lista Expeditii
+	</legend>
+	<table id="liste_istoric_scanare"></table>
+	<div id="pager" class="pagination_jqgrid"></div>
+</fieldset>
+<div class="separator_empty" style="height: 10px;"></div>

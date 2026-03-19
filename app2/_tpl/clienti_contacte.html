@@ -1,0 +1,53 @@
+<div class="separator_empty" style="height: 10px;"></div>
+<div class="field_row">
+	<input type="checkbox" value="1" id="ACTIV1" {ACTIV1}>&nbsp;<label for="ACTIV1">Activ</label>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<input type="hidden" name="COD_CONT_CL" id="COD_CONT_CL" value="{COD_CONT_CL}"/>
+<div class="field_row">
+	<div class="field_name w100">
+		Nume
+	</div>
+	<input type="text" name="NUME_PERS" id="NUME_PERS" class="field_input w230" value="{NUME_PERS}" title="Nume"/>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Functie
+	</div>
+	<input type="text" name="FUNCTIE" id="FUNCTIE" class="field_input w230" value="{FUNCTIE}" title="Functie"/>
+</div>
+<div class="field_row">
+	&nbsp;
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Telefon
+	</div>
+	<input type="text" name="CONTACT_PERS" id="CONTACT_PERS" class="field_input combo_localitate w230" value="{CONTACT_PERS}" title="Contact"/>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Email
+	</div>
+	<input type="text" name="ROL" id="ROL" class="field_input w230" value="{ROL}" title="Rol"/>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Email2
+	</div>
+	<input type="text" name="ROL2" id="ROL2" class="field_input w230" value="{ROL2}" title="Rol"/>
+</div>
+<div class="field_row">
+	<div class="field_name w100">
+		Observatii
+	</div>
+	<textarea name="OBS" id="OBS" class="field_textarea auto-hint w230" style="height: 50px;" title="Observatii">{OBS}</textarea>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div class="field_row">
+	<div style="float: left; width: 140px;">
+		<input type="button" name="adauga" class="button" value="Adauga" style="width: 60px; font-size: 12px; height: 28px;" onclick="ClientiEditareContacte('add');"/>
+		<input type="button" name="editeaza" class="button" value="Editeaza" style="width: 70px; font-size: 12px; height: 28px;" onclick="ClientiEditareContacte('edit');"/>
+	</div>
+	<div id="raspuns_detalii1" style="float: left; width: 220px;"></div>
+</div>

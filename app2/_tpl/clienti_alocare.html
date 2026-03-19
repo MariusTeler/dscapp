@@ -1,0 +1,59 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".button").button();
+		ClientiListareAlocare();
+		
+		ComboLocalitati_Old('client_localitate');
+		ComboClienti_Old('client', 'client_localitate');
+		
+		
+		var progressbar = $("#progressbar"), progressLabel = $(".progress-label");
+		progressbar.progressbar({
+			value : false,
+			change : function() {
+				progressLabel.text(progressbar.progressbar("value") + "%");
+			},
+			complete : function() {
+				progressLabel.text("Complete!");
+			}
+		});
+	});
+</script>
+<input type="hidden" name="codul_clientului" id="codul_clientului" value="0"/>
+
+
+
+
+
+<div class="listare_clienti">
+	<table id="clienti_listare" class="table_jqgrid"></table>
+	<div id="clienti_listare_pag"></div>
+	<div class="clear" style="height: 10px;"></div>
+</div>
+<div class="detalii_client" id="detalii_client">
+	<div id="progressbar" style="display:none;"><div class="progress-label">Loading...</div></div>
+	<h2 style="padding-left: 20px; padding-bottom: 10px;clear:both;">Client</h2>
+	<div class="field_name w180" style="padding-left: 20px;">
+		<input type="hidden" name="client_localitate" id="client_localitate" value=""/>
+		<input type="text" name="client_localitate_NUME" id="client_localitate_NUME" class="field_input auto-hint w170" value="" title="Localitate"/>
+	</div>
+	<div class="field_name w180">
+		<input type="hidden" name="client" id="client" value=""/>
+		<input type="text" name="client_NUME" id="client_NUME" class="field_input auto-hint w170" value="" title="Client"/>
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>	
+	<textarea id="lista_id_alocare" name="lista_id_alocare" style="display: none;"></textarea>
+	<h2 style="padding-left: 20px;">Clienti Alocati</h2>
+	<div id="lista_clienti_alocare"></div>
+	<div class="separator_empty" style="height: 10px;"></div>
+	<div style="float: left; width: 200px; padding-left: 20px; padding-top: 15px;">
+		<input type="checkbox" name="sterge" id="sterge" value="1" class="field_checkbox" />
+		<label class="field_label" for="sterge">&nbsp;Sterge Clienti din baza de date</label>	
+	</div>
+	<div style="float: right; text-align: right; width: 180px;">
+	<input style="float: right;" class="button" name="alocare" id="alocare" value="Aloca Clientii" onclick="AlocareClienti(1);"/>
+	</div>
+	<div class="separator_empty" style="height: 10px;"></div>
+</div>
+<div class="separator_empty" style="height: 10px;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>

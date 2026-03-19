@@ -1,0 +1,213 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+        AfisarePerioada();
+        Grid_RambursuriValidate();
+	});
+
+	function CautareRbsValidate()
+	{
+		var data_start = "";
+		var data_final = "";
+
+		if ($.trim($('#data_start').val()).length && $.trim($('#data_final').val()).length) {
+			data_start = $('#data_start').val();
+			data_final = $('#data_final').val();
+		}
+
+		jQuery("#lista_rbs_validate").jqGrid('setGridParam', { url: HTTP + 'rambursuri/json/validate', postData : { 
+			data_start: data_start,
+			data_final: data_final
+		}}).trigger("reloadGrid");
+	}
+
+	function ExportRbsValidate()
+	{
+		var cond = '';
+		var data_start = $('#data_start').val();
+		var data_final = $('#data_final').val();
+
+		cond += '&data_start=' + data_start + '&data_final='+ data_final;
+
+		var mypostdata = $("#lista_rbs_validate").jqGrid('getGridParam', 'postData');
+
+		$.downloadWithFilters('rambursuri/export_validate', cond, mypostdata._search, mypostdata.filters);
+
+	}
+
+	function Grid_RambursuriValidate()
+	{
+		var grid = jQuery('#lista_rbs_validate');
+		getColumnIndexByName = function(mygrid,columnName) {
+			var cm = mygrid.jqGrid('getGridParam','colModel');
+			for (var i=0,l=cm.length; i<l; i++) {
+				if (cm[i].name===columnName) {
+					return i; // return the index
+				}
+			}
+			return -1;
+		};
+		grid.jqGrid(
+				{
+			url : HTTP + 'rambursuri/json/validate',
+			datatype: 'json',
+			mtype: 'POST',
+			colNames : [ 'Nr. Exp', 'Data col.', 'Centru decont', 'Data decont', 'ID decont','Centru colectare','Centru livrare','Expeditor','Valoare rbs','Tip plata','Data validare'],
+			colModel : [ {
+				name : 'expeditie',
+				index : 'ep.expeditie',
+				sorttype : 'int',
+				width: 70,
+				align: 'right'
+			}, {
+				name : 'data_expeditie',
+				index : 'ep.data_expeditie',
+				sorttype : 'date',
+				formatter : 'date',
+				formatoptions : {
+					srcformat : 'Y-m-d',
+					newformat : 'd.m.Y'
+				},
+				width: 70,
+				align: 'center'
+			}, {
+				name : 'decont_centru_cod',
+				search:false,
+				width: 70,
+				align: 'center'
+			}, {
+				name : 'decont_data',
+				search:false,
+				sorttype : 'date',
+				formatter : 'date',
+				formatoptions : {
+					srcformat : 'Y-m-d',
+					newformat : 'd.m.Y'
+				},
+				width: 70,
+				align: 'center'
+			},{
+				name : 'decont_id',
+				search:false,
+				width: 50
+			},{
+				name : 'exp_centru_label',
+				index : 'cee.label',
+				width: 70,
+				align: 'center'
+			}, {
+				name : 'dest_centru_label',
+				index : 'ced.label',
+				width: 70,
+				align: 'center'
+			},{
+				name : 'expeditor',
+				index : 'cle.nume',
+				width: 150
+			}, {
+				name : 'ramburs',
+				index : 'ep.ramburs',
+				sorttype : 'int',
+				align: 'right',
+				width: 60
+			},{
+				name : 'tip_plata',
+				index : 'ep.tip_plata',
+				stype : 'select',
+				formatter: 'select',
+				editoptions : {
+					value : ":Toate;0:cash;3:cont;1:bo;2:cec"
+				},
+				searchoptions : {
+					value : ":Toate;0:cash;3:cont;1:bo;2:cec",
+					sopt : [ 'eq' ]
+				},
+				align: 'center',
+				width: 70
+			}, {
+				name : 'validare_data',
+				search:false,
+				sorttype : 'date',
+				formatter : 'date',
+				formatoptions : {
+					srcformat : 'Y-m-d',
+					newformat : 'd.m.Y'
+				},
+				width: 70,
+				align: 'center'
+			}],
+			rowNum : 100,
+			rowList : [ 100,250,500,1000 ],
+			rownumbers : true,
+			width : 970,
+			height : 'auto',
+			sortname : 'ep.expeditie',
+			sortorder : "asc",
+			viewrecords : true,
+			pager : '#paginatie',
+			shrinkToFit: false,
+			caption:'Lista Rbs Decontate Validate',
+			forceFit: true,
+			ondblClickRow : function(id) {
+				AfisareDetaliiExpeditieCuID(id)
+			},
+			loadError : function(xhr,st,err) {
+				AfiseazaEroare(xhr.responseText);
+			},
+			footerrow: true,
+		});
+		grid.jqGrid('bindKeys');
+		grid.jqGrid('filterToolbar',{
+			stringResult : true,
+			searchOnEnter : false
+		});
+	}
+</script>
+<div style="padding:0px 0px 2px 0px;">
+	<form action="" id="export_" method="post" name="export_validate"  target="_blank">
+		<input type="hidden" id="table_filters" name="table_filters" value="{TABLE_FILTERS}" />
+		<fieldset>
+			<legend>
+				<label class="field_label" for="perioada">Data decont</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name w110">
+				<input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" placeholder="De la" readonly/>
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name w110">
+				<input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_FINAL}" placeholder="Pana la" readonly/>
+			</div>
+		</fieldset>
+		<!--
+		<fieldset>
+			<legend>
+				<label class="field_label">Centru</label>
+			</legend>
+			<input type="hidden" name="centru_id" id="centru_id" />
+			<input type="text" name="centru_nume" id="centru_nume" class="field_input capitalize auto-hint" placeholder="Centru"/>
+		</fieldset> 
+		-->
+		<fieldset style="min-width: 100px;">
+			<legend>
+				<label class="field_label">Actiuni</label>
+			</legend>
+			<div class="field_name w230">
+				<input type="button" name="search" class="button" value="Afisare"  onclick="CautareRbsValidate();"/>
+				<input type="button" name="search" class="button" value="Export"  onclick="ExportRbsValidate();"/>
+			</div>
+		</fieldset>
+		<div class="separator_empty"></div>
+	
+	</form>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="lista_rbs_validate"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div class="separator_empty" style="height: 2px;"></div>
+<div id="detalii_expeditie"></div>

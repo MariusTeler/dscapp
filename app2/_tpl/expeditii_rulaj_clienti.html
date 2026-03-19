@@ -1,0 +1,42 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		AfisarePerioada();
+		ComboClienti_2('client','ALL');
+	});
+</script>
+<div style="padding:0px 0px 2px 0px;" class="cautare_expeditii" >
+	<div class="separator_empty" style="height: 5px;"></div>
+	<fieldset>
+		<legend>
+			<label class="field_label" for="perioada">Perioada</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+			De la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" title="De la" />
+		</div>
+		<div class="field_name w60" style="line-height: 20px;">
+			Pana la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_START}" title="Pana la" />
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label" for="operatie">Client</label>
+		</legend>
+		<div class="field_name w230">
+			<input type="hidden" name="client" id="client" class="field_input  w220" value="0" />
+			<input type="text" name="client_NUME" id="client_NUME" class="field_input  w220" value="{CLIENT_NUME}" title="Client" />
+		</div>
+	</fieldset>
+	<div class="field_name w330 class_btn" style="margin-top: 15px; margin-left: 40px;">
+		<input type="button" name="search" class="button" value="Afiseaza"  onclick="AfisareRulajClient()" />
+	</div>
+	<div class="separator_empty" style="height: 5px;"></div>
+</div>
+<div class="separator_empty" style="height: 5px;"></div>
+<div id="detalii_rulaj"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>

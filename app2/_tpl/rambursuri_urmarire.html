@@ -1,0 +1,93 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		Rambursuri_Grid_Urmarire('urmarire');
+	});
+
+</script>
+<style type="text/css">
+	.exp_returnat .exp_referire_class ,.exp_returnat .exp_data_referire_class{
+		color: #00ccff !important;
+	}
+</style>
+<div style="padding:0px 0px 2px 0px;">
+	<form action="" id="export_lista" method="post" name="export_lista"  target="_blank">
+		
+		<input type="hidden" id="form_gs_centru_livrare" name="form_gs_centru_livrare" value="" />
+		<input type="hidden" id="form_gs_centru_colectare" name="form_gs_centru_colectare" value="" />
+		<input type="hidden" id="form_gs_expeditor" name="form_gs_expeditor" value="" />
+		<input type="hidden" id="form_gs_destinatar" name="form_gs_destinatar" value="" />
+		<input type="hidden" id="form_gs_livrat" name="form_gs_livrat" value="" />
+		<input type="hidden" id="form_gs_status" name="form_gs_status" value="" />
+		<input type="hidden" id="table_filters" name="table_filters" value="{TABLE_FILTERS}" />
+	<fieldset>
+		<legend>
+			<label class="field_label" for="perioada">Perioada</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+			De la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_start" id="data_start" class="field_input  w80" value="{DATA_START}" title="De la" readonly/>
+		</div>
+		<div class="field_name w60" style="line-height: 20px;">
+			Pana la:
+		</div>
+		<div class="field_name w110">
+			<input type="text" name="data_final" id="data_final" class="field_input  w80" value="{DATA_FINAL}" title="Pana la" readonly/>
+		</div>
+		<select style="width: 100px;" id="date_range_for" name="date_range_for" class="field_combobox">
+			<option value="1" {DATE_RANGE_FOR_INITIALA}>Initiala</option>
+			<option value="2" {DATE_RANGE_FOR_RAMBURS}>Ramburs</option>
+		</select>
+	</fieldset>
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label" for="perioada">Filtru</label>
+		</legend>
+		<div class="field_name w110">
+            <select style="width: 100px;" id="status_rmb" name="status_rmb" class="field_combobox">
+                {OPTIUNI_STATUS_RBS}
+            </select>
+        </div>
+    </fieldset>  
+	<fieldset style="min-width: 100px;">
+		<legend>
+			<label class="field_label" for="perioada">Actiuni</label>
+		</legend>
+		<div class="field_name w170">
+			<input type="button" name="search" class="button" value="Afisare"  onclick="AfisareUrmarireRambursuri('urmarire');"/>
+			<!-- <input type="button" name="search" class="button" value="Print" onclick='PrintUrmarireRambursuri();'/> -->
+			<input type="button" name="search" class="button" value="Export"  onclick='ExportUrmarireRambursuri();'/>
+		</div>
+	</fieldset>
+	<fieldset style="min-width: 100px; height: 43px; width: 200px;">
+		<legend>
+			<label class="field_label" id="detalii_exp">Modifica status</label>
+		</legend>
+		<div class="field_name w110">
+            <select style="width: 100px;" id="status_rmb_set" name="status_rmb_set" class="field_combobox">
+				{OPTIONS_STATUS_RAMBURS}
+		        <option value="999" selected="selected">Alege</option>
+            </select>
+        </div>
+			<input type="button" name="search" class="button" value="Modifica" onclick="ModificareMultiplaExpeditieRamburs();"/>
+	</fieldset>
+	<div class="separator_empty"></div>
+	<fieldset style="min-width: 90%; width:90%">
+		<legend>
+			<label class="field_label" id="nr_exps_in"></label>
+		</legend>
+		<textarea id="expeditii" name="expeditii" style="width:100%"></textarea>
+	</fieldset>
+	</form>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="urmarire_rambursuri"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="mesaj_confirmare" title="Confirmare" style="display: none;">
+	Sunteti sigur?
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<div id="detalii_expeditie"></div>

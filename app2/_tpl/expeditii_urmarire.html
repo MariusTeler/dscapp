@@ -1,0 +1,105 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        Grid_UrmarireExpeditii();
+        Grid_IstoricExpeditii();
+
+		ComboClienti('expeditor_nume','','');
+		ComboClienti('destinatar_nume','','');
+
+        $('.field_search').hide();
+        $('#search').show();
+    });
+    
+    function VerificareAfisare(evt){
+    	var theEvent = evt || window.event;
+    	var key = theEvent.key || theEvent.which || theEvent.keyCode;
+    	if(key == 'Enter' || key == 13)
+			AfisareUrmarireExpeditii();
+    }
+</script>
+
+
+<form action="{HTTP}expeditii/cautare_export/" id="export_lista" method="post" name="export_lista">
+	<div class="urmarire_expeditii" >
+		<fieldset>
+			<legend>
+				<label class="field_label">Perioada</label>
+			</legend>
+			<div class="field_name w50" style="line-height: 20px;">
+				De la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="{DATA_START}" title="De la" readonly/>
+			</div>
+			<div class="field_name w60" style="line-height: 20px;">
+				Pana la:
+			</div>
+			<div class="field_name" style="width: 101px;">
+				<input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="{DATA_FINAL}" title="Pana la" readonly/>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<label class="field_label" for="filtru">Filtru</label>
+			</legend>
+			<div class="field_name w110">
+				<select id="filtru" name="filtru" class="field_combobox w100" onchange="AfisareOperatiuneUrmarire(this.value);">
+					<option selected="selected" value="1">Nr. Expeditie:</option>
+					<option value="2">Expeditor:</option>
+					<option value="3">Destinatar:</option>
+					<option value="4">Centru Exp:</option>
+					<option value="5">Centru Dest:</option>
+				</select>
+			</div>
+			<div class="field_name w210">
+				<input type="text" name="search" id="search" class="field_input auto-hint w200 field_search" value="" placeholder="Valoare" onkeydown="return VerificareAfisare(event);" />
+				<input type="text" name="expeditor_nume" id="expeditor_nume" class="field_input auto-hint w200 field_search" value="" placeholder="Valoare"  onkeydown="return VerificareAfisare(event);"/>
+				<input type="text" name="destinatar_nume" id="destinatar_nume" class="field_input auto-hint w200 field_search" value="" placeholder="Valoare"  onkeydown="return VerificareAfisare(event);"/>
+				<input type="text" name="centru_nume" id="centru_nume" class="field_input auto-hint w200 field_search" value="" placeholder="Valoare"  onkeydown="return VerificareAfisare(event);"/>
+			</div>
+		</fieldset>
+		
+		<div class="field_name w260 class_btn" style="margin-top: 20px; margin-left: 10px;">
+			<input type="button" name="afiseaza" class="button" value="Afiseaza"  onclick="AfisareUrmarireExpeditii();" />
+ 			<input type="button" name="exporta" class="button" value="Exporta" onclick="ExportUrmarireExpeditii();" /> 
+			<input type="button" name="exporta" class="button" value="Detalii Expeditii" onclick="AfisareDetaliiExpeditie('urmarire_expeditii');" />
+		</div>
+
+		<fieldset>
+			<legend>
+				<label class="field_label" for="expeditii_area">Expeditii : </label>
+				<span id = "nr_expeditii_area"></span>
+			</legend>
+			<div style="width:930px">
+				<textarea id="expeditii_area" name="expeditii_area" style="width:100%" rows="5" placeholder="Expeditii separate cu , sau Enter"></textarea>
+			</div>
+		</fieldset>
+	</div>
+</form>
+
+
+    
+
+<div class="separator_empty h5"></div>
+<table id="urmarire_expeditii"></table>
+<div id="paginatie" class="pagination_jqgrid"></div>
+<div class="separator_empty h10"></div>
+<div id="expeditii_continut" class="expeditii_content">    
+    
+    <div class="afisare_istoric">
+        <table id="istoric_expeditii"></table>
+        <div id="paginatie_istoric" class="pagination_jqgrid"></div>
+    </div>
+    <div id="editare_istoric" class="editare_istoric">
+    	<div class="ui-jqgrid-titlebar ui-widget-header ui-corner-top ui-helper-clearfix">
+	    	<span class="ui-jqgrid-title">Lista Expeditii</span>
+	    </div>
+        <img id="expeditii_loading" src="/assets/images/admin/loading1.gif" alt="loading" title="loading" width="160" height="20" style="padding: 30px 0px;" />
+    </div>
+    <div id="mesaj_expeditie" class="title_info"></div>
+    <div class="separator_empty h10"></div>
+</div>
+
+<div id="detalii_expeditie" style="display: none;"></div>
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<div id="mesaj_confirmare" title="Confirmare" style="display: none;">Sunteti sigur?</div>    

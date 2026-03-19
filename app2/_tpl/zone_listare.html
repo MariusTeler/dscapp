@@ -1,0 +1,99 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#zone_listare").jqGrid({
+            url : HTTP + 'zone/listare_json',
+            datatype : "json",
+            colNames : [ 'Nume', 'Cod', 'Sefi'],
+            colModel : [ {
+                name : 'nume',
+                index : 'r.nume',
+                editable : true,
+                editrules : {
+				    custom : true,
+				    custom_func : checkNotEmpty
+			    }
+            },{
+                name : 'cod',
+                index : 'r.label',
+                editable : true,
+                editrules : {
+				    custom : true,
+				    custom_func : checkNotEmpty
+			    }
+            },{
+                name : 'sefi',
+                editable : false
+            }],
+            height : 400,
+            width : 970,
+            scroll : 1,
+            rowNum : 50,
+            mtype : "GET",
+            rownumbers : true,
+            rownumWidth : 40,
+            gridview : true,
+            pager : '#zone_listare_pag',
+            sortname : 'nume',
+            viewrecords : true,
+            sortorder : "asc",
+            caption : 'Lista zone',
+            editurl : HTTP + 'zone/editare?q=dummy'
+        });
+
+        $("#zone_listare").jqGrid('bindKeys');
+        $("#zone_listare").jqGrid('filterToolbar', {
+            stringResult : true,
+            searchOnEnter : false
+        });
+        $("#zone_listare").jqGrid('navGrid', '#zone_listare_pag', 
+            { edit: true, add: true, del: true, search: false, refresh: false, view: false, position: "left", cloneToTop: false },
+                // options for the Edit Dialog
+                {
+                    recreateForm: true,
+					reloadAfterSubmit:true,
+                    closeAfterEdit: true,
+                    closeOnEscape:true,
+                    savekey: [true,13],
+                    errorTextFormat: function (data) {
+                        if (data.status == 500) 
+                            return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Add Dialog
+                {
+                    closeAfterAdd: true,
+                    recreateForm: true,
+                    closeOnEscape:true,
+                    savekey: [true,13],
+                    errorTextFormat: function (data) {
+                        if (data.status == 500) 
+                            return 'Error: ' + data.responseText
+                    }
+                },
+                // options for the Delete Dailog
+                {
+                    errorTextFormat: function (data) {
+                        if (data.status == 500) 
+                            return 'Error: ' + data.responseText
+                    }
+                });
+        /*
+        $("#zone_listare").jqGrid('navButtonAdd','#zone_listare_pag',{
+            caption:"Export to CSV",
+            onClickButton : function () {
+                window.location.href = HTTP + 'zone/export_csv';
+            }
+        });
+        */
+    });
+    function checkNotEmpty(str) {
+        if (!str.trim().length) {
+            return [ false, "Nume zona, Cod sunt obligatorii!", "" ];
+        } else {
+            return [ true, "", "" ];
+        }
+    }
+</script>
+<table id="zone_listare" class="table_jqgrid"></table>
+<div id="zone_listare_pag"></div>
+<div class="separator_empty h10"></div>

@@ -1,0 +1,174 @@
+<div style="padding:0px 0px 2px 0px;">
+    <fieldset>
+		<legend>
+			<label class="field_label" for="perioada">Perioada prima livrare</label>
+		</legend>
+		<div class="field_name w50" style="line-height: 20px;">
+            De la:
+        </div>
+        <div class="field_name" style="width: 101px;">
+            <input type="text" name="data_start" id="data_start" class="field_input auto-hint w70" value="{DATA_START}" placeholder="De la" disabled="true" />
+        </div>
+        <div class="field_name w60" style="line-height: 20px;">
+            Pana la:
+        </div>
+        <div class="field_name" style="width: 101px;">
+            <input type="text" name="data_final" id="data_final" class="field_input auto-hint  w70" value="{DATA_FINAL}" placeholder="Pana la" disabled="true" />
+        </div>
+	</fieldset>	
+    <fieldset style="min-width: 180px; height: 43px;">
+        <legend>
+            <label class="field_label">Centru</label>
+        </legend>
+        <div class="field_name">
+            {CENTRE}
+        </div>
+    </fieldset>
+    <div class="field_name w300 class_btn" style="margin-top: 15px; margin-left: 40px;">
+        <input type="button" name="search" class="button" value="Afisare"  onclick="AfisarePontaj();" />
+        <input type="button" name="export" class="button" value="Export"  onclick="ExportPontaj();"/>
+    </div>
+</div>
+<div class="separator_empty" style="height: 2px;"></div>
+<table id="agenti_pontaj"></table>
+<div id="agenti_pontaj_paginatie" class="pagination_jqgrid"></div>
+
+<div id="eroare" title="Eroare" style="display: none;"></div>
+<script type="text/javascript">
+    function AfisarePontaj(){
+        var cond = '';
+
+        var data_start = $('#data_start').val();
+        var data_final = $('#data_final').val();
+        var centru = parseInt($('#centru').val());
+
+        cond = '?data_start=' + data_start + '&data_final=' + data_final + '&centru=' + centru;
+
+        jQuery("#agenti_pontaj").jqGrid('setGridParam', {
+            url : HTTP + 'agenti/pontaj_json' + cond
+        }).trigger("reloadGrid");
+    }
+
+    function ExportPontaj()
+    {
+        var cond = '';
+        var centru = parseInt($('#centru').val());
+        var data_start = $('#data_start').val();
+        var data_final = $('#data_final').val();
+        cond += '&data_start=' + data_start + '&data_final='+ data_final + '&centru=' + centru;
+        var filters =  $('#agenti_pontaj').jqGrid('getGridParam','postData').filters;
+        if(filters) cond+='&_search=true&filters='+filters;
+        sidx = $('#agenti_pontaj').jqGrid('getGridParam','sortname');
+        if(sidx) cond+='&sidx='+sidx;
+        sord = $('#agenti_pontaj').jqGrid('getGridParam','sortorder');
+        if(sord) cond+='&sord='+sord;
+
+        $.download('agenti/pontaj_xls', cond, false);
+    }
+
+    function Grid_AgentiPontajJson() {
+        var centru = parseInt($('#centru').val());
+	    var data_start = $('#data_start').val();
+        var data_final = $('#data_final').val();
+
+        $("#agenti_pontaj").jqGrid({
+            url : HTTP + 'agenti/pontaj_json?data_start=' + data_start + '&data_final=' + data_final + '&centru=' + centru,
+            datatype : "json",
+            colNames : [ 'Cod', 'Nume', 'Centru', 'Telefon', 'Tip', 'Primul login', 'Primul bor.', 'Prima liv/prel', 'Tip', 'Ultima liv/prel', 'Tip', 'Ultimul ZET', 'Ultimul decont', 'Nr. exp.'],
+            colModel : [ {
+                name : 'cod_ag',
+                index : 'ag.cod_ag',
+                sorttype : 'integer',
+            },{
+                name : 'nume_ag',
+                index : 'ag.nume_ag'
+            },{
+                name : 'centru',
+                index : 'ce.nume'
+            }, {
+                name : 'telefon',
+                index : 'ag.telefon'
+            },{
+                name : 'tip',
+                index : 'ag.tip',
+                formatter:'select',
+					stype : 'select',
+					searchoptions : {
+						value: ":Toate;0:Curier;1:Centru;2:Departament;3:HUB;4:SBK",						
+						sopt : [ 'eq' ]
+					},
+					edittype : "select",
+					editoptions: {
+						value: {0:'Curier', 1:'Centru', 2:'Departament', 3:'HUB',4:'SBK'}
+					}
+            },{
+                name : 'first_login',
+                align: 'center',
+                sortable : false,
+                search : false
+            },{
+                name : 'first_bo',
+                align: 'center',
+                sortable : false,
+                search : false
+            },
+            {
+                name : 'first_liv',
+                align: 'center',
+                sortable : false,
+                search : false
+            },{
+                name : 'first_tip',
+                align: 'center',
+                sortable : false,
+                search : false
+            },{
+                name : 'last_liv',
+                align: 'center',
+                sortable : false,
+                search : false
+            },{
+                name : 'last_tip',
+                align: 'center',
+                sortable : false,
+                search : false
+            },{
+                name : 'last_inc_zi',
+                align: 'center',
+                search : false,
+                sortable : false
+            },{
+                name : 'last_decont',
+                align: 'center',
+                search : false,
+                sortable : false
+            },{
+                name : 'nb_exps',
+                search : false,
+                sortable : false
+            }],
+            height : 400,
+            width : 970,
+            scroll : 1,
+            rowNum : 100,
+            mtype : "GET",
+            rownumbers : false,
+            rownumWidth : 40,
+            gridview : true,
+            pager : '#agenti_pontaj_pag',
+            sortname : 'ag.nume_ag',
+            viewrecords : true,
+            sortorder : "asc",
+            caption : 'Pontaj Agenti',
+        });
+        $("#agenti_pontaj").jqGrid('bindKeys');
+        $("#agenti_pontaj").jqGrid('filterToolbar', {
+            stringResult : true,
+            searchOnEnter : false
+        });
+    }
+    $(document).ready(function(){
+        SetareDate();
+        Grid_AgentiPontajJson();
+    });
+</script>
