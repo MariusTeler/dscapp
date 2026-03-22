@@ -49,6 +49,23 @@ class AuthTest extends TestCase
         $this->assertAuthenticated();
     }
 
+    public function test_low_nivel_acces_cannot_login(): void
+    {
+        User::create([
+            'user' => 'lowacces',
+            'hashParola' => Hash::make('pass123'),
+            'nivel_acces' => 4,
+            'activ' => 1,
+        ]);
+
+        $this->post('/login', [
+            'user' => 'lowacces',
+            'password' => 'pass123',
+        ]);
+
+        $this->assertGuest();
+    }
+
     public function test_inactive_user_cannot_login(): void
     {
         User::create([
