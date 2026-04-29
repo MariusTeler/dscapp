@@ -21,9 +21,8 @@ import { useShipmentsFilters } from '@/pages/shipments/hooks/use-shipments-filte
 import { useShipmentsStats } from '@/pages/shipments/hooks/use-shipments-stats';
 import { NepredateTab } from '@/pages/shipments/tabs/nepredate-tab';
 
-// Componente vechi păstrate temporar pentru tabs nemigrate
-import { AwbPredate } from '@/pages/shipments/awb-predate';
-import { AwbRetururi } from '@/pages/shipments/awb-retururi';
+import { PredateTab, PredateExportButton } from '@/pages/shipments/tabs/predate-tab';
+import { RetururiTab, RetururiExportButton } from '@/pages/shipments/tabs/retururi-tab';
 
 export default function ShipmentsIndex() {
     const { auth, pcs, prefs } = usePage<SharedData>().props;
@@ -32,8 +31,7 @@ export default function ShipmentsIndex() {
     const [activeTab, setActiveTab] = useState<ShipmentsTab>('nepredate');
     const { filters, setFilters } = useShipmentsFilters();
 
-    // Stats — doar pentru Nepredate în Plan 1 (alte tabs primesc null → header ascunde)
-    const { stats } = useShipmentsStats(activeTab, filters, { enabled: activeTab === 'nepredate' });
+    const { stats } = useShipmentsStats(activeTab, filters);
 
     // Refresh triggers (din vechiul flow)
     const [createUpdateDeleteRow, setCreateUpdateDeleteRow] = useState({ rowId: undefined, newAwbData: null, action: null } as { rowId: number | undefined, newAwbData: AwbData | null, action: 'create' | 'update' | 'delete' | 'bo' | null });
@@ -127,7 +125,7 @@ export default function ShipmentsIndex() {
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
                 tabCounts={{ nepredate: null, predate: null, retururi: null }}
-                stats={activeTab === 'nepredate' ? stats : null}
+                stats={stats}
             />
 
             {activeTab === 'nepredate' && (
@@ -157,15 +155,27 @@ export default function ShipmentsIndex() {
             )}
 
             {activeTab === 'predate' && (
-                <div className="p-4">
-                    <AwbPredate />
-                </div>
+                <>
+                    <ShipmentsFilterBar
+                        tab="predate"
+                        filters={filters}
+                        onChange={setFilters}
+                        actions={<PredateExportButton filters={filters} />}
+                    />
+                    <PredateTab filters={filters} prefs={prefs as UserPrefs} />
+                </>
             )}
 
             {activeTab === 'retururi' && (
-                <div className="p-4">
-                    <AwbRetururi />
-                </div>
+                <>
+                    <ShipmentsFilterBar
+                        tab="retururi"
+                        filters={filters}
+                        onChange={setFilters}
+                        actions={<RetururiExportButton filters={filters} />}
+                    />
+                    <RetururiTab filters={filters} prefs={prefs as UserPrefs} />
+                </>
             )}
 
             {/* Dialogs */}
