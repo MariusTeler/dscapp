@@ -28,8 +28,12 @@ export default function ShipmentsIndex() {
     const { auth, pcs, prefs } = usePage<SharedData>().props;
     const toast = useRef<ToastRef>(null);
 
-    const [activeTab, setActiveTab] = useState<ShipmentsTab>('nepredate');
-    const { filters, setFilters } = useShipmentsFilters();
+    const [activeTab, setActiveTab] = useState<ShipmentsTab>(() => {
+        if (typeof window === 'undefined') return 'nepredate';
+        const tab = new URLSearchParams(window.location.search).get('tab');
+        return (tab === 'predate' || tab === 'retururi') ? tab : 'nepredate';
+    });
+    const { filters, setFilters } = useShipmentsFilters(activeTab);
 
     const { stats } = useShipmentsStats(activeTab, filters);
 

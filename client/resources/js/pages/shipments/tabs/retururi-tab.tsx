@@ -1,6 +1,8 @@
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { Download } from 'lucide-react';
 import { retururi } from '@/routes/shipments';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { AwbMobileList } from '@/pages/shipments/awb-mobile-list';
 import {
     baseColumns as retururiBaseColumns,
     exportRetururiCsv,
@@ -21,6 +23,7 @@ interface RetururiTabProps {
 }
 
 export function RetururiTab({ filters, prefs }: RetururiTabProps) {
+    const isMobile = useMediaQuery('(max-width: 1023px)');
     const [selectedRows, setSelectedRows] = useState<AwbData[]>([]);
     const [viewAwb, setViewAwb] = useState<AwbData | null>(null);
     const toast = useRef<ToastRef>(null);
@@ -39,14 +42,22 @@ export function RetururiTab({ filters, prefs }: RetururiTabProps) {
                 {/* No bulk actions yet for Retururi — read-only tab */}
             </ShipmentsBulkBar>
 
-            <AwbTable
-                endpoint={retururi().url}
-                columns={columns}
-                filters={filters}
-                prefs={prefs}
-                onSelectionChange={setSelectedRows}
-                onRowDblClick={handleView}
-            />
+            {isMobile ? (
+                <AwbMobileList
+                    endpoint={retururi().url}
+                    filters={filters}
+                    onSelectionChange={setSelectedRows}
+                />
+            ) : (
+                <AwbTable
+                    endpoint={retururi().url}
+                    columns={columns}
+                    filters={filters}
+                    prefs={prefs}
+                    onSelectionChange={setSelectedRows}
+                    onRowDblClick={handleView}
+                />
+            )}
 
             {viewAwb && (
                 <Dialog

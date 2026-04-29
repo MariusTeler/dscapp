@@ -201,6 +201,27 @@ class ListeController extends Controller
     }
 
     /**
+     * Get distinct status values (operatiune) for a tab.
+     */
+    public function statuses(Request $request, string $tab): JsonResponse
+    {
+        if (! in_array($tab, ['predate', 'retururi'], true)) {
+            return response()->json(['success' => false, 'message' => 'Invalid tab'], 400);
+        }
+        try {
+            $user = $request->user();
+            if ($user === null || ($user->expeditor_id ?? 0) == 0) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+            }
+            $statuses = $this->expeditiiService->getStatuses($user, $tab);
+            return response()->json(['success' => true, 'data' => $statuses]);
+        } catch (\Exception $e) {
+            Log::error('Error loading statuses', ['tab' => $tab, 'error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'Error loading statuses'], 500);
+        }
+    }
+
+    /**
      * Get aggregated stats for a tab.
      */
     public function stats(Request $request, string $tab): JsonResponse

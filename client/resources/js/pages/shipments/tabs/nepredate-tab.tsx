@@ -1,6 +1,8 @@
 import { useMemo, useState, useCallback } from 'react';
-import { Printer } from 'lucide-react';
+import { Printer, Edit, Trash2 } from 'lucide-react';
 import { nepredate } from '@/routes/shipments';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { AwbMobileList } from '@/pages/shipments/awb-mobile-list';
 import {
     baseColumns as nepredateBaseColumns,
     actionsColumns as nepredateActionsColumns,
@@ -35,6 +37,7 @@ export function NepredateTab({
     onPrintRows,
     onDeleteAwb,
 }: NepredateTabProps) {
+    const isMobile = useMediaQuery('(max-width: 1023px)');
     const [selectedRows, setSelectedRows] = useState<AwbData[]>([]);
     const [viewAwb, setViewAwb] = useState<AwbData | null>(null);
 
@@ -90,17 +93,53 @@ export function NepredateTab({
                 {/* Borderou: în Plan 1 doar Nepredate; pentru moment, folosim flux existent dacă e disponibil */}
             </ShipmentsBulkBar>
 
-            <AwbTable
-                endpoint={nepredate().url}
-                columns={columns}
-                filters={filters}
-                extraParams={{ swapped: '1' }}
-                prefs={prefs}
-                createUpdateDeleteRow={createUpdateDeleteRow}
-                printRows={printRows}
-                onSelectionChange={setSelectedRows}
-                onRowDblClick={handleView}
-            />
+            {isMobile ? (
+                <AwbMobileList
+                    endpoint={nepredate().url}
+                    filters={filters}
+                    extraParams={{ swapped: '1' }}
+                    onSelectionChange={setSelectedRows}
+                    rowActions={(row) => (
+                        <>
+                            {(row.can_update ?? true) && (
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); onEditAwb(row); }}
+                                    className="px-2 py-1 text-xs bg-primary text-primary-foreground rounded inline-flex items-center gap-1"
+                                >
+                                    <Edit className="h-3 w-3" />
+                                    Editează
+                                </button>
+                            )}
+                            <button
+                                onClick={(e) => { e.stopPropagation(); if (typeof row.id === 'number') onPrintRows([row.id]); }}
+                                className="px-2 py-1 text-xs bg-foreground text-background rounded inline-flex items-center gap-1"
+                            >
+                                <Printer className="h-3 w-3" />
+                                Print
+                            </button>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); onDeleteAwb(row); }}
+                                className="px-2 py-1 text-xs bg-red-600 text-white rounded inline-flex items-center gap-1"
+                            >
+                                <Trash2 className="h-3 w-3" />
+                                Șterge
+                            </button>
+                        </>
+                    )}
+                />
+            ) : (
+                <AwbTable
+                    endpoint={nepredate().url}
+                    columns={columns}
+                    filters={filters}
+                    extraParams={{ swapped: '1' }}
+                    prefs={prefs}
+                    createUpdateDeleteRow={createUpdateDeleteRow}
+                    printRows={printRows}
+                    onSelectionChange={setSelectedRows}
+                    onRowDblClick={handleView}
+                />
+            )}
 
             {viewAwb && (
                 <Dialog
