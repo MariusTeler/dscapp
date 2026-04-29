@@ -2,6 +2,7 @@ import { Search } from 'lucide-react';
 import { Calendar } from '@/components/ui/primereact/calendar';
 import type { ShipmentsTab, ShipmentsFilters, TipObj } from '@/types/shipments';
 import { JUDETE } from '@/lib/judete';
+import { useStatusOptions } from '@/pages/shipments/hooks/use-status-options';
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 
 interface ShipmentsFilterBarProps {
@@ -13,6 +14,8 @@ interface ShipmentsFilterBarProps {
 }
 
 export function ShipmentsFilterBar({ tab, filters, onChange, actions }: ShipmentsFilterBarProps) {
+    const statusOptions = useStatusOptions(tab);
+
     // Search debounce (400ms)
     const [searchValue, setSearchValue] = useState(filters.q);
     const searchTimer = useRef<number | null>(null);
@@ -84,7 +87,9 @@ export function ShipmentsFilterBar({ tab, filters, onChange, actions }: Shipment
                     className="px-2 py-1 text-xs border border-border rounded bg-background"
                 >
                     <option value="">Toate statusurile</option>
-                    {/* Valorile reale se vor inventaria — placeholder pentru Plan 1 */}
+                    {statusOptions.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                    ))}
                 </select>
             )}
 

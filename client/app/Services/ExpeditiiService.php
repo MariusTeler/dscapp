@@ -827,6 +827,28 @@ class ExpeditiiService
      *
      * @param string $tab 'nepredate'|'predate'|'retururi'
      */
+    /**
+     * Build the expeditor scope SQL condition for a given table alias.
+     * For 'retururi', use alias 'epr' — no swapped logic (always expeditor_id).
+     *
+     * @param string $alias Table alias (default 'ep')
+     */
+    private function getExpeditorScopeCondition(User $user, string $alias = 'ep'): string
+    {
+        $pcs = collect(session('pcs', []));
+        $pcIds = $pcs->reduce(function ($carry, $item) {
+            $carry[] = $item['id'];
+            return $carry;
+        }, []);
+
+        if ($user->expeditor_id == 171350 || count($pcIds) > 1) {
+            // maravet / multi-pc
+            return "IF({$alias}.swapped = 0, {$alias}.expeditor_id in (" . implode(',', $pcIds) . "), {$alias}.destinatar_id in (" . implode(',', $pcIds) . "))";
+        }
+
+        return "IF({$alias}.swapped = 0, {$alias}.expeditor_id = {$user->expeditor_id}, {$alias}.destinatar_id = {$user->expeditor_id})";
+    }
+
     public function getStats(
         Request $request,
         User $user,
@@ -948,5 +970,47 @@ class ExpeditiiService
             'total_weight' => round((float) ($row->total_weight ?? 0), 2),
             'total_ramburs' => round((float) ($row->total_ramburs ?? 0), 2),
         ];
+    }
+
+    /**
+     * Get distinct status values (operatiune) for a tab.
+     *
+     * @param string $tab 'predate'|'retururi'
+     */
+    public function getStatuses(User $user, string $tab): array
+    {
+        $cond = $this->getExpeditorScopeCondition($user);
+
+        if ($tab === 'predate') {
+            $query = DB::table('exp_prelucrate as ep')
+                ->select(DB::raw('DISTINCT ep.operatiune as status'))
+                ->whereNotNull('ep.operatiune')
+                ->where('ep.operatiune', '!=', '')
+                ->where('ep.tip_exp', 0)
+                ->where('ep.anulata', 0)
+                ->whereExists(function ($sub) {
+                    $sub->select(DB::raw(1))
+                        ->from('scanari_coduri as sc')
+                        ->whereRaw('sc.expeditie = ep.expeditie');
+                })
+                ->whereRaw($cond);
+        } elseif ($tab === 'retururi') {
+            $condEpr = $this->getExpeditorScopeCondition($user, 'epr');
+            $query = DB::table('exp_prelucrate as epr')
+                ->select(DB::raw('DISTINCT epr.operatiune as status'))
+                ->whereNotNull('epr.operatiune')
+                ->where('epr.operatiune', '!=', '')
+                ->where(function ($sub) {
+                    $sub->where('epr.ret_nt', 1)
+                        ->orWhere('epr.ret_doc', 1)
+                        ->orWhere('epr.ret_colet', 1)
+                        ->orWhere('epr.ret_amb', 1);
+                })
+                ->whereRaw($condEpr);
+        } else {
+            return [];
+        }
+
+        return $query->orderBy('status')->pluck('status')->filter()->values()->toArray();
     }
 }
