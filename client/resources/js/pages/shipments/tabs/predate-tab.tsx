@@ -1,6 +1,8 @@
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { Download } from 'lucide-react';
 import { predate } from '@/routes/shipments';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { AwbMobileList } from '@/pages/shipments/awb-mobile-list';
 import {
     baseColumns as predateBaseColumns,
     exportPredateCsv,
@@ -21,6 +23,7 @@ interface PredateTabProps {
 }
 
 export function PredateTab({ filters, prefs }: PredateTabProps) {
+    const isMobile = useMediaQuery('(max-width: 1023px)');
     const [selectedRows, setSelectedRows] = useState<AwbData[]>([]);
     const [viewAwb, setViewAwb] = useState<AwbData | null>(null);
     const toast = useRef<ToastRef>(null);
@@ -39,14 +42,22 @@ export function PredateTab({ filters, prefs }: PredateTabProps) {
                 {/* No bulk actions yet for Predate — read-only tab */}
             </ShipmentsBulkBar>
 
-            <AwbTable
-                endpoint={predate().url}
-                columns={columns}
-                filters={filters}
-                prefs={prefs}
-                onSelectionChange={setSelectedRows}
-                onRowDblClick={handleView}
-            />
+            {isMobile ? (
+                <AwbMobileList
+                    endpoint={predate().url}
+                    filters={filters}
+                    onSelectionChange={setSelectedRows}
+                />
+            ) : (
+                <AwbTable
+                    endpoint={predate().url}
+                    columns={columns}
+                    filters={filters}
+                    prefs={prefs}
+                    onSelectionChange={setSelectedRows}
+                    onRowDblClick={handleView}
+                />
+            )}
 
             {viewAwb && (
                 <Dialog
