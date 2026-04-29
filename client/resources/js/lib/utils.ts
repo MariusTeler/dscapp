@@ -16,3 +16,12 @@ export function isSameUrl(
 export function resolveUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
+
+/**
+ * Builds an anchored regex from a pattern string.
+ * Wraps the pattern with ^ and $ anchors if not already present.
+ */
+export function buildAnchoredRegex(pattern: string): RegExp {
+    const anchored = (pattern.startsWith('^') ? '' : '^') + pattern + (pattern.endsWith('$') ? '' : '$');
+    return new RegExp(anchored);
+}
