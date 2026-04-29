@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use App\Services\Helpers\ToolsService;
 
 class ExpeditiiService
 {
@@ -243,6 +244,22 @@ class ExpeditiiService
             $query->whereDate('ep.data_expeditie', '<=', $endDate);
         }
 
+        // Apply global search (q) — LIKE OR pe câmpurile cheie
+        $q = trim((string) $request->input('q', ''));
+        $minChars = config('awb.tabulator.min_chars_filter', 3);
+        if ($q !== '' && mb_strlen($q) >= $minChars) {
+            $isAwb = ToolsService::isAwb($q);
+            $query->where(function ($sub) use ($q, $isAwb) {
+                if ($isAwb) {
+                    $sub->orWhere('ep.expeditie', '=', (int) $q);
+                }
+                $sub->orWhere('cle.nume', 'like', "%{$q}%")
+                    ->orWhere('cld.nume', 'like', "%{$q}%")
+                    ->orWhere('lce.nume_lc', 'like', "%{$q}%")
+                    ->orWhere('lcd.nume_lc', 'like', "%{$q}%");
+            });
+        }
+
         // Apply filters
         foreach ($request->all() as $key => $value) {
             if (str_starts_with($key, 'filter_') && !empty($value)) {
@@ -260,6 +277,7 @@ class ExpeditiiService
                         $query->where('ep.' . $field, 'like', "%{$value}%"),
                     'data_expeditie' =>
                         $query->whereDate('ep.data_expeditie', '=', date('Y-m-d', strtotime($value))),
+                    'judet' => $query->where('jd.cod_jd', '=', strtoupper(trim($value))),
                     default => $query->where($field, 'like', "{$value}%"),
                 };
             }
@@ -272,7 +290,7 @@ class ExpeditiiService
             'destinatar_localitate' => $query->orderBy('lcd.nume_lc', $sortOrder),
             'awb' => $query->orderBy('ep.expeditie', $sortOrder),
             'id' => $query->orderBy('ep.cod_expeditie', $sortOrder),
-            'tip_obj', 'piese', 'greutate', 'ramburs', 'data_expeditie' => 
+            'tip_obj', 'piese', 'greutate', 'ramburs', 'data_expeditie' =>
                 $query->orderBy('ep.'.$sortField, $sortOrder),
             'valoare_fara_tva' => $query->orderBy('ep.valoare_totala_expeditie', $sortOrder),
             'valoare_tva' => $query->orderBy('ep.tva', $sortOrder),
@@ -441,7 +459,23 @@ class ExpeditiiService
             $query->whereDate('ep.data_expeditie', '>=', date('Y-m-d', strtotime($endDate . ' - 1 month')));
             $query->whereDate('ep.data_expeditie', '<=', $endDate);
         }
-        
+
+        // Apply global search (q) — LIKE OR pe câmpurile cheie
+        $q = trim((string) $request->input('q', ''));
+        $minChars = config('awb.tabulator.min_chars_filter', 3);
+        if ($q !== '' && mb_strlen($q) >= $minChars) {
+            $isAwb = ToolsService::isAwb($q);
+            $query->where(function ($sub) use ($q, $isAwb) {
+                if ($isAwb) {
+                    $sub->orWhere('ep.expeditie', '=', (int) $q);
+                }
+                $sub->orWhere('cle.nume', 'like', "%{$q}%")
+                    ->orWhere('cld.nume', 'like', "%{$q}%")
+                    ->orWhere('lce.nume_lc', 'like', "%{$q}%")
+                    ->orWhere('lcd.nume_lc', 'like', "%{$q}%");
+            });
+        }
+
         // Apply filters
         foreach ($request->all() as $key => $value) {
             if (str_starts_with($key, 'filter_') && !empty($value)) {
@@ -467,6 +501,7 @@ class ExpeditiiService
                     'data_ckp' =>
                         $query->whereDate('ep.data_last_ckp', '=', date('Y-m-d', strtotime($value))),
                     'centru_ckp' => $query->where('ce.nume', 'like', "{$value}%"),
+                    'judet' => $query->where('jd.cod_jd', '=', strtoupper(trim($value))),
                     default => $query->where($field, 'like', "{$value}%"),
                 };
             }
@@ -637,6 +672,23 @@ class ExpeditiiService
             $query->whereDate('epr.data_expeditie', '>=', date('Y-m-d', strtotime($endDate . ' - 1 month')));
             $query->whereDate('epr.data_expeditie', '<=', $endDate);
         }
+
+        // Apply global search (q) — LIKE OR pe câmpurile cheie
+        $q = trim((string) $request->input('q', ''));
+        $minChars = config('awb.tabulator.min_chars_filter', 3);
+        if ($q !== '' && mb_strlen($q) >= $minChars) {
+            $isAwb = ToolsService::isAwb($q);
+            $query->where(function ($sub) use ($q, $isAwb) {
+                if ($isAwb) {
+                    $sub->orWhere('epr.expeditie', '=', (int) $q);
+                }
+                $sub->orWhere('cle.nume', 'like', "%{$q}%")
+                    ->orWhere('cld.nume', 'like', "%{$q}%")
+                    ->orWhere('lce.nume_lc', 'like', "%{$q}%")
+                    ->orWhere('lcd.nume_lc', 'like', "%{$q}%");
+            });
+        }
+
         //dd($query->toSql(), $query->getBindings());
 
         // Apply filters
@@ -665,6 +717,7 @@ class ExpeditiiService
                         $query->whereDate('ep.data_last_ckp', '=', date('Y-m-d', strtotime($value))),
                     'ckp' => $query->where('ck.denumire', 'like', "{$value}%"),
                     'centru_ckp' => $query->where('ce.nume', 'like', "{$value}%"),
+                    'judet' => $query->where('jd.cod_jd', '=', strtoupper(trim($value))),
                     default => $query->where($field, 'like', "{$value}%"),
                 };
             }
@@ -767,5 +820,133 @@ class ExpeditiiService
                 'printed_by' => $userId,
             ]);
         return $updated == count($ids);
+    }
+
+    /**
+     * Get aggregated stats (count, total weight, total ramburs) for a tab + filters.
+     *
+     * @param string $tab 'nepredate'|'predate'|'retururi'
+     */
+    public function getStats(
+        Request $request,
+        User $user,
+        string $tab,
+        bool $swapped = false,
+    ): array {
+        $cond = $this->getExpeditorScopeCondition($user);
+
+        $query = DB::table('exp_prelucrate as ep')
+            ->join('clienti as cle', 'ep.expeditor_id', '=', 'cle.cod_cl')
+            ->join('localitati as lce', 'cle.cod_lc', '=', 'lce.cod_lc')
+            ->leftJoin('judete as je', 'lce.cod_jd', '=', 'je.cod_jd')
+            ->join('clienti as cld', 'ep.destinatar_id', '=', 'cld.cod_cl')
+            ->join('localitati as lcd', 'cld.cod_lc', '=', 'lcd.cod_lc')
+            ->leftJoin('judete as jd', 'lcd.cod_jd', '=', 'jd.cod_jd')
+            ->where('ep.tip_exp', 0)
+            ->where('ep.anulata', 0);
+
+        // Tab-specific WHERE
+        if ($tab === 'nepredate') {
+            if (! $swapped) {
+                $query->where('ep.swapped', 0);
+            }
+            $query->where('ep.borderou_id', 0)
+                  ->where('ep.idfact', 0)
+                  ->whereNotExists(function ($subQuery) {
+                      $subQuery->select(DB::raw(1))
+                          ->from('decont_expeditii as dee')
+                          ->join('decont_facturi as dfa', function ($join) {
+                              $join->on('dee.factura_id', '=', 'dfa.id')
+                                   ->where('dfa.anulata', 0);
+                          })
+                          ->whereRaw('dee.expeditie = ep.expeditie')
+                          ->where('dee.anulata', 0);
+                  })
+                  ->whereNotExists(function ($subQuery) {
+                      $subQuery->select(DB::raw(1))
+                          ->from('scanari_coduri as sc')
+                          ->whereRaw('sc.expeditie = ep.expeditie');
+                  })
+                  ->whereRaw($cond);
+        } elseif ($tab === 'predate') {
+            // Replică WHERE-urile din getPredate — minim: scope + există scanare/predare
+            $query->whereExists(function ($sub) {
+                $sub->select(DB::raw(1))
+                    ->from('scanari_coduri as sc')
+                    ->whereRaw('sc.expeditie = ep.expeditie');
+            })->whereRaw($cond);
+        } elseif ($tab === 'retururi') {
+            // Replică WHERE-urile din getRetururi
+            $query->where(function ($sub) {
+                $sub->where('ep.ret_nt', 1)
+                    ->orWhere('ep.ret_doc', 1)
+                    ->orWhere('ep.ret_colet', 1)
+                    ->orWhere('ep.ret_amb', 1);
+            })->whereRaw($cond);
+        }
+
+        // Apply date range filter (inline pattern)
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+
+        if ($startDate && $endDate) {
+            //if startDate is after endDate, swap them
+            if ($startDate > $endDate) {
+                $temp = $startDate;
+                $startDate = $endDate;
+                $endDate = $temp;
+            }
+            $query->whereBetween('ep.data_expeditie', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            //between start date and start date + 1 month
+            $query->whereDate('ep.data_expeditie', '>=', $startDate);
+            $query->whereDate('ep.data_expeditie', '<=', date('Y-m-d', strtotime($startDate . ' + 1 month')));
+        } elseif ($endDate) {
+            //between end date - 1 month and end date
+            $query->whereDate('ep.data_expeditie', '>=', date('Y-m-d', strtotime($endDate . ' - 1 month')));
+            $query->whereDate('ep.data_expeditie', '<=', $endDate);
+        }
+
+        // Global search q
+        $q = trim((string) $request->input('q', ''));
+        $minChars = config('awb.tabulator.min_chars_filter', 3);
+        if ($q !== '' && mb_strlen($q) >= $minChars) {
+            $isAwb = ToolsService::isAwb($q);
+            $query->where(function ($sub) use ($q, $isAwb) {
+                if ($isAwb) {
+                    $sub->orWhere('ep.expeditie', '=', (int) $q);
+                }
+                $sub->orWhere('cle.nume', 'like', "%{$q}%")
+                    ->orWhere('cld.nume', 'like', "%{$q}%")
+                    ->orWhere('lce.nume_lc', 'like', "%{$q}%")
+                    ->orWhere('lcd.nume_lc', 'like', "%{$q}%");
+            });
+        }
+
+        // filter_* (judet, tip_obj)
+        foreach ($request->all() as $key => $value) {
+            if (str_starts_with($key, 'filter_') && ! empty($value)) {
+                $field = substr($key, 7);
+                match ($field) {
+                    'judet' => $query->where('jd.cod_jd', '=', strtoupper(trim($value))),
+                    'tip_obj' => $query->where('ep.tip_obj', '=', (int) $value),
+                    'destinatar_nume' => $query->where('cld.nume', 'like', "{$value}%"),
+                    'destinatar_localitate' => $query->where('lcd.nume_lc', 'like', "{$value}%"),
+                    default => null,
+                };
+            }
+        }
+
+        $row = $query->selectRaw('
+            COUNT(DISTINCT ep.cod_expeditie) as count,
+            COALESCE(SUM(ep.greutate), 0) as total_weight,
+            COALESCE(SUM(ep.ramburs), 0) as total_ramburs
+        ')->first();
+
+        return [
+            'count' => (int) ($row->count ?? 0),
+            'total_weight' => round((float) ($row->total_weight ?? 0), 2),
+            'total_ramburs' => round((float) ($row->total_ramburs ?? 0), 2),
+        ];
     }
 }

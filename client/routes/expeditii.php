@@ -30,4 +30,7 @@ Route::middleware(['web','auth', 'verified'])->group(function () {
     Route::get('shipments/predate/export', [ListeController::class, 'exportPredate'])->name('shipments.predate.export');
     Route::get('shipments/retururi', [ListeController::class, 'retururi'])->name('shipments.retururi');
     Route::get('shipments/retururi/export', [ListeController::class, 'exportRetururi'])->name('shipments.retururi.export');
+    Route::get('shipments/{tab}/stats', [ListeController::class, 'stats'])
+        ->where('tab', 'nepredate|predate|retururi')
+        ->name('shipments.stats');
 });
