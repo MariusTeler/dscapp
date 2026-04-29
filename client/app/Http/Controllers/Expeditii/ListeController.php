@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use App\Services\Export\CsvService as ExportCsvService;
 
@@ -196,6 +197,31 @@ class ListeController extends Controller
                 'success' => false,
                 'message' => 'Error generating CSV: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    /**
+     * Get aggregated stats for a tab.
+     */
+    public function stats(Request $request, string $tab): JsonResponse
+    {
+        if (! in_array($tab, ['nepredate', 'predate', 'retururi'], true)) {
+            return response()->json(['success' => false, 'message' => 'Invalid tab'], 400);
+        }
+
+        try {
+            $user = $request->user();
+            if ($user === null || ($user->expeditor_id ?? 0) == 0) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+            }
+
+            $swapped = $request->input('swapped', '0') === '1';
+            $stats = $this->expeditiiService->getStats($request, $user, $tab, $swapped);
+
+            return response()->json(['success' => true, 'data' => $stats]);
+        } catch (\Exception $e) {
+            Log::error('Error loading stats', ['tab' => $tab, 'error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'Error loading stats'], 500);
         }
     }
 }

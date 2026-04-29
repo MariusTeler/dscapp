@@ -87,6 +87,10 @@ export interface UserPrefs {
     def_obsv?: string;
     def_retur_nc?: boolean;
     show_master_clienti?: boolean;
+    /** Minimum characters required before a header filter triggers a server request */
+    min_chars_filter?: number;
+    /** Regex pattern used to validate AWB field values before sending to server */
+    awb_regexp?: string;
 }
 
 // Service response interface for paginated data
